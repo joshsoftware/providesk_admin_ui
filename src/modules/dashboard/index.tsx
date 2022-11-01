@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import TablePagination from '@mui/material/TablePagination';
 
@@ -6,6 +6,8 @@ import { useGetRequestsList } from './dashboard.hooks';
 import { CustomSelect } from 'modules/shared/Select';
 import Search from 'modules/shared/Search';
 import ComplaintCard from 'modules/shared/ComplaintCard';
+import { useDepartMentList } from 'modules/details/details.hook';
+import { IComplaintDetails } from './types';
 
 const statusOptions = [
   {
@@ -26,25 +28,10 @@ const statusOptions = [
   },
 ];
 
-const departmentOptions = [
-  {
-    value: 'finance',
-    label: 'Finance',
-  },
-  {
-    value: 'admin',
-    label: 'Admin',
-  },
-  {
-    value: 'sales',
-    label: 'Sales',
-  },
-  {
-    value: 'learning',
-    label: 'Learning',
-  },
-];
-
+// const deparmentList = useDepartMentList();
+// const departmentOptions = useMemo(() => {
+// return deparmentList?.map((item) => {});
+// }, [deparmentList]);
 const DEFAULT_FILTERS = {
   status: '',
   department: '',
@@ -83,7 +70,9 @@ const Dashboard = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const { data: departmentList, isLoading: isLoadingDepartment } =
+    useDepartMentList();
+  console.log(departmentList, 'department');
   const updatedData = data?.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
   return (
@@ -99,7 +88,7 @@ const Dashboard = () => {
           />
           <CustomSelect
             label={'Departments'}
-            options={departmentOptions}
+            options={[]}
             value={filters.department}
             onChange={handleChange}
             name='deparment'

@@ -80,7 +80,7 @@ export const DepartMent = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {data?.data?.departments?.map((row) => (
+                  {data?.map((row) => (
                     <TableRow
                       key={row.name}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

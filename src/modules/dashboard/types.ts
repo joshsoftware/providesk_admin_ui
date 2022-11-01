@@ -1,12 +1,19 @@
 export interface IComplaintDetails {
-  id: number;
-  raised_by: string;
-  created_at: string;
+  id: string | number;
   title: string;
-  updated_time: string;
+  description: string;
+  ticket_number: number | null | string;
   status: string;
-  assigned_to: string;
+  priority: string;
+  ticket_type: string;
+  resolved_at: null;
+  created_at: string;
+  updated_at: string;
+  category: string;
   department: string;
+  resolver: string;
+  requester: string;
+  permited_events: string[];
 }
 
 export interface GetRequestsListResponse {

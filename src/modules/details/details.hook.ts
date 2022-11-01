@@ -31,7 +31,7 @@ export const useDepartMentList = () => {
       },
     }
   );
-  return { data: data?.data || [], isLoading };
+  return { data: data?.data?.departments || [], isLoading };
 };
 export const useCatagory = () => {
   return useQuery(API_CONSTANTS.CATEGORY_LIST, () => getCategoryList(), {

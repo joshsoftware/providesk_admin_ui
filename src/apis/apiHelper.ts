@@ -24,14 +24,16 @@ export const get = async (payload: getPayload) => {
  * @param payload
  */
 export const post = async (payload: postPayload) => {
-  const { path, requestParams, queryParams = {} } = payload;
-  axiosInstance.interceptors.request.use((config) => {
-    let headers = config.headers as AxiosRequestHeaders;
-    headers['Authorization'] = JSON.parse(
-      localStorage.getItem('userAuth') as string
-    ).auth_token;
-    return config;
-  });
+  const { path, requestParams, requireToken, queryParams = {} } = payload;
+  if (!(requireToken === false)) {
+    axiosInstance.interceptors.request.use((config) => {
+      let headers = config.headers as AxiosRequestHeaders;
+      headers['Authorization'] = JSON.parse(
+        localStorage.getItem('userAuth') as string
+      ).auth_token;
+      return config;
+    });
+  }
   const response = await axiosInstance.post(path, requestParams, {
     params: queryParams,
   });

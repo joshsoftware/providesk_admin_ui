@@ -24,12 +24,19 @@ const ComplaintCard: React.FC<Props> = (props) => {
   const {
     id,
     title,
-    raised_by,
-    created_at: raised_time,
-    updated_time: last_update_time,
+    description,
+    ticket_number,
     status,
-    assigned_to,
+    priority,
+    ticket_type,
+    resolved_at,
+    created_at,
+    updated_at,
+    category,
     department,
+    resolver,
+    requester,
+    permited_events,
   } = details;
 
   const navigate = useNavigate();
@@ -46,21 +53,21 @@ const ComplaintCard: React.FC<Props> = (props) => {
     },
     {
       label: 'Raised by',
-      value: raised_by,
+      value: requester,
     },
     {
       label: 'Raised Time',
-      value: raised_time,
+      value: created_at,
     },
     {
       label: 'Assigned To',
-      value: assigned_to,
+      value: resolver,
     },
     {
       label: 'Department',
       value: department,
     },
-    { label: 'Last Updated Time', value: last_update_time },
+    { label: 'Last Updated Time', value: updated_at },
   ];
 
   return (
