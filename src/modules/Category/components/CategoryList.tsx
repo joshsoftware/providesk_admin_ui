@@ -41,15 +41,22 @@ const CategoryList = () => {
   }
 
   return (
-    <div style={{ width: '80%' }}>
+    <div
+      style={{
+        width: '80%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        margin: '1rem',
+        alignItems: 'center',
+      }}
+    >
       <Divider>
-        <Typography variant='h6' component='div' align='center'>
+        <Typography variant='h4' component='div' align='center'>
           Category Listing
         </Typography>
       </Divider>
-      <div
-        style={{ display: 'flex', justifyContent: 'center', margin: '2rem 0' }}
-      >
+      <div style={{ margin: '12px 0' }}>
         <Select
           required={true}
           sx={{ m: 0, width: '12rem' }}
@@ -60,46 +67,59 @@ const CategoryList = () => {
         />{' '}
         <br />
       </div>
-      <Divider>
-        {departmentsList?.[departmentId - 1].name} Department Categories
-      </Divider>
-      <div style={{ maxHeight: '60vh', overflowY: 'scroll', width: '100%' }}>
-        <TableContainer component={Paper}>
-          <Table
-            stickyHeader={true}
-            sx={{
-              minWidth: 250,
-              maxHeight: '20vh',
-              overflow: 'scroll',
-            }}
-            aria-label='sticky table'
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell className='fw-bold'>Id</TableCell>
-                <TableCell className='fw-bold'>Name</TableCell>
-              </TableRow>
-            </TableHead>
-            {listFetching ? (
-              <Loader isLoading={listFetching} />
-            ) : (
-              <TableBody>
-                {categoriesList?.map((row) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component='th' scope='row'>
-                      {row.id}
-                    </TableCell>
-                    <TableCell>{row.name}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            )}
-          </Table>
-        </TableContainer>
-      </div>
+      <TableContainer
+        component={Paper}
+        style={{
+          maxHeight: '45vh',
+          overflowY: 'auto',
+          width: '60%',
+          minWidth: '280px',
+        }}
+      >
+        <Table
+          stickyHeader={true}
+          sx={{
+            minWidth: 250,
+            maxHeight: '20vh',
+            overflow: 'scroll',
+          }}
+          aria-label='sticky table'
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell
+                component='th'
+                scope='span'
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  maxWidth: '1rem',
+                }}
+              >
+                Id
+              </TableCell>
+              <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+                Name
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          {listFetching ? (
+            <Loader isLoading={listFetching} />
+          ) : (
+            <TableBody>
+              {categoriesList?.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.name}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
+        </Table>
+      </TableContainer>
     </div>
   );
 };

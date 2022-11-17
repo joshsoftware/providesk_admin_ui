@@ -1,9 +1,7 @@
 export const saveToLocalStorage = (key, value) => {
   try {
     localStorage.setItem(key, JSON.stringify(value));
-  } catch (error) {
-    console.log('Error while storing data in localstorage');
-  }
+  } catch (error) {}
 };
 
 export const loadLocalStorage = (key) => {
@@ -13,9 +11,7 @@ export const loadLocalStorage = (key) => {
       return JSON.parse(serializableState);
     }
     return null;
-  } catch (error) {
-    console.log('Error while retrieving data from localstorage');
-  }
+  } catch (error) {}
 };
 
 export const removeLocalStorageState = (key) => {

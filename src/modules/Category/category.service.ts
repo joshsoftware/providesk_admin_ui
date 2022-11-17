@@ -1,10 +1,10 @@
 import { get, post } from 'apis/apiHelper';
-import { createCategoryPayloadType } from './type';
+import { IreateCategoryPayload } from './type';
 
 export const postCreateCategory = ({
   payload,
 }: {
-  payload: createCategoryPayloadType;
+  payload: IreateCategoryPayload;
 }) => {
   return post({ path: '/categories', requestParams: payload });
 };

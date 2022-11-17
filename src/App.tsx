@@ -13,6 +13,8 @@ import { loadLocalStorage } from 'shared/localStorageHelpers';
 
 import './App.css';
 
+import { ReactQueryDevtools } from 'react-query/devtools';
+
 // Create a client
 const queryClient = new QueryClient();
 
@@ -41,6 +43,7 @@ function App() {
             <RouterProvider router={router} />
           </ThemeProvider>
         </UserContext.Provider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </GoogleOAuthProvider>
   );

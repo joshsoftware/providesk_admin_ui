@@ -11,12 +11,10 @@ import API_CONSTANTS from 'hooks/constants';
 //1. inavalidate ticket query on successful ticket creation
 
 export const useCreateTicket = () => {
-  // const queryClient = useQueryClient();
   const { mutate, data, isLoading, error } = useMutation(
     (payload: ICreateTicketPayload) => postCreateTicket(payload),
     {
       onSuccess: (res) => {
-        // queryClient.invalidateQueries([API_CONSTANTS.TICKET]);
         toast.success(res?.data?.message);
       },
       onError: (err: AxiosError) => {
@@ -33,6 +31,7 @@ export const useUsers = (dept_id) => {
     [API_CONSTANTS.USER_LIST, dept_id],
     () => getUsersList(dept_id),
     {
+      enabled: !!dept_id,
       onError: () => {
         toast.error('Failed to fetch department employees list.');
       },

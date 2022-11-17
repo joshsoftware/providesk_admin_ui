@@ -52,9 +52,7 @@ const AuthContainer = () => {
     }
   }, [navigate, userAuth]);
 
-  const onGoogleLoginFailure = () => {
-    console.log('Login Failed');
-  };
+  const onGoogleLoginFailure = () => {};
 
   return (
     <div

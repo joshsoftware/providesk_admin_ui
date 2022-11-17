@@ -5,5 +5,5 @@ export const postCreateDepartment = ({
 }: {
   payload: { name: string; id: number };
 }) => {
-  return post({ path: '', requestParams: payload });
+  return post({ path: '/departments', requestParams: payload });
 };

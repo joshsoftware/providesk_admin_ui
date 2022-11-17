@@ -7,7 +7,11 @@ interface IProps {
 
 const Loader: React.FC<IProps> = ({ isLoading }) => (
   <Backdrop
-    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    sx={{
+      color: '#fff',
+      zIndex: (theme) => theme.zIndex.drawer + 1,
+      top: '4rem',
+    }}
     open={isLoading}
     onClick={() => {}}
   >

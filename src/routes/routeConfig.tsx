@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom';
 
+import { Organization } from 'modules/Organization';
 import { DepartMent } from 'modules/Department';
 import { Category } from 'modules/Category';
 import { Ticket } from 'modules/Ticket';
@@ -44,12 +45,16 @@ export const routeConfig = [
     element: (
       <PrivateRoute
         Component={withLayout(<Details />)}
-        AllowedRoles={[
-          ROLES.SUPER_ADMIN,
-          ROLES.ADMIN,
-          ROLES.DEPARTMENT_HEAD,
-          ROLES.EMPLOYEE,
-        ]}
+        AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
+      />
+    ),
+  },
+  {
+    path: ROUTE.ORGANIZATION,
+    element: (
+      <PrivateRoute
+        Component={withLayout(<Organization />)}
+        AllowedRoles={[ROLES.SUPER_ADMIN]}
       />
     ),
   },
