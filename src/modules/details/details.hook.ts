@@ -18,7 +18,7 @@ export const useEditTicket = () => {
       putEditTicket({ id, ticket }),
     {
       onSuccess: (res) => {
-        toast.success(res?.data?.message);
+        toast.success(res?.data?.message || 'Ticked edited successfully.');
         queryClient.invalidateQueries([API_CONSTANTS.DETAILS_SPECEFIC]);
       },
       onError: (err: AxiosError) => {
@@ -41,7 +41,7 @@ export const useReopenTicket = () => {
     }) => putReopenTicket({ id, ticket_result }),
     {
       onSuccess: (res) => {
-        toast.success(res?.data?.message);
+        toast.success(res?.data?.message || 'Ticked reopened successfully.');
         queryClient.invalidateQueries([API_CONSTANTS.DETAILS_SPECEFIC]);
       },
       onError: (err: AxiosError) => {

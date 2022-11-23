@@ -11,23 +11,17 @@ export interface IReopenTicketProps {
 
 export interface ITicketDetails {
   ticket: ITicket;
-  activites: {
-    id: number;
-    ticket_id: number;
-    assigned_from: string;
-    assigned_to: string;
-    description: string;
-    current_ticket_status: ticketStatusType;
-    asset_url?: string;
-    resolver?: { id: number; name: string };
-  }[];
-  resolver?: {
-    id: number;
-    name: string;
-  };
-  created_at: string;
-  resolved_at?: string;
-  id: number;
+  activites: [
+    {
+      id: number;
+      ticket_id: number;
+      assigned_from: string;
+      assigned_to: string;
+      description: string;
+      current_ticket_status: ticketStatusType;
+      asset_url: null;
+    }
+  ];
 }
 
 export interface ITicket {
