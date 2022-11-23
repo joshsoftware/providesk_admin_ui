@@ -6,6 +6,11 @@ export interface IreateCategoryPayload {
   };
 }
 
+export interface ICreateCategoryError {
+  message: string;
+  errors?: string;
+}
+
 export type PriorityType = {
   id: number;
   value: string;

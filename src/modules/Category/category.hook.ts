@@ -3,12 +3,13 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 
 import API_CONSTANTS from 'hooks/constants';
-import { ICreateCategoryError } from './type';
+import { ICreateDepartmentError } from 'modules/Department/type';
 import {
   getCategoriesList,
   getDepartmentList,
   postCreateCategory,
 } from './category.service';
+import { ICreateCategoryError } from './type';
 
 export const useCreateCategory = () => {
   const queryClient = useQueryClient();
@@ -19,7 +20,9 @@ export const useCreateCategory = () => {
     },
     onError: (err: AxiosError) => {
       let error = err?.response?.data as ICreateCategoryError;
-      toast.error(error?.errors || 'Failed to create category.');
+      toast.error(
+        error?.errors || error?.message || 'Failed to create department.'
+      );
     },
   });
 };
@@ -29,9 +32,9 @@ export const useDepartments = (id) => {
     [API_CONSTANTS.DEPARTMENT_LIST, id],
     () => getDepartmentList(id),
     {
-      enabled: !!id,
-      onError: () => {
-        toast.error('Failed to fetch departments list.');
+      onError: (err: AxiosError) => {
+        let error = err?.response?.data as ICreateDepartmentError;
+        toast.error(error?.message || 'Failed to fetch departments list.');
       },
     }
   );
@@ -43,9 +46,11 @@ export const useCategories = (dept_id) => {
     [API_CONSTANTS.CATEGORY_LIST, dept_id],
     () => getCategoriesList(dept_id),
     {
-      enabled: !!dept_id,
-      onError: () => {
-        toast.error('Failed to fetch categories list.');
+      onError: (err: AxiosError) => {
+        let error = err?.response?.data as ICreateCategoryError;
+        toast.error(
+          error?.errors || error?.message || 'Failed to fetch categories list.'
+        );
       },
     }
   );

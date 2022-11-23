@@ -1,0 +1,47 @@
+@import 'stylesheets/core';
+
+.complaint-card-filters {
+  flex-direction: column;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }  
+}
+
+.filter-input-group {
+  grid-template-columns: repeat(1, 1fr);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.complaint-card-grid {
+  grid-template-columns: repeat(1, 1fr);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (min-width: 1400px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.card-list {
+
+  .card-list-item {
+
+    + .card-list-item:not(:first-child) {
+      border-top: 1px solid rgba($color: #000000, $alpha: 0.1);
+    }
+  }
+}

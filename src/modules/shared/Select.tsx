@@ -120,7 +120,7 @@ export const CustomSelect = ({
       value={value}
       onChange={onChange}
       name={name}
-      //   sx={{width:200}}
+      size="small"
       fullWidth
     >
       {options.map((option: SelectOption) => (

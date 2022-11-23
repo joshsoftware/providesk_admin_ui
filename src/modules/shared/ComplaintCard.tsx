@@ -5,16 +5,10 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-import CardActionArea from '@mui/material/CardActionArea';
 
 import { IComplaintDetails } from 'modules/dashboard/types';
 import ROUTE from 'routes/constants';
-
+import { List, ListItem } from '@mui/material';
 interface Props {
   details: IComplaintDetails;
 }
@@ -64,46 +58,28 @@ const ComplaintCard: React.FC<Props> = (props) => {
   ];
 
   return (
-    <Card sx={{ minWidth: 300, cursor: 'pointer' }} onClick={onCardClick}>
-      <CardActionArea>
-        <CardContent>
-          <Stack
-            direction='row'
-            spacing={1}
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: 2,
-            }}
-          >
-            <Chip label={id} />
-            <Chip label={status} color='primary' />
-          </Stack>
-          <Typography
-            sx={{ fontSize: 16, fontWeight: 'bold', maxWidth: 300 }}
-            color='text.dark'
-            gutterBottom
-          >
-            {title}
-          </Typography>
-          <TableContainer>
-            <Table>
-              <TableBody>
-                {complaintConfig.map((config) => (
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>
-                      {config.label}
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      {config.value}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </CardContent>
-      </CardActionArea>
+    <Card variant="outlined" onClick={onCardClick}>
+      <CardContent sx={{pb: '0.5rem !important'}}>
+        <Stack
+          direction='row'
+          spacing={1}
+          sx={{justifyContent: 'space-between', mb: '1rem'}}
+        >
+          <Chip label={id} variant="outlined" size='small' sx={{fontSize: '0.75rem', fontWeight: '600'}} />
+          <Chip label={status} variant="outlined" color='info' className='text-truncate' size='small' sx={{fontSize: '0.75rem', fontWeight: '500'}} />
+        </Stack>
+        <Typography variant='h6' sx={{mb: '0.5rem'}} className='text-truncate'>
+          {title}
+        </Typography>
+        <List className='card-list'>
+          {complaintConfig.map((config) => (
+            <ListItem sx={{gap: '1rem', p: '0.5rem'}} className='card-list-item'>
+              <Typography variant='body2' sx={{mr: 'auto'}}>{config.label}</Typography>
+              <Typography variant='body1' sx={{fontWeight: '700'}}>{config.value}</Typography>
+            </ListItem>
+          ))}
+        </List>
+      </CardContent>
     </Card>
   );
 };

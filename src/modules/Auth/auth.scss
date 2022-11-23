@@ -1,0 +1,59 @@
+@import 'stylesheets/core';
+
+.auth-wrapper {
+  background-color: $primary-light;
+  flex-direction: column;
+  gap: 0;
+
+  @media (min-width: 992px) {
+    background-color: transparent;
+    flex-direction: row;
+  }
+}
+
+.img-box, .auth-box {
+  padding: 1rem;
+
+  @media (min-width: 992px) {
+    height: 100%;
+    flex: 1;
+  }
+}
+
+.img-box {
+
+
+  .auth-heading {
+    display: block;
+  }
+
+  @media (min-width: 992px) {
+
+    .auth-heading {
+      display: none;
+    }
+  }
+}
+
+.auth-box {
+
+  .auth-heading {
+    display: none;
+  }
+
+  @media (min-width: 992px) {
+    background-color: $primary-light;
+
+    .auth-heading {
+      display: block;
+    }
+  }
+}
+
+.img-auth {
+  width: 80%;
+
+  @media (min-width: 992px) {
+    width: 24rem;
+  }
+}

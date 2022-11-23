@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { useCreateOrganization } from './organization.hook';
@@ -24,7 +24,7 @@ export const Organization = () => {
 
   const { mutate, isLoading: creating } = useCreateOrganization();
 
-  const handleAddDomain = () => {
+  const handleAddDomain = useCallback(() => {
     const DomainRegEx = /[a-z0-9]*[.][a-z]*/;
     if (DomainRegEx.test(domain)) {
       setDomainsList([...domainsList, domain]);
@@ -32,17 +32,20 @@ export const Organization = () => {
     } else {
       toast.warning("Domain Name should be of type 'domain.xyz'");
     }
-  };
+  }, [domain]);
 
-  const handleDomainDelete = (index) => {
-    const modifiedDomains = [
-      ...domainsList.slice(0, index),
-      ...domainsList.slice(index + 1),
-    ];
-    setDomainsList(modifiedDomains);
-  };
+  const handleDomainDelete = useCallback(
+    (index) => {
+      const modifiedDomains = [
+        ...domainsList.slice(0, index),
+        ...domainsList.slice(index + 1),
+      ];
+      setDomainsList(modifiedDomains);
+    },
+    [domainsList]
+  );
 
-  const createOrganization = () => {
+  const createOrganization = useCallback(() => {
     let valid = /^[ A-Za-z0-9 ]*$/;
     if (!valid.test(organization)) {
       toast.warning(
@@ -59,7 +62,7 @@ export const Organization = () => {
       setOrganization('');
       setDomainsList([]);
     }
-  };
+  }, [organization, domainsList]);
 
   return (
     <>

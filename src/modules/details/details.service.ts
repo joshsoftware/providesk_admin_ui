@@ -13,11 +13,3 @@ export const getDetailsTicket = (id) => {
     path: `/tickets/${id}`,
   });
 };
-
-export const getDepartmentList = () => {
-  return get({ path: `/organizations/1/departments` });
-};
-
-export const getCategoryList = () => {
-  return get({ path: `/category/` });
-};

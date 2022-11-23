@@ -1,11 +1,13 @@
 import React from 'react';
+import { Box } from '@mui/material';
+
 import Sidebar from './sidebar';
 
 const withLayout = (component: React.ReactElement) => {
   return (
     <>
       <Sidebar />
-      <div style={{ marginTop: '5rem' }}>{component}</div>
+      <Box sx={{p: '1.5rem', pt: '5.5rem'}}>{component}</Box>
     </>
   );
 };

@@ -1,0 +1,63 @@
+// Flex
+.flex-1 {
+  flex: 1 !important;
+}
+
+// Font Size
+.fs-mini {
+  font-size: $font-size-mini !important;
+}
+
+.fs-xs {
+  font-size: $font-size-xs !important;
+}
+
+.fs-sm {
+  font-size: $font-size-sm !important;
+}
+
+// Text
+.text-truncate {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+// Scroll
+.scroll-auto {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+  @include scrollbars();
+}
+
+.scroll-x {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  @include scrollbars();
+}
+
+.scroll-y {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  @include scrollbars();
+}
+
+// Disabled
+.disabled {
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+}
+
+// Cursor
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+
+// Background Color
+.bg-primary-light {
+  background-color: #DEEBF1 !important;
+}

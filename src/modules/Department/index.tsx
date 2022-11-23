@@ -13,7 +13,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select as SelectMUI,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 export const DepartMent = () => {
   const { userAuth } = React.useContext(UserContext);
@@ -27,11 +35,15 @@ export const DepartMent = () => {
   const { mutate, isLoading: creatingDepartment } = useCreateDepartment();
 
   const createDepartment = React.useCallback(() => {
-    const payload = { name: department, organization_id: organizationId };
+    const payload = {
+      name: department.trim(),
+      organization_id: organizationId,
+    };
     mutate(payload);
   }, [mutate, department]);
 
-  const handleChange = (e) => setDepartment(e.target.value);
+  const handleDepartmentChange = (e) => setDepartment(e.target.value);
+  const handleOrganizationChange = (e) => setOrganizationId(e.target.value);
 
   return (
     <>
@@ -43,32 +55,77 @@ export const DepartMent = () => {
           m: 1,
         }}
       >
-        <Box sx={{ m: 5, display: 'flex', alignItems: 'center' }}>
+        <Typography variant='h4' sx={{ mt: 1 }}>
+          Create Department
+        </Typography>
+        <Box
+          sx={{
+            m: 5,
+            display: 'flex',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}
+        >
+          <FormControl variant='standard' sx={{ m: 2, minWidth: 120 }}>
+            <InputLabel id='select-organization'>
+              Select Organization
+            </InputLabel>
+            <SelectMUI
+              labelId='select-organization'
+              id='select-organization'
+              value={organizationId}
+              onChange={handleOrganizationChange}
+              label='Select Organization'
+            >
+              {userAuth?.organizations?.map((org) => (
+                <MenuItem value={org.id}>{org.name}</MenuItem>
+              ))}
+            </SelectMUI>
+          </FormControl>
+
           <TextField
-            label='Add new Department'
+            sx={{ m: 2 }}
+            label='Create Department'
             value={department}
             type='text'
             required={true}
             variant='standard'
             color='secondary'
-            onChange={handleChange}
+            onChange={handleDepartmentChange}
           />
           <Button
             isLoading={creatingDepartment}
             onClick={() => createDepartment()}
             className='btn btn-success mx-3'
             style={{ height: '40px' }}
-            disabled={department.length < 6}
+            disabled={!!organizationId && department.length < 2}
           >
-            Save
+            Create
           </Button>
         </Box>
-        <Box sx={{ width: '600px', maxHeight: '60vh', overflowY: 'scroll' }}>
+        <Box
+          sx={{
+            width: '100%',
+            maxHeight: '60vh',
+            maxWidth: '600px',
+          }}
+        >
+          <Typography variant='h4' sx={{ mb: 4, textAlign: 'center' }}>
+            Departments List
+          </Typography>
           {isLoading ? (
             <Loader isLoading={isLoading} />
           ) : (
             <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 250 }} aria-label='simple table'>
+              <Table
+                sx={{
+                  minWidth: 250,
+                  maxHeight: '20vh',
+                  overflow: 'scroll',
+                }}
+                aria-label='simple table'
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell className='fw-bold'>Id</TableCell>
@@ -76,7 +133,7 @@ export const DepartMent = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {departmentsList.map((dept) => (
+                  {departmentsList?.map((dept) => (
                     <TableRow
                       key={dept.name}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

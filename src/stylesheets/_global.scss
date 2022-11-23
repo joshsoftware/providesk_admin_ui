@@ -1,0 +1,15 @@
+html,
+body {
+  min-height: 100vh;
+}
+
+body {
+  @extend .scroll-y;
+}
+
+main#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  @extend .scroll-y;
+}

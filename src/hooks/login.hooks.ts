@@ -1,5 +1,5 @@
 // Login hooks
-import { useMutation, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
 import { login } from 'services/login.services';
 
 export const useLogin = () => {

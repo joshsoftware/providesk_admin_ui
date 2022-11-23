@@ -8,11 +8,13 @@ import { CreateOrganizationErrorType } from './type';
 export const useCreateOrganization = () => {
   return useMutation((payload: any) => postCreateOrganization({ payload }), {
     onSuccess: (res) => {
-      toast.success(res?.data?.message);
+      toast.success(res?.data?.message || 'Organization created successfully.');
     },
     onError: (err: AxiosError) => {
       let error = err?.response?.data as CreateOrganizationErrorType;
-      toast.error(error.errors);
+      toast.error(
+        error.errors || error.message || 'Failed to create organization.'
+      );
     },
   });
 };

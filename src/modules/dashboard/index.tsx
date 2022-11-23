@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TablePagination from '@mui/material/TablePagination';
+import { Box } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
 import { CustomSelect } from 'modules/shared/Select';
 import Search from 'modules/shared/Search';
 import ComplaintCard from 'modules/shared/ComplaintCard';
+import './dashboard.scss';
 
 const statusOptions = [
   {
@@ -87,9 +89,9 @@ const Dashboard = () => {
   const updatedData = data?.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
   return (
-    <div>
-      <div className='d-flex flex-column p-5 '>
-        <div className='d-flex gap-3 mb-4'>
+    <Box sx={{display: 'flex', flexDirection: 'column'}}>
+      <Box sx={{display: 'flex', gap: '1.5rem', mb: '1.5rem'}} className='complaint-card-filters'>
+        <Box sx={{display: 'grid', gap: '1.5rem'}} className='filter-input-group flex-1'>
           <CustomSelect
             label={'Status'}
             options={statusOptions}
@@ -110,28 +112,26 @@ const Dashboard = () => {
             onChange={onSearchTile}
             name='title'
           />
-          <Button variant='contained' sx={{ width: 250 }}>
-            Search
-          </Button>
-        </div>
-        <div className='d-flex justify-content-around flex-wrap gap-4 mt-3'>
-          {updatedData?.map((complaint) => (
-            <ComplaintCard details={complaint} />
-          ))}
-        </div>
-        <div className='d-flex justify-content-end mt-3'>
-          <TablePagination
-            component='div'
-            count={TOTAL_COMPLAINTS}
-            page={page}
-            rowsPerPage={rowsPerPage}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            sx={{ alignItems: 'center', fontWeight: 'bold', fontSize: 30 }}
-          />
-        </div>
-      </div>
-    </div>
+        </Box>
+        <Button variant='contained' size='small'>
+          Search
+        </Button>
+      </Box>
+      <Box sx={{display: 'grid', gap: '1.5rem'}} className='complaint-card-grid'>
+        {updatedData?.map((complaint) => (
+          <ComplaintCard details={complaint} />
+        ))}
+      </Box>
+      <TablePagination
+        component='div'
+        count={TOTAL_COMPLAINTS}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{fontSize: '0.75rem'}}
+      />
+    </Box>
   );
 };
 

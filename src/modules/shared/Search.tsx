@@ -10,7 +10,7 @@ interface SearchProps {
 
 const Search = ({ label, name, value, onChange }: SearchProps) => {
   return (
-    <TextField label={label} name={name} value={value} onChange={onChange} fullWidth />
+    <TextField label={label} name={name} value={value} onChange={onChange} size="small" fullWidth />
   );
 };
 

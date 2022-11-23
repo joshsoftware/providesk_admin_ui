@@ -13,6 +13,9 @@ export const useCreateDepartment = () => {
     onSuccess: (res) => {
       queryClient.invalidateQueries(API_CONSTANTS.DEPARTMENT_LIST);
       toast.success(res?.data?.message || 'Department created successfully.');
+      toast.info('Please assign department head for the department.', {
+        autoClose: false,
+      });
     },
     onError: (err: AxiosError) => {
       let error = err?.response?.data as ICreateDepartmentError;
