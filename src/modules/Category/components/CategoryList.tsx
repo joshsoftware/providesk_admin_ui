@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 
 import Select from 'modules/shared/Select';
 import Loader from 'modules/Auth/components/Loader';
-
+import { UserContext } from 'App';
 import { useCategories, useDepartments } from '../category.hook';
 
 import {
@@ -18,14 +18,21 @@ import {
 } from '@mui/material';
 
 const CategoryList = () => {
-  const [departmentId, setDepartmentId] = useState<number>(1);
+  const { userAuth } = useContext(UserContext);
 
-  const { data: categoriesList, isLoading: listFetching } =
+  const [organizationId, setOrganizationId] = useState<number | ''>(
+    userAuth?.organizations?.[0]?.id || ''
+  );
+
+  const { data: departmentsList, isLoading: isFetchingDepartment } =
+    useDepartments(organizationId);
+
+  const [departmentId, setDepartmentId] = useState<number | ''>(
+    departmentsList?.[0]?.id || ''
+  );
+
+  const { data: categoriesList, isLoading: isFetchingCategories } =
     useCategories(departmentId);
-  // todo
-  // send organization id in useDepartments
-  const { data: departmentsList, isLoading: departmentsFetching } =
-    useDepartments(1);
 
   const deptOptions = useMemo(() => {
     return (
@@ -36,9 +43,9 @@ const CategoryList = () => {
     );
   }, [departmentId, departmentsList]);
 
-  function handleChange(value: string) {
+  const handleChange = useCallback((value: string) => {
     setDepartmentId(parseInt(value));
-  }
+  }, []);
 
   return (
     <div
@@ -51,6 +58,7 @@ const CategoryList = () => {
         alignItems: 'center',
       }}
     >
+      <Loader isLoading={isFetchingDepartment || isFetchingCategories} />
       <Divider>
         <Typography variant='h4' component='div' align='center'>
           Category Listing
@@ -103,21 +111,17 @@ const CategoryList = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          {listFetching ? (
-            <Loader isLoading={listFetching} />
-          ) : (
-            <TableBody>
-              {categoriesList?.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.name}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          )}
+          <TableBody>
+            {categoriesList?.map((row) => (
+              <TableRow
+                key={row.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell>{row.id}</TableCell>
+                <TableCell>{row.name}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </TableContainer>
     </div>

@@ -8,6 +8,8 @@ export type userAuthType = {
 export type OrganizationType = {
   id: number;
   name: string;
+  department_name?: string;
+  department_id: number;
 };
 
 export type userProfileType = {

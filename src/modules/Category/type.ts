@@ -18,5 +18,5 @@ export type PriorityType = {
 
 export interface ICreateCategoryError {
   message: string;
-  errors: string;
+  errors?: string;
 }
