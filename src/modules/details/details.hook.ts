@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
 import API_CONSTANTS from 'hooks/constants';
-import { IEditTicketPayload, IReopenTicketPayload } from './type';
+import { IEditTicketParams, IReopenTicketParams } from './type';
 import { ICreateTicketError } from 'modules/Ticket/type';
 import {
   getDetailsTicket,
@@ -14,16 +14,17 @@ import {
 export const useEditTicket = () => {
   const queryClient = useQueryClient();
   return useMutation(
-    ({ id, ticket }: { id: number; ticket: { ticket: IEditTicketPayload } }) =>
-      putEditTicket({ id, ticket }),
+    ({ id, ticket_details, setOpenEdit }: IEditTicketParams) =>
+      putEditTicket({ id, ticket_details }),
     {
-      onSuccess: (res) => {
-        toast.success(res?.data?.message || 'Ticked edited successfully.');
+      onSuccess: (res, params) => {
+        toast.success(res?.data?.message || 'Ticked updated successfully.');
+        params.setOpenEdit(false);
         queryClient.invalidateQueries([API_CONSTANTS.DETAILS_SPECEFIC]);
       },
       onError: (err: AxiosError) => {
         let error = err?.response?.data as ICreateTicketError;
-        toast.error(error?.errors || 'Failed to create ticket.');
+        toast.error(error?.errors || 'Failed to update ticket.');
       },
     }
   );
@@ -32,16 +33,12 @@ export const useEditTicket = () => {
 export const useReopenTicket = () => {
   const queryClient = useQueryClient();
   return useMutation(
-    ({
-      id,
-      ticket_result,
-    }: {
-      id: number;
-      ticket_result: { ticket_result: IReopenTicketPayload };
-    }) => putReopenTicket({ id, ticket_result }),
+    ({ id, ticket_result, setOpenEdit }: IReopenTicketParams) =>
+      putReopenTicket({ id, ticket_result }),
     {
-      onSuccess: (res) => {
+      onSuccess: (res, params) => {
         toast.success(res?.data?.message || 'Ticked reopened successfully.');
+        params.setOpenEdit(false);
         queryClient.invalidateQueries([API_CONSTANTS.DETAILS_SPECEFIC]);
       },
       onError: (err: AxiosError) => {

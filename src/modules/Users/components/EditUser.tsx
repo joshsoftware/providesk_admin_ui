@@ -8,6 +8,7 @@ import { useEditUser } from '../users.hook';
 import { getAllowedRoles } from '../users.helpers';
 import { UserContext } from 'App';
 import { ROLES } from 'routes/roleConstants';
+import ROUTE from 'routes/constants';
 import { IEditUserPayload } from '../type';
 
 import {
@@ -16,9 +17,9 @@ import {
   InputLabel,
   MenuItem,
   Select as SelectMUI,
+  Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import ROUTE from 'routes/constants';
 
 const EditUser = ({ user, organizationId, setOpenEdit }) => {
   const { userAuth } = useContext(UserContext);
@@ -38,7 +39,7 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
       role,
       department_id: departmentId as number,
     };
-    updateUser({ id: user?.id, payload });
+    updateUser({ id: user?.id, payload, setOpenEdit });
   }, [role, departmentId]);
 
   const deptOptions = useMemo(() => {
@@ -69,10 +70,9 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
         bgcolor: 'background.paper',
         boxShadow: 24,
         pt: 2,
-        px: 4,
+        px: 2,
         pb: 3,
         maxWidth: 600,
-        mt: 10,
       }}
     >
       <CloseIcon
@@ -89,12 +89,14 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
           justifyContent: 'center',
         }}
       >
-        <h3>Edit User</h3>
+        <Typography variant='h5'>Edit User</Typography>
         <div
           style={{
+            padding: '1rem',
             display: 'flex',
             flexDirection: 'column',
             margin: 20,
+            maxWidth: 600,
             alignItems: 'center',
             justifyContent: 'center',
           }}
@@ -110,7 +112,7 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
             >
               {allowedRoles.map((role) => (
                 <MenuItem key={role} value={role.toLowerCase()}>
-                  {role}
+                  {role.toUpperCase()}
                 </MenuItem>
               ))}
             </SelectMUI>

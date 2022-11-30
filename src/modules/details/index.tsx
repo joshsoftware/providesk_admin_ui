@@ -39,18 +39,17 @@ function Details() {
   }, [ticketDetails]);
 
   return (
-    <div className='d-flex'>
+    <div>
       <Grid container>
         <Loader isLoading={isFetchingTicketDetails} />
         <Grid item xs={12} md={4} p={5}>
           <Divider>
-            <Typography variant='h6' component='div'>
+            <Typography variant='h5' component='div'>
               Ticket Details
             </Typography>
           </Divider>
           <Box>
-            <div className='d-flex justify-content-between'>
-              <Chip label={ticket?.id}></Chip>
+            <div>
               <IconButton
                 aria-label='edit'
                 size='large'
@@ -110,6 +109,14 @@ function Details() {
                       <Chip label={ticket?.status} style={{backgroundColor:ticketStatusColours[ticket?.status]}}/>
                     </TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ color: '#63686b' }}>
+                      Previous Comment
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>
+                      {ticket?.reason_for_approval || '_'}
+                    </TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
@@ -119,6 +126,11 @@ function Details() {
             open={openEdit}
             onClose={() => setOpenEdit(false)}
             sx={{ overflow: 'scroll' }}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
             <EditTicketForm
               ticket={ticketDetails}
@@ -135,7 +147,7 @@ function Details() {
           style={{ maxHeight: '85vh', overflow: 'auto' }}
         >
           <Divider>
-            <Typography variant='h6' component='div'>
+            <Typography variant='h5' component='div'>
               Ticket History
             </Typography>
           </Divider>

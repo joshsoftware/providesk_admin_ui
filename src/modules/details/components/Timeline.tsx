@@ -8,19 +8,19 @@ import {
   TimelineOppositeContent,
 } from '@mui/lab';
 import { Box, Chip, Paper, Typography } from '@mui/material';
-import { DateFormate, lastDayesFrom } from 'apis/utils/date.utils';
+import { DateFormate, getLastDaysFrom } from 'apis/utils/date.utils';
 import { ticketStatusColours } from '../constants';
 
 export const TimelineComponent = ({ activities }: any) => {
   return (
     <>
       <Timeline>
-        {activities?.map((item,index) => {
+        {activities?.map((item, index) => {
           return (
             <Box key={item.created_at}>
               <TimelineItem>
                 <TimelineOppositeContent>
-                  <TimelineLeft date={item.created_at} index={index}/>{' '}
+                  <TimelineLeft date={item.created_at} index={index} />{' '}
                 </TimelineOppositeContent>
                 <TimelineSeparator>
                   <TimelineDot />
@@ -38,7 +38,7 @@ export const TimelineComponent = ({ activities }: any) => {
   );
 };
 
-const TimelineLeft = ({ date,index }: { date: string,index:number }) => {
+const TimelineLeft = ({ date, index }: { date: string; index: number }) => {
   return (
     <div
       style={{
@@ -46,8 +46,7 @@ const TimelineLeft = ({ date,index }: { date: string,index:number }) => {
         minWidth: '11.5vw',
         maxWidth: '100%',
         textAlign: 'right',
-        fontWeight:490,
-
+        fontWeight: 490,
       }}
     >
       {DateFormate(date)}
@@ -58,14 +57,21 @@ const TimelineLeft = ({ date,index }: { date: string,index:number }) => {
 const TimeLineDescription = ({ activity }: { activity: any }) => {
   return (
     <Paper elevation={8} style={{ width: '40vw', maxWidth: '100%' }}>
-      <div className='p-2 m-2'>
-        
+      <div style={{ padding: '0.5rem 0', margin: '0.5rem' }}>
         <Chip
           label={activity?.current_ticket_status}
-          style={{backgroundColor:ticketStatusColours[activity?.current_ticket_status]}}
-          sx={{m:2}}
+          style={{
+            backgroundColor:
+              ticketStatusColours[activity?.current_ticket_status],
+          }}
+          sx={{ m: 2 }}
         />
-        <Typography sx={{p:2}}>{activity?.description}</Typography>
+        <p>{activity?.description}</p>
+        <p>
+          {activity?.reason_for_update && (
+            <strong>Reason: {activity?.reason_for_update}</strong>
+          )}
+        </p>
       </div>
     </Paper>
   );

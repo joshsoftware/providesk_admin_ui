@@ -3,7 +3,7 @@ import { ROLES } from 'routes/roleConstants';
 export const getAllowedRoles = (role) => {
   let allowedRoles;
   if (role === ROLES.ADMIN) {
-    allowedRoles = ['Employee', 'Department Head', 'Admin'];
+    allowedRoles = ['Employee', 'Department_Head', 'Admin'];
   } else {
     allowedRoles = ['Employee'];
   }

@@ -7,7 +7,7 @@ import jwt_decode from 'jwt-decode';
 import Login from 'assets/svg/Login.svg';
 import Loader from './components/Loader';
 import { userProfileType } from './auth.types';
-import { useLogin } from 'hooks/login.hooks';
+import { useLogin } from './login.hooks';
 import { saveToLocalStorage } from 'shared/localStorageHelpers';
 import ROUTE from 'routes/constants';
 import { LOCAL_STORAGE_KEYS } from 'shared/appConstants';

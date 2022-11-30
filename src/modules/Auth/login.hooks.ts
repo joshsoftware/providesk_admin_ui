@@ -1,6 +1,6 @@
 // Login hooks
 import { useMutation } from 'react-query';
-import { login } from 'services/login.services';
+import { login } from './login.services';
 
 export const useLogin = () => {
   const { mutate, isLoading, data } = useMutation(login);

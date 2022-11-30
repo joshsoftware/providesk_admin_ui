@@ -88,7 +88,11 @@ export const EditTicketForm = ({
         description,
         status,
       };
-      editTicket({ id, ticket: { ticket: ticketDetails } });
+      editTicket({
+        id,
+        ticket_details: { ticket: ticketDetails },
+        setOpenEdit,
+      });
     },
     []
   );
@@ -101,7 +105,11 @@ export const EditTicketForm = ({
         state_action,
         started_reason,
       };
-      reopenTicket({ id, ticket_result: { ticket_result: ticketDetails } });
+      reopenTicket({
+        id,
+        ticket_result: { ticket_result: ticketDetails },
+        setOpenEdit,
+      });
     },
     []
   );
@@ -132,7 +140,6 @@ export const EditTicketForm = ({
     onSubmit: (values) => {
       if (values.status === 'reopen') handleReopenTicket(values);
       else handleUpdateTicket(values);
-      setOpenEdit(false);
       resetForm();
     },
   });
@@ -144,10 +151,9 @@ export const EditTicketForm = ({
         bgcolor: 'background.paper',
         boxShadow: 24,
         pt: 2,
-        px: 4,
+        px: 2,
         pb: 3,
         maxWidth: 600,
-        mt: 10,
       }}
     >
       <CloseIcon
@@ -156,11 +162,11 @@ export const EditTicketForm = ({
       />
       <Loader
         isLoading={
-          isFetchingDepartments &&
-          isFetchingCategories &&
-          isFetchingUsers &&
-          isUpdatingTicket &&
-          isReopeningTicket
+          isUpdatingTicket ||
+          isReopeningTicket ||
+          isFetchingDepartments ||
+          isFetchingCategories ||
+          isFetchingUsers
         }
       />
       <form
@@ -384,9 +390,10 @@ export const EditTicketForm = ({
         <Button
           type='submit'
           className='mx-3'
+          isLoading={isReopeningTicket || isUpdatingTicket}
           style={{ height: '40px', marginTop: '1rem' }}
         >
-          {values.status === 'reopen' ? 'Reopen Ticket' : 'Update Ticket'}
+          {values.status === 'reopen' ? 'Reopen' : 'Update'}
         </Button>
       </form>
     </Box>

@@ -1,6 +1,6 @@
 import { get, put } from 'apis/apiHelper';
 
-export const putEditTicket = ({ id, ticket: payload }) => {
+export const putEditTicket = ({ id, ticket_details: payload }) => {
   return put({ path: `/tickets/${id}`, payloadParams: payload });
 };
 

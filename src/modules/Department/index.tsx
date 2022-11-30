@@ -5,6 +5,7 @@ import { Button } from 'modules/shared/Button';
 import Loader from 'modules/Auth/components/Loader';
 import { useDepartments } from 'modules/Category/category.hook';
 import { UserContext } from 'App';
+import { ROLES } from 'routes/roleConstants';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -40,6 +41,7 @@ export const DepartMent = () => {
       organization_id: organizationId,
     };
     mutate(payload);
+    setDepartment('');
   }, [mutate, department]);
 
   const handleDepartmentChange = (e) => setDepartment(e.target.value);
@@ -55,55 +57,56 @@ export const DepartMent = () => {
           m: 1,
         }}
       >
-        <Typography variant='h4' sx={{ mt: 1 }}>
-          Create Department
-        </Typography>
-        <Box
-          sx={{
-            m: 5,
-            display: 'flex',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-          }}
-        >
-          <FormControl variant='standard' sx={{ m: 2, minWidth: 120 }}>
-            <InputLabel id='select-organization'>
-              Select Organization
-            </InputLabel>
-            <SelectMUI
-              labelId='select-organization'
-              id='select-organization'
-              value={organizationId}
-              onChange={handleOrganizationChange}
-              label='Select Organization'
-            >
-              {userAuth?.organizations?.map((org) => (
-                <MenuItem value={org.id}>{org.name}</MenuItem>
-              ))}
-            </SelectMUI>
-          </FormControl>
+        <Paper elevation={2} sx={{ padding: 3, minWidth: '20rem', mb: 5 }}>
+          <Typography variant='h5' sx={{ mt: 1, textAlign: 'center' }}>
+            Create Department
+          </Typography>
 
-          <TextField
-            sx={{ m: 2 }}
-            label='Create Department'
-            value={department}
-            type='text'
-            required={true}
-            variant='standard'
-            color='secondary'
-            onChange={handleDepartmentChange}
-          />
-          <Button
-            isLoading={creatingDepartment}
-            onClick={() => createDepartment()}
-            className='btn btn-success mx-3'
-            style={{ height: '40px' }}
-            disabled={!!organizationId && department.length < 2}
+          <Box
+            sx={{
+              m: 5,
+              display: 'flex',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+            }}
           >
-            Create
-          </Button>
-        </Box>
+            {userAuth?.role === ROLES.SUPER_ADMIN && (
+              <FormControl variant='standard' sx={{ m: 2, minWidth: 120 }}>
+                <InputLabel id='select-organization'>Organization</InputLabel>
+                <SelectMUI
+                  labelId='select-organization'
+                  id='select-organization'
+                  value={organizationId}
+                  onChange={handleOrganizationChange}
+                  label='Organization'
+                >
+                  {userAuth?.organizations?.map((org) => (
+                    <MenuItem value={org.id}>{org.name}</MenuItem>
+                  ))}
+                </SelectMUI>
+              </FormControl>
+            )}
+
+            <TextField
+              sx={{ m: 2 }}
+              label='Department'
+              value={department}
+              type='text'
+              required={true}
+              variant='standard'
+              onChange={handleDepartmentChange}
+            />
+            <Button
+              isLoading={creatingDepartment}
+              onClick={() => createDepartment()}
+              style={{ height: '40px' }}
+              disabled={!!organizationId && department.length < 2}
+            >
+              Create
+            </Button>
+          </Box>
+        </Paper>
         <Box
           sx={{
             width: '100%',
@@ -111,7 +114,7 @@ export const DepartMent = () => {
             maxWidth: '600px',
           }}
         >
-          <Typography variant='h4' sx={{ mb: 4, textAlign: 'center' }}>
+          <Typography variant='h5' sx={{ mb: 4, textAlign: 'center' }}>
             Departments List
           </Typography>
           {isLoading ? (

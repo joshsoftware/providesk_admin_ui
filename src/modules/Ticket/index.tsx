@@ -24,6 +24,7 @@ import {
 import { UploadBucket } from 'modules/shared/UploadBucket';
 import { s3GetSignedUrlForPath, s3Upload } from 'apis/utils/mediaUpload/awsmedia';
 
+import Loader from 'modules/Auth/components/Loader';
 
 export const Ticket = () => {
   const { userAuth } = useContext(UserContext);
@@ -126,16 +127,27 @@ export const Ticket = () => {
         style={{
           margin: '3rem 0',
           display: 'flex',
+          justifyContent: 'center',
           flexDirection: 'column',
           alignItems: 'center',
         }}
       >
-        <Paper elevation={2} sx={{ paddingTop: 3, minWidth: '20rem' }}>
-          <Divider>
-            <Typography variant='h6' component='div'>
-              Create Request or Complaint
-            </Typography>
-          </Divider>
+        <Loader
+          isLoading={
+            isFetchingDepartments ||
+            isFetchingCategories ||
+            isFetchingUsers ||
+            creatingTicket
+          }
+        />
+        <Paper elevation={2} sx={{ padding: 3, minWidth: '20rem' }}>
+          <Typography
+            variant='h5'
+            component='div'
+            style={{ textAlign: 'center' }}
+          >
+            Create Request or Complaint
+          </Typography>
           <form onSubmit={formik.handleSubmit}>
             <div
               style={{
@@ -154,20 +166,21 @@ export const Ticket = () => {
                 type='text'
                 required={true}
                 variant='standard'
-                color='secondary'
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 error={formik.touched.title && Boolean(formik.errors.title)}
                 autoFocus={true}
                 helperText={formik.touched.title && formik.errors.title}
               />
-              <Typography variant='caption' style={{ margin: '0 1rem' }}>
-                {' '}
-                Description *{' '}
+              <Typography
+                variant='caption'
+                style={{ margin: '0 0.5rem', fontSize: '11px' }}
+              >
+                Description *
               </Typography>
               <textarea
                 style={{
-                  margin: '0 1rem',
+                  margin: '0 0.5rem',
                   border: '0',
                   borderBottom: '1px solid',
                   whiteSpace: 'pre-wrap',
@@ -177,7 +190,6 @@ export const Ticket = () => {
                 rows={3}
                 value={formik.values.description}
                 required={true}
-                color='secondary'
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
               />

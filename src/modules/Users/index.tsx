@@ -21,6 +21,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import EditUser from './components/EditUser';
@@ -72,7 +73,7 @@ export const Users = () => {
           flexDirection: 'column',
         }}
       >
-        <h5>Users List</h5>
+        <Typography variant='h5'>Users List</Typography>
         <div
           style={{
             display: 'flex',
@@ -209,6 +210,11 @@ export const Users = () => {
           open={openEdit}
           onClose={() => setOpenEdit(false)}
           sx={{ overflow: 'scroll' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         >
           <EditUser user={user} organizationId={1} setOpenEdit={setOpenEdit} />
         </Modal>

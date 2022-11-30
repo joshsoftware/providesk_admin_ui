@@ -17,7 +17,7 @@ export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
   const { data, isLoading, isFetching } = useQuery(['complaint-list',params], () =>
     getRequestList(path,params),{
       onError:(e)=>{
-        toast.error("unable to fetch")
+        toast.error("Failed to fetch list")
       }
     }
   );

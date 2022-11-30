@@ -77,3 +77,15 @@ export type permittedEventsType =
   | 'resolve'
   | 'close'
   | 'reopen';
+
+export interface IReopenTicketParams {
+  ticket_result: { ticket_result: IReopenTicketPayload };
+  id: number;
+  setOpenEdit: (value: React.SetStateAction<boolean>) => void;
+}
+
+export interface IEditTicketParams {
+  ticket_details: { ticket: IEditTicketPayload };
+  id: number;
+  setOpenEdit: (value: React.SetStateAction<boolean>) => void;
+}

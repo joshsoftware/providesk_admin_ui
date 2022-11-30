@@ -73,11 +73,9 @@ const ComplaintCard: React.FC<Props> = (props) => {
   return (
     
     <Card variant="outlined" onClick={onCardClick} 
-    // onMouseEnter={()=>setPointer(true)} 
-    // onMouseOut={()=>setPointer(false)}
-    // className={"shadow-lg p-3 mb-5 bg-red rounded"}
+   
      sx={{cursor:"pointer" }}
-    //  boxShadow={{ pointer?-1:3}}
+ 
      >
       <CardContent sx={{pb: '0.5rem !important'}}>
         <Stack
@@ -85,8 +83,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
           spacing={1}
           sx={{justifyContent: 'space-between', mb: '1rem'}}
         >
-          {/* <Chip label={id} variant="outlined" size='small' sx={{fontSize: '0.75rem', fontWeight: '600'}} /> */}
-          <Chip label={status.charAt(0).toUpperCase() + status.slice(1)} className='text-truncate' size='small' sx={{fontSize: '1rem', fontWeight: '400',}} style={{backgroundColor:ticketStatusColours[status]}}/>
+         <Chip label={status.charAt(0).toUpperCase() + status.slice(1)} className='text-truncate' size='small' sx={{fontSize: '1rem', fontWeight: '400',}} style={{backgroundColor:ticketStatusColours[status]}}/>
         </Stack>
         <Typography variant='h6' sx={{mb: '0.5rem'}} className='text-truncate'>
           {title}

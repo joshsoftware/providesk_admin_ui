@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 
 import { useCreateOrganization } from './organization.hook';
 import { Button } from 'modules/shared/Button';
+import Loader from 'modules/Auth/components/Loader';
 
 import {
   Box,
@@ -22,7 +23,7 @@ export const Organization = () => {
   const [domain, setDomain] = useState<string>('');
   const [domainsList, setDomainsList] = useState<string[]>([]);
 
-  const { mutate, isLoading: creating } = useCreateOrganization();
+  const { mutate, isLoading: creatingOrganization } = useCreateOrganization();
 
   const handleAddDomain = useCallback(() => {
     const DomainRegEx = /[a-z0-9]*[.][a-z]*/;
@@ -76,6 +77,7 @@ export const Organization = () => {
           alignItems: 'center',
         }}
       >
+        <Loader isLoading={creatingOrganization} />
         <Box
           style={{
             border: '1px solid #dddddd',
@@ -83,11 +85,10 @@ export const Organization = () => {
             padding: '2rem',
           }}
         >
-          <Divider>
-            <Typography variant='h6' component='div'>
-              Create Organization
-            </Typography>
-          </Divider>
+          <Typography variant='h5' component='div' sx={{ textAlign: 'center' }}>
+            Create Organization
+          </Typography>
+
           <div
             style={{
               margin: '1rem',
@@ -105,7 +106,6 @@ export const Organization = () => {
               type='text'
               required={true}
               variant='standard'
-              color='secondary'
               onChange={(e) => setOrganization(e.target.value)}
             />
             <div
@@ -141,7 +141,6 @@ export const Organization = () => {
                   value={domain}
                   type='text'
                   required={true}
-                  color='secondary'
                   endAdornment={
                     <InputAdornment position='end'>
                       <AddBoxIcon
@@ -159,10 +158,12 @@ export const Organization = () => {
 
             <Button
               onClick={createOrganization}
-              className='btn btn-success mx-3'
+              isLoading={creatingOrganization}
               style={{ height: '40px', margin: '1rem 0' }}
               disabled={
-                organization.length < 2 || domainsList.length < 1 || creating
+                organization.length < 2 ||
+                domainsList.length < 1 ||
+                creatingOrganization
               }
             >
               Create

@@ -1,22 +1,24 @@
 import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
-import { UserContext } from "App";
-import { Button } from "modules/shared/Button";
 import { useContext, useState } from "react";
-import LogoutIcon from '@mui/icons-material/Logout';
+
+import { UserContext } from "App";
+
+
 
 export const DropMenu = ({logout})=>{
     const userContext = useContext(UserContext);
     const profile = userContext?.userProfile;
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
       setAnchorEl(event.currentTarget);
     };
+
     const handleClose = () => {
       setAnchorEl(null);
     };
-    return <>
-     <div>
+    return (<div>
       <IconButton
         id="demo-positioned-button"
         aria-controls={open ? 'demo-positioned-menu' : undefined}
@@ -45,6 +47,7 @@ export const DropMenu = ({logout})=>{
         <MenuItem onClick={logout}>Logout  </MenuItem>
        
       </Menu>
-    </div>
-    </>
+    </div>)
+    
+    
 } 

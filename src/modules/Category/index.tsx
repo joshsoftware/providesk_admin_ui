@@ -10,7 +10,7 @@ import { ROLES } from 'routes/roleConstants';
 
 import {
   Box,
-  Divider,
+  Paper,
   FormControl,
   InputLabel,
   MenuItem,
@@ -69,131 +69,134 @@ export const Category = () => {
         }}
       >
         <Loader isLoading={isFetchingDepartment || isCreatingCategory} />
-        <Divider>
-          <Typography variant='h4' component='div'>
+        <Paper elevation={2} sx={{ padding: 3, minWidth: '20rem', mb: 5 }}>
+          <Typography
+            variant='h5'
+            component='div'
+            sx={{ mt: 1, textAlign: 'center' }}
+          >
             Create Category
           </Typography>
-        </Divider>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            flexWrap: 'wrap',
-          }}
-        >
-          {userAuth.role === ROLES.SUPER_ADMIN && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              flexWrap: 'wrap',
+            }}
+          >
+            {userAuth.role === ROLES.SUPER_ADMIN && (
+              <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
+                <InputLabel id='select-organization'>
+                  Select Organization
+                </InputLabel>
+                <SelectMUI
+                  labelId='select-organization'
+                  id='select-organization'
+                  value={organizationId}
+                  onChange={handleOrganizationChange}
+                  label='Select Organization'
+                >
+                  {userAuth?.organizations?.map((org) => (
+                    <MenuItem value={org.id}>{org.name}</MenuItem>
+                  ))}
+                </SelectMUI>
+              </FormControl>
+            )}
+
             <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
-              <InputLabel id='select-organization'>
-                Select Organization
-              </InputLabel>
+              <InputLabel id='department-selector-id'>Department</InputLabel>
               <SelectMUI
-                labelId='select-organization'
-                id='select-organization'
-                value={organizationId}
-                onChange={handleOrganizationChange}
-                label='Select Organization'
+                placeholder='Select Department'
+                required={true}
+                labelId='department-selector-id'
+                id='department-selector'
+                value={departmentId?.toString()}
+                disabled={userAuth.role === ROLES.DEPARTMENT_HEAD}
+                label='Department'
+                onChange={handleDepartmentChange}
               >
-                {userAuth?.organizations?.map((org) => (
-                  <MenuItem value={org.id}>{org.name}</MenuItem>
+                <MenuItem key={'None'} value={0}>
+                  <em> -Select- </em>
+                </MenuItem>
+                {departmentsList?.map((item) => (
+                  <MenuItem key={item.name} value={item.id}>
+                    <span>{item.name}</span>
+                  </MenuItem>
                 ))}
               </SelectMUI>
             </FormControl>
-          )}
 
-          <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
-            <InputLabel id='department-selector-id'>Department</InputLabel>
-            <SelectMUI
-              placeholder='Select Department'
-              required={true}
-              labelId='department-selector-id'
-              id='department-selector'
-              value={departmentId?.toString()}
-              disabled={userAuth.role === ROLES.DEPARTMENT_HEAD}
-              label='Department'
-              onChange={handleDepartmentChange}
-            >
-              <MenuItem key={'None'} value={0}>
-                <em> -Select- </em>
-              </MenuItem>
-              {departmentsList?.map((item) => (
-                <MenuItem key={item.name} value={item.id}>
-                  <span>{item.name}</span>
-                </MenuItem>
-              ))}
-            </SelectMUI>
-          </FormControl>
+            <Box sx={{ m: 3, minWidth: 120 }}>
+              <TextField
+                label='Category'
+                value={category}
+                type='text'
+                error={!!error}
+                required={true}
+                autoFocus={true}
+                variant='standard'
+                onChange={(e) => {
+                  if (categoryValidationRegex.test(e.target.value)) {
+                    setCategory(e.target.value);
+                    setError('');
+                  } else {
+                    setError('Special characters are not allowed.');
+                  }
+                }}
+              />
+              {error && (
+                <Typography
+                  variant='caption'
+                  display='block'
+                  color='#d32f2f'
+                  gutterBottom
+                  style={{ fontSize: '11px' }}
+                >
+                  {error}
+                </Typography>
+              )}
+            </Box>
 
-          <Box sx={{ m: 3, minWidth: 120 }}>
-            <TextField
-              label='Category'
-              value={category}
-              type='text'
-              error={!!error}
-              required={true}
-              autoFocus={true}
-              variant='standard'
-              color='secondary'
-              onChange={(e) => {
-                if (categoryValidationRegex.test(e.target.value)) {
-                  setCategory(e.target.value);
-                  setError('');
-                } else {
-                  setError('Special characters are not allowed.');
+            <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
+              <InputLabel id='priority-selector-id'>Priority</InputLabel>
+              <SelectMUI
+                placeholder='Select Priority'
+                required={true}
+                labelId='priority-selector-id'
+                id='priority-selector'
+                value={priority?.toString()}
+                label='Priority'
+                onChange={(e: SelectChangeEvent) =>
+                  setPriority(parseInt(e.target.value))
                 }
-              }}
-            />
-            {error && (
-              <Typography
-                variant='caption'
-                display='block'
-                color='#d32f2f'
-                gutterBottom
-                style={{ fontSize: '11px' }}
               >
-                {error}
-              </Typography>
-            )}
-          </Box>
+                {prioritiesList?.map((item) => (
+                  <MenuItem key={item.value} value={item.id}>
+                    <span>{item.value}</span>
+                  </MenuItem>
+                ))}
+              </SelectMUI>
+            </FormControl>
 
-          <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
-            <InputLabel id='priority-selector-id'>Priority</InputLabel>
-            <SelectMUI
-              placeholder='Select Priority'
-              required={true}
-              labelId='priority-selector-id'
-              id='priority-selector'
-              value={priority?.toString()}
-              label='Priority'
-              onChange={(e: SelectChangeEvent) =>
-                setPriority(parseInt(e.target.value))
+            <Button
+              onClick={() => {
+                createCategory();
+                setPriority(0);
+                setDepartmentId(0);
+                setCategory('');
+              }}
+              isLoading={isCreatingCategory}
+              style={{ height: '40px' }}
+              sx={{ m: 3 }}
+              disabled={
+                category.length < 2 || departmentId === 0 || isCreatingCategory
               }
             >
-              {prioritiesList?.map((item) => (
-                <MenuItem key={item.value} value={item.id}>
-                  <span>{item.value}</span>
-                </MenuItem>
-              ))}
-            </SelectMUI>
-          </FormControl>
-
-          <Button
-            onClick={() => {
-              createCategory();
-              setPriority(0);
-              setDepartmentId(0);
-              setCategory('');
-            }}
-            className='btn btn-success mx-3'
-            style={{ height: '40px' }}
-            sx={{ m: 3 }}
-            disabled={
-              category.length < 2 || departmentId === 0 || isCreatingCategory
-            }
-          >
-            Create
-          </Button>
-        </div>
+              Create
+            </Button>
+          </div>
+        </Paper>
         <br />
         <CategoryList />
       </div>

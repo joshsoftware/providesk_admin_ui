@@ -15,3 +15,9 @@ export interface IEditUserError {
   errors?: string;
   message: string;
 }
+
+export interface IEditUserParams {
+  id: number;
+  payload: IEditUserPayload;
+  setOpenEdit: (value: React.SetStateAction<boolean>) => void;
+}

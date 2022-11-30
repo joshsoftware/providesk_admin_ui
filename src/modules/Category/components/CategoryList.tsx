@@ -84,45 +84,51 @@ const CategoryList = () => {
           minWidth: '280px',
         }}
       >
-        <Table
-          stickyHeader={true}
-          sx={{
-            minWidth: 250,
-            maxHeight: '20vh',
-            overflow: 'scroll',
-          }}
-          aria-label='sticky table'
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell
-                component='th'
-                scope='span'
-                sx={{
-                  fontSize: '1rem',
-                  fontWeight: 'bold',
-                  maxWidth: '1rem',
-                }}
-              >
-                Id
-              </TableCell>
-              <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                Name
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {categoriesList?.map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell>{row.id}</TableCell>
-                <TableCell>{row.name}</TableCell>
+        {categoriesList ? (
+          <Table
+            stickyHeader={true}
+            sx={{
+              minWidth: 250,
+              maxHeight: '20vh',
+              overflow: 'scroll',
+            }}
+            aria-label='sticky table'
+          >
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  component='th'
+                  scope='span'
+                  sx={{
+                    fontSize: '1rem',
+                    fontWeight: 'bold',
+                    maxWidth: '1rem',
+                  }}
+                >
+                  Id
+                </TableCell>
+                <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+                  Name
+                </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {categoriesList?.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell>{row.id}</TableCell>
+                  <TableCell>{row.name}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <p style={{ textAlign: 'center' }}>
+            {!departmentId && 'Select Department to few categories'}
+          </p>
+        )}
       </TableContainer>
     </div>
   );
