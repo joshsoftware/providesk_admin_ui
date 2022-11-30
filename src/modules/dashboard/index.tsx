@@ -18,6 +18,7 @@ import { Routes, useNavigate, useRoutes } from 'react-router-dom';
 import ROUTE from 'routes/constants';
 import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
+import { UploadImageToS3WithReactS3 } from 'apis/utils/mediaUpload/Add';
 
 const statusOptions = [
   {
@@ -52,7 +53,7 @@ const DEFAULT_FILTERS = {
   title: '',
   category:'',
   page: 0,
-  perPage: 30,
+  perPage: 10,
   assig_to_me:false,
   created_by_me:false,
 };
@@ -199,6 +200,7 @@ const onClickPlus = ()=>{
       <Box sx={{display:"flex", flexDirection:"row-reverse", position:"sticky", bottom:0,zIndex:10000}}>
         <IconButton onClick={onClickPlus}><AddCircleSharpIcon color="primary" fontSize='large'/></IconButton>
       </Box>
+      <UploadImageToS3WithReactS3/>
     </Box>
   );
 };
