@@ -284,7 +284,7 @@ export const Ticket = () => {
               </FormControl>
                <UploadBucket />
                 <Button onClick={()=>
-                s3GetSignedUrlForPath("Snap (1).png")
+                s3GetSignedUrlForPath("Screenshot from 2022-09-20 19-50-21.png")
                 .then((e)=>console.log("message",e))
                 .catch(e=>console.log(e))}>Buttton</Button>
               <Button type='submit' className='mx-3' style={{ height: '40px' }}>

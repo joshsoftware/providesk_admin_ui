@@ -43,7 +43,10 @@ export const s3Upload = async (base64Obj, path) => {
       Body: base64Obj,
       Bucket:process.env.REACT_APP_S3_BUCKET_NAME,
       ACL:'public-read',
-      "Content-Type":"image/*"
+      // "Content-Type":"image/*",
+      'ContentType' :'image/png',
+      // ContentType: 'image/*',
+      ContentDisposition: 'inline',
       
     };
   console.log(data,"in s3bucket",s3Bucket)
