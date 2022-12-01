@@ -127,7 +127,7 @@ const Dashboard = () => {
     navigate(ROUTE.TICKET)
   }
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }} >
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
       <Box sx={{ display: 'flex', gap: '1.5rem', mb: '1.5rem' }} className='complaint-card-filters'>
         <Box sx={{ display: 'grid', gap: '1.5rem' }} className='filter-input-group flex-1'>
           {userAuth.role !== "employee" &&
