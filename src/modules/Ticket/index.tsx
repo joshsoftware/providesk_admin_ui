@@ -45,7 +45,7 @@ export const Ticket = () => {
     isLoading: creatingTicket,
     data: ticketConfirmation,
   } = useCreateTicket();
-
+ const [link,setLink] = useState<string|undefined>()
   const deptOptions = useMemo(
     () =>
       departmentsList?.map((dept) => ({
@@ -296,13 +296,13 @@ export const Ticket = () => {
               </FormControl>
                <UploadBucket />
                 <Button onClick={()=>
-                s3GetSignedUrlForPath("Screenshot from 2022-09-20 19-50-21.png")
-                .then((e)=>console.log("message",e))
+                s3GetSignedUrlForPath("Snap (2) (2).png")
+                .then((e)=>{console.log("message",e);setLink(e)})
                 .catch(e=>console.log(e))}>Buttton</Button>
               <Button type='submit' className='mx-3' style={{ height: '40px' }}>
                 Create
               </Button>
-              <a href="https://providesk-media.s3.ap-south-1.amazonaws.com/Screenshot%20from%202022-09-20%2019-50-21%20%284%29.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVOPE4M6SDPSLDX6U%2F20221130%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20221130T050752Z&X-Amz-Expires=21600&X-Amz-Signature=6590ea8212bdb5a13f2fa1f1a2a09c2dbda3e49daddbdc369a3e7b0338c1cb88&X-Amz-SignedHeaders=host">Link</a>
+              <a href={link} target="_blank">Link</a>
             </div>
           </form>
           <br />

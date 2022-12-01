@@ -17,6 +17,7 @@ export const UploadBucket = ()=>{
         s3Upload(file[0],file[0].name)
         .then((e)=>{
           toast.success("Upload successfully");
+          console.log(e,"this is upload")
           setIsLoading(false);
         })
         .catch((e)=>{
