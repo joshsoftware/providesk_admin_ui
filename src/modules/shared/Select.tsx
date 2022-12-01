@@ -38,19 +38,14 @@ export const Select = ({
 
   return (
     <Box sx={{ width: "100%", ...sx }}>
-      <FormControl fullWidth variant='standard'>
+      <FormControl fullWidth>
         <InputLabel>{label}</InputLabel>
         <MUISelect
           value={value as string}
           label={label}
           name={name}
-          size='small'
           onChange={onChange}
-          sx={{
-            mt: label || helperText ? 1 : 0,
-            ...sx,
-          }}
-          // sx={sx}
+          sx={sx}
         >
           {selectOptions.map((opt) => (
             <MenuItem

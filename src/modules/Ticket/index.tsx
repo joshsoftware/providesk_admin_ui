@@ -140,35 +140,24 @@ export const Ticket = () => {
               value={formik.values.title}
               type='text'
               required={true}
-              variant='standard'
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
             />
             <Box sx={{ display: 'grid' }}>
-              <Typography
-                variant='caption'
-                style={{ margin: '0 0.5rem', fontSize: '11px' }}
-              >
-                Description *
-              </Typography>
-              <textarea
-                style={{
-                  margin: '0 0.5rem',
-                  border: '0',
-                  borderBottom: '1px solid',
-                  whiteSpace: 'pre-wrap',
-                  outline: 'none',
-                }}
+              <TextField
+                label='Description'
+                multiline
                 name='description'
-                rows={3}
                 value={formik.values.description}
                 required={true}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
+                error={formik.touched.description && Boolean(formik.errors.description)}
+                helperText={formik.touched.description && formik.errors.description}
               />
-              {formik.touched.description && formik.errors.description ? (
+              {/* {formik.touched.description && formik.errors.description ? (
                 <Typography
                   variant='caption'
                   display='block'
@@ -176,11 +165,11 @@ export const Ticket = () => {
                   gutterBottom
                   style={{ fontSize: '11px', margin: '0.4rem 1rem' }}
                 >
-                  {formik.errors.description}
+                  
                 </Typography>
               ) : (
                 ''
-              )}
+              )} */}
             </Box>
             <FormControl>
               <InputLabel id='ticket-type-selector-id'>
