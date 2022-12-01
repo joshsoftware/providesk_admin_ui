@@ -8,9 +8,10 @@ import {
   TextField,
 } from "@mui/material";
 import { ReactNode, useMemo } from "react";
+import { boolean } from "yup";
 import { StyledErrorText } from "./StyledErrorText";
 
-export const Select = ({
+export const  Select = ({
   options,
   value,
   error,
@@ -35,7 +36,7 @@ export const Select = ({
       }),
     [options]
   );
-
+  
   return (
     <Box sx={{ width: "100%", ...sx }}>
       <FormControl fullWidth>
@@ -45,7 +46,9 @@ export const Select = ({
           label={label}
           name={name}
           onChange={onChange}
+          onBlur={onBlur}
           sx={sx}
+          error={Boolean(error? error:false)}
         >
           {selectOptions.map((opt) => (
             <MenuItem
@@ -57,7 +60,7 @@ export const Select = ({
             </MenuItem>
           ))}
         </MUISelect>
-        {error && <StyledErrorText text={error} />}
+        {error && <StyledErrorText text={error as string} />}
       </FormControl>
     </Box>
   );
@@ -69,7 +72,7 @@ export interface SelectProps {
   value: string | number;
   label: string;
   name?: string;
-  error?: string;
+  error?: string|boolean ;
   helperText?: string | ReactNode;
   required?: boolean;
   multiple?: boolean;
@@ -79,7 +82,7 @@ export interface SelectProps {
   disabled?: boolean;
   isLoading?: boolean;
 
-  onBlur?: () => void;
+  onBlur?: (e:any) => void;
 }
 export interface SelectOpt {
   label: string;
