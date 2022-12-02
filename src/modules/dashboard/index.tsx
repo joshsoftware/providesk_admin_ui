@@ -39,6 +39,10 @@ const statusOptions = [
   {
     value: "for_approval",
     label: "For Approval"
+  },
+  {
+    value:"closed",
+    label:"Close"
   }
 ];
 
