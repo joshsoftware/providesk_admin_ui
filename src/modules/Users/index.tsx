@@ -145,66 +145,74 @@ export const Users = () => {
             minWidth: '280px',
           }}
         >
-          <Table
-            stickyHeader={true}
-            sx={{
-              minWidth: 250,
-              maxHeight: '20vh',
-              overflow: 'scroll',
-            }}
-            aria-label='sticky table'
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  component='th'
-                  scope='span'
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    maxWidth: '1rem',
-                  }}
-                >
-                  Id
-                </TableCell>
-                <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                  Name
-                </TableCell>
-                <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                  Role
-                </TableCell>
-                <TableCell
-                  sx={{ fontSize: '1rem', fontWeight: 'bold' }}
-                ></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredUsers?.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.name}</TableCell>
-                  <TableCell style={{ textTransform: 'uppercase' }}>
-                    {row.role}
+          {usersList?.length > 0 ? (
+            <Table
+              stickyHeader={true}
+              sx={{
+                minWidth: 250,
+                maxHeight: '20vh',
+                overflow: 'scroll',
+              }}
+              aria-label='sticky table'
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    component='th'
+                    scope='span'
+                    sx={{
+                      fontSize: '1rem',
+                      fontWeight: 'bold',
+                      maxWidth: '1rem',
+                    }}
+                  >
+                    Id
                   </TableCell>
-                  <TableCell sx={{ textAlign: 'right' }}>
-                    <IconButton
-                      aria-label='edit'
-                      size='large'
-                      onClick={(e) => {
-                        setUser(row);
-                        handleEdit(e);
-                      }}
-                    >
-                      <EditIcon fontSize='inherit' />
-                    </IconButton>
+                  <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+                    Name
                   </TableCell>
+                  <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
+                    Role
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontSize: '1rem', fontWeight: 'bold' }}
+                  ></TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {filteredUsers?.map((row) => (
+                  <TableRow
+                    key={row.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell>{row.id}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell style={{ textTransform: 'uppercase' }}>
+                      {row.role}
+                    </TableCell>
+                    <TableCell sx={{ textAlign: 'right' }}>
+                      <IconButton
+                        aria-label='edit'
+                        size='large'
+                        onClick={(e) => {
+                          setUser(row);
+                          handleEdit(e);
+                        }}
+                      >
+                        <EditIcon fontSize='inherit' />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <p style={{ textAlign: 'center' }}>
+              {departmentId
+                ? 'No such employees found'
+                : 'Select department to see employees'}
+            </p>
+          )}
         </TableContainer>
         <Modal
           open={openEdit}

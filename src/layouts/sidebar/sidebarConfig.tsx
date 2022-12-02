@@ -12,12 +12,12 @@ export const getSidebarConfig = (role: string) => {
   const employeeAccessSidebar = [
     {
       label: 'Dashboard',
-      icon: <DashboardIcon fontSize='large' />,
+      icon: <DashboardIcon fontSize='small' />,
       path: ROUTE.DASHBOARD,
     },
     {
       label: 'Ticket',
-      icon: <ConfirmationNumberIcon fontSize='large' />,
+      icon: <ConfirmationNumberIcon fontSize='small' />,
       path: ROUTE.TICKET,
     },
   ];
@@ -26,26 +26,25 @@ export const getSidebarConfig = (role: string) => {
     ...employeeAccessSidebar,
     {
       label: 'Department',
-      icon: <DomainIcon fontSize='large' />,
+      icon: <DomainIcon fontSize='small' />,
       path: ROUTE.DEPARTMENT,
     },
     {
       label: 'Categories',
-      icon: <CategoryIcon fontSize='large' />,
+      icon: <CategoryIcon fontSize='small' />,
       path: ROUTE.CATEGORY,
     },
     {
       label: 'Employees',
-      icon: <GroupIcon fontSize='large' />,
+      icon: <GroupIcon fontSize='small' />,
       path: ROUTE.USERS,
     },
   ];
 
   const superAdminAccessSidebar = [
-    ...employeeAccessSidebar,
     {
       label: 'Organization',
-      icon: <ApartmentIcon fontSize='large' />,
+      icon: <ApartmentIcon fontSize='small' />,
       path: ROUTE.ORGANIZATION,
     },
   ];
@@ -54,12 +53,12 @@ export const getSidebarConfig = (role: string) => {
     ...employeeAccessSidebar,
     {
       label: 'Categories',
-      icon: <CategoryIcon fontSize='large' />,
+      icon: <CategoryIcon fontSize='small' />,
       path: ROUTE.CATEGORY,
     },
     {
       label: 'Employees',
-      icon: <GroupIcon fontSize='large' />,
+      icon: <GroupIcon fontSize='small' />,
       path: ROUTE.USERS,
     },
   ];

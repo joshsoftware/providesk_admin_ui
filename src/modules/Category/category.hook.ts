@@ -16,7 +16,11 @@ export const useCreateCategory = () => {
   return useMutation((payload: any) => postCreateCategory({ payload }), {
     onSuccess: (res) => {
       queryClient.invalidateQueries([API_CONSTANTS.CATEGORY_LIST]);
-      toast.success(res?.data?.message || 'Category created successfuly');
+      toast.success(
+        res?.data?.errors ||
+          res?.data?.message ||
+          'Category created successfuly'
+      );
     },
     onError: (err: AxiosError) => {
       let error = err?.response?.data as ICreateCategoryError;

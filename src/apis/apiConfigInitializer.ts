@@ -1,5 +1,6 @@
 import axios, { AxiosRequestHeaders } from 'axios';
 
+import ROUTE from 'routes/constants';
 import { API_BASE_URL } from 'shared/appConstants';
 import {
   loadLocalStorage,
@@ -9,6 +10,8 @@ import {
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
+    'Access-Control-Allow-Origin': '*',
+    'ngrok-skip-browser-warning': true,
     Accept: 'application/vnd.providesk; version=1',
     'Content-Type': 'application/json',
   },
@@ -28,10 +31,14 @@ axiosInstance.interceptors.request.use((config) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401 && error.response.data) {
-      // window.location.href = '/';
-      // removeLocalStorageState('userAuth');
-      // removeLocalStorageState('userProfile');
+    if (error.response.status === 440 && error.response.data) {
+      window.location.href = '/';
+      removeLocalStorageState('userAuth');
+      removeLocalStorageState('userProfile');
+    }
+    if (error.response.status === 401) {
+      window.location.href = ROUTE.UNAUTHORIZED;
+      return Promise.reject(error);
     }
     return Promise.reject(error);
   }

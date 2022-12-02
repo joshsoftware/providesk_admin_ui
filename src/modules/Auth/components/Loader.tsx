@@ -3,14 +3,15 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 interface IProps {
   isLoading: boolean;
+  top?: string
 }
 
-const Loader: React.FC<IProps> = ({ isLoading }) => (
+const Loader: React.FC<IProps> = ({ isLoading, top='64' }) => (
   <Backdrop
     sx={{
       color: '#fff',
       zIndex: (theme) => theme.zIndex.drawer + 1,
-      top: '4rem',
+      top: `${top}px`
     }}
     open={isLoading}
     onClick={() => {}}

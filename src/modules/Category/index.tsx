@@ -49,7 +49,7 @@ export const Category = () => {
 
   const createCategory = useCallback(() => {
     let payload = {
-      categories: {
+      category: {
         name: category.trim(),
         priority: priority,
         department_id: departmentId,

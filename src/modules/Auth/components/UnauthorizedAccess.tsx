@@ -17,7 +17,7 @@ const UnauthorizedAccess = () => {
         <img src={AccessDenied} alt='Login' height={300}></img>
       </div>
       <h5 style={{ margin: '2rem 0', textAlign: 'center' }}>
-        You are trying to access a route outside your scope.
+        You are attempting to access or change data outside of your scope.
       </h5>
     </div>
   );

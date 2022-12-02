@@ -1,5 +1,5 @@
 export interface IreateCategoryPayload {
-  categories: {
+  category: {
     name: string;
     priority: number;
     department_id: number;

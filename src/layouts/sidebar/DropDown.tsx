@@ -5,20 +5,21 @@ import { UserContext } from "App";
 
 
 
-export const DropMenu = ({logout})=>{
-    const userContext = useContext(UserContext);
-    const profile = userContext?.userProfile;
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
+export const DropMenu = ({ logout }) => {
+  const userContext = useContext(UserContext);
+  const profile = userContext?.userProfile;
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-      setAnchorEl(event.currentTarget);
-    };
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
-    return (<div>
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  return (
+    <>
       <IconButton
         id="demo-positioned-button"
         aria-controls={open ? 'demo-positioned-menu' : undefined}
@@ -26,7 +27,7 @@ export const DropMenu = ({logout})=>{
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        <Avatar>{profile.name.toLocaleUpperCase().charAt(0)}</Avatar>
+        <Avatar sx={{ backgroundColor: 'rgba(0,0,0,0.1)', fontSize: '1rem', fontWeight: '700', color: 'black' }}>{profile.name.toLocaleUpperCase().charAt(0)}</Avatar>
       </IconButton>
       <Menu
         id="demo-positioned-menu"
@@ -45,9 +46,7 @@ export const DropMenu = ({logout})=>{
       >
         <MenuItem onClick={handleClose}>{profile.name}</MenuItem>
         <MenuItem onClick={logout}>Logout  </MenuItem>
-       
       </Menu>
-    </div>)
-    
-    
-} 
+    </>
+  )
+}

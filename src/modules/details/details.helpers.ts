@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 export const editTicketValidationSchema = yup.object({
-  description: yup.string().when('status', {
+  reason_for_update: yup.string().when('status', {
     is: (status) => status !== 'reopen',
     then: (schema) =>
       schema

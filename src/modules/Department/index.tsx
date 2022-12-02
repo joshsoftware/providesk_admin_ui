@@ -117,42 +117,39 @@ export const DepartMent = () => {
           <Typography variant='h5' sx={{ mb: 4, textAlign: 'center' }}>
             Departments List
           </Typography>
-          {isLoading ? (
-            <Loader isLoading={isLoading} />
-          ) : (
-            <TableContainer component={Paper}>
-              <Table
-                sx={{
-                  minWidth: 250,
-                  maxHeight: '20vh',
-                  overflow: 'scroll',
-                }}
-                aria-label='simple table'
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell className='fw-bold'>Id</TableCell>
-                    <TableCell className='fw-bold'>Name</TableCell>
+          <Loader isLoading={isLoading || creatingDepartment} />
+          <TableContainer component={Paper}>
+            <Table
+              sx={{
+                minWidth: 250,
+                maxHeight: '20vh',
+                overflow: 'scroll',
+              }}
+              aria-label='simple table'
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell className='fw-bold'>Id</TableCell>
+                  <TableCell className='fw-bold'>Name</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {departmentsList?.map((dept) => (
+                  <TableRow
+                    key={dept?.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component='th' scope='row'>
+                      <Typography>{dept?.id}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{dept?.name}</Typography>
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {departmentsList?.map((dept) => (
-                    <TableRow
-                      key={dept.name}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component='th' scope='row'>
-                        <Typography>{dept.id}</Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography>{dept.name}</Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       </Box>
     </>

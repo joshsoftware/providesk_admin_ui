@@ -7,7 +7,7 @@ const withLayout = (component: React.ReactElement) => {
   return (
     <>
       <Sidebar />
-      <Box sx={{p: '1.5rem', pt: '5.5rem'}}>{component}</Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }} className='flex-1 scroll-auto'>{component}</Box>
     </>
   );
 };

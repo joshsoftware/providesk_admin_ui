@@ -7,7 +7,7 @@ import { LOCAL_STORAGE_KEYS } from 'shared/appConstants';
 import { removeLocalStorageState } from 'shared/localStorageHelpers';
 import { getSidebarConfig } from './sidebarConfig';
 
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,19 +15,15 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { Menu, Close } from '@mui/icons-material';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 
 import { DropMenu } from './DropDown';
 
-const drawerWidth = 180;
+const drawerWidth = 240;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -60,7 +56,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function Sidebar() {
-  const theme = useTheme();
   const userContext = useContext(UserContext);
   const role = userContext?.userAuth?.role;
 
@@ -85,39 +80,22 @@ export default function Sidebar() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position='fixed' open={open}>
-        <Toolbar style={{ justifyContent: 'space-between' }}>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'nowrap',
-              alignItems: 'center',
-            }}
-          >
+      <AppBar position='static' open={open} sx={{ zIndex: '1', backgroundColor: 'primary.light', color: 'black', boxShadow: 'none' }}>
+        <Toolbar sx={{ gap: '1rem' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', mr: 'auto' }}>
             <IconButton
-              color='inherit'
               aria-label='open drawer'
-              onClick={handleDrawerOpen}
+              onClick={open ? handleDrawerClose : handleDrawerOpen}
               edge='start'
-              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              sx={{ color: 'common.black', ml: 0 }}
             >
-              <MenuIcon />
+              {open ? <Close sx={{ fontSize: '1.5rem' }} /> : <Menu sx={{ fontSize: '1.5rem' }} />}
             </IconButton>
-            <Typography variant='h6' noWrap component='div' onClick={()=>navigate(ROUTE.HOME)} sx={{cursor:"pointer"}}>
+            <Typography variant='h6' noWrap onClick={() => navigate(ROUTE.HOME)} sx={{ cursor: "pointer" }}>
               ProviDesk
             </Typography>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              width: 'inherit',
-            }}
-          >
-            
-            <DropMenu logout={onLogout}/>
-          </div>
+          </Box>
+          <DropMenu logout={onLogout} />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -133,20 +111,8 @@ export default function Sidebar() {
         anchor='left'
         open={open}
       >
-        <DrawerHeader>
-          <Typography variant='h5' sx={{ width: '100%', textAlign: 'center' }}>
-            ProviDesk{' '}
-          </Typography>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
+        <DrawerHeader sx={{ backgroundColor: 'primary.light', justifyContent: 'center' }}></DrawerHeader>
+        <List sx={{ py: '1.5rem' }}>
           {sidebarConfig.map((ele) => (
             <Link
               to={ele?.path}
@@ -158,28 +124,25 @@ export default function Sidebar() {
               }}
             >
               <ListItem
-                className='my-4'
-                style={{
-                  borderRight:
-                    active === ele.path ? '4px solid #4006D4' : '#ffffff',
+                sx={{
                   backgroundColor:
-                    active === ele.path ? '#75757515' : '#ffffff',
+                    active === ele.path ? 'grey.200' : 'common.white',
                 }}
                 disablePadding
               >
-                <ListItemButton className='d-flex flex-column justify-content-center align-items-center'>
-                  <ListItemIcon style={{ minWidth: 0 }}>
+                <ListItemButton sx={{ gap: '1rem' }}>
+                  <ListItemIcon sx={{ minWidth: 'unset', color: active === ele.path ? 'primary.main' : '' }}>
                     {ele?.icon}
                   </ListItemIcon>
-                  <ListItemText primary={ele?.label} />
+                  <Typography sx={{ fontSize: '0.75rem', fontWeight: '600', color: active === ele.path ? 'grey.900' : 'grey.700' }}>
+                    {ele?.label}
+                  </Typography>
                 </ListItemButton>
               </ListItem>
             </Link>
           ))}
         </List>
-        <Divider />
       </Drawer>
     </Box>
   );
 }
-

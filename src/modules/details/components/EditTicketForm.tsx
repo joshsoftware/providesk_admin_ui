@@ -80,12 +80,12 @@ export const EditTicketForm = ({
   }, [usersList]);
 
   const handleUpdateTicket = useCallback(
-    ({ department_id, category_id, resolver_id, description, status }) => {
+    ({ department_id, category_id, resolver_id, reason_for_update, status }) => {
       let ticketDetails: IEditTicketPayload = {
         department_id,
         category_id,
         resolver_id,
-        description,
+        reason_for_update,
         status,
       };
       editTicket({
@@ -118,7 +118,7 @@ export const EditTicketForm = ({
     department_id: ticket?.department_id || '',
     category_id: ticket?.category_id || '',
     resolver_id: ticket?.resolver_id || '',
-    description: '',
+    reason_for_update: '',
     status: ticket?.status || '',
     is_customer_satisfied: false,
     rating: 0,
@@ -270,8 +270,8 @@ export const EditTicketForm = ({
               />
               <TextareaAutosize
                 required
-                name='description'
-                value={values.description}
+                name='reason_for_update'
+                value={values.reason_for_update}
                 minRows={3}
                 maxRows={5}
                 style={{
@@ -285,7 +285,7 @@ export const EditTicketForm = ({
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {touched.description && errors.description && (
+              {touched.reason_for_update && errors.reason_for_update && (
                 <Typography
                   variant='caption'
                   display='block'
@@ -293,7 +293,7 @@ export const EditTicketForm = ({
                   gutterBottom
                   style={{ fontSize: '11px', margin: 0, padding: 0 }}
                 >
-                  {errors.description}
+                  {errors.reason_for_update}
                 </Typography>
               )}
             </Box>

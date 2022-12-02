@@ -9,19 +9,20 @@ export interface IReopenTicketProps {
   setOpenEdit: (value: React.SetStateAction<boolean>) => void;
 }
 
+export interface ITicketActivity {
+  id: number;
+  ticket_id: number;
+  assigned_from: string;
+  assigned_to: string;
+  get_description: string;
+  reason_for_update: string;
+  current_ticket_status: ticketStatusType;
+  asset_url: null;
+}
+
 export interface ITicketDetails {
   ticket: ITicket;
-  activites: [
-    {
-      id: number;
-      ticket_id: number;
-      assigned_from: string;
-      assigned_to: string;
-      description: string;
-      current_ticket_status: ticketStatusType;
-      asset_url: null;
-    }
-  ];
+  activites: ITicketActivity[];
 }
 
 export interface ITicket {
@@ -49,7 +50,7 @@ export interface IEditTicketPayload {
   category_id: string;
   department_id: string;
   resolver_id: string;
-  description?: string;
+  reason_for_update?: string;
   status: ticketStatusType;
 }
 
