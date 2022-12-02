@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 
 import TablePagination from '@mui/material/TablePagination';
-import { Box, IconButton } from '@mui/material';
+import { Box, Divider, IconButton, Paper } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
 import { CustomSelect } from 'modules/shared/Select';
@@ -9,7 +9,7 @@ import Search from 'modules/shared/Search';
 import ComplaintCard from 'modules/shared/ComplaintCard';
 import { UserContext } from 'App';
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
-import { CheckBox } from '@mui/icons-material';
+import { CheckBox, RestartAltRounded } from '@mui/icons-material';
 
 import { Checkbox, Typography } from '@mui/material';
 import './dashboard.scss';
@@ -127,9 +127,13 @@ const Dashboard = () => {
     navigate(ROUTE.TICKET)
   }
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }} >
-      <Box sx={{ display: 'flex', gap: '1.5rem', mb: '1.5rem' }} className='complaint-card-filters'>
-        <Box sx={{ display: 'grid', gap: '1.5rem' }} className='filter-input-group flex-1'>
+    <Box sx={{ display: 'flex', flex: '1', p: '1rem' }} className='complaint-grid-wrapper'>
+      <Paper sx={{ display: 'grid', alignSelf: 'flex-start', mb: '1.5rem', p: 3 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+          <Typography variant='h6' sx={{ m: 0 }}>Filter By</Typography>
+          <Button variant="text" size='small' startIcon={<RestartAltRounded />} onClick={() => setFilters(DEFAULT_FILTERS)} sx={{  height: 'auto', color: 'primary.dark', p: 0, ml: 'auto' }}>Reset All</Button>
+        </Box>
+        <Box sx={{ display: 'grid', gap: '1rem' }} className='filter-input-group flex-1'>
           {userAuth.role !== "employee" &&
             <>
               <CustomSelect
@@ -145,11 +149,9 @@ const Dashboard = () => {
                 value={filters.department}
                 onChange={(e) => {
                   setDepartmentId((departmentsList.filter((item) => item.name === e.target.value))[0].id)
-
                   setFilters((p) => ({ ...p, "category": "" }))
                   handleChange(e)
                 }
-
                 }
                 name='department'
               />
@@ -162,14 +164,6 @@ const Dashboard = () => {
               />
             </>
           }
-          <Box sx={{ display: "flex", alignItems: 'center' }}>
-            <Checkbox checked={filters.assig_to_me} onChange={() => setFilters((p) => ({ ...p, "assig_to_me": !filters.assig_to_me }))} />
-            <Typography>Assign to me</Typography>
-          </Box>
-          <Box sx={{ display: "flex", alignItems: 'center' }}>
-            <Checkbox checked={filters.created_by_me} onChange={() => setFilters((p) => ({ ...p, "created_by_me": !filters.created_by_me }))} />
-            <Typography>Created by me</Typography>
-          </Box>
           <Search
             label={'Search'}
             value={filters.title}
@@ -177,30 +171,35 @@ const Dashboard = () => {
             name='title'
             placeholder='Enter Title'
           />
+          <Box sx={{ display: "flex", alignItems: 'center', borderRadius: '4px', border: '1px solid', borderColor: 'grey.400' }}>
+            <Checkbox checked={filters.assig_to_me} onChange={() => setFilters((p) => ({ ...p, "assig_to_me": !filters.assig_to_me }))} sx={{p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }} />
+            <Typography>Assign to me</Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: 'center', borderRadius: '4px', border: '1px solid', borderColor: 'grey.400' }}>
+            <Checkbox checked={filters.created_by_me} onChange={() => setFilters((p) => ({ ...p, "created_by_me": !filters.created_by_me }))} sx={{p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }} />
+            <Typography>Created by me</Typography>
+          </Box>
         </Box>
-        <Button onClick={() => setFilters(DEFAULT_FILTERS)}>Reset</Button>
-      </Box>
-      <Box sx={{ flex: '1' }}>
+      </Paper>
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
         {isLoading ? <Loader isLoading={isLoading} /> : updateddataSearch?.length === 0 ?
-          <Typography sx={{ textAlign: "center" }}>No Data</Typography> :
-          <Box sx={{ display: 'grid', gap: '1.5rem' }} className='complaint-card-grid'>
+          <Typography variant='h6' sx={{ p: 3, textAlign: "center" }}>No Data</Typography> :
+          <Box sx={{ display: 'grid', gap: '1rem', flex: '1' }} className='complaint-card-grid'>
             {updateddataSearch?.map((complaint) => (
               <ComplaintCard details={complaint} />
             ))}
           </Box>}
+        <TablePagination
+          component='div'
+          count={Math.ceil(updatedData?.length / rowsPerPage || 0)}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{ fontSize: '0.75rem', mt: 'auto' }}
+        />
       </Box>
-      <TablePagination
-        component='div'
-        count={Math.ceil(updatedData?.length / rowsPerPage || 0)}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{ fontSize: '0.75rem' }}
-      />
-      <Box sx={{ display: 'flex', justifyContent: 'end', position: "sticky", bottom: 0, zIndex: 1 }}>
-        <IconButton onClick={onClickPlus} sx={{ p: 0 }}><AddCircleSharpIcon color="primary" sx={{ fontSize: '2.25rem' }} /></IconButton>
-      </Box>
+      {/* <IconButton onClick={onClickPlus} sx={{ p: 0 }}><AddCircleSharpIcon color="primary" sx={{ fontSize: '2.25rem' }} /></IconButton> */}
     </Box>
   );
 };
