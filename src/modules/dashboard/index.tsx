@@ -42,7 +42,7 @@ const statusOptions = [
   },
   {
     value:"closed",
-    label:"Close"
+    label:"Closed"
   }
 ];
 
