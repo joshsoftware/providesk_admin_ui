@@ -144,6 +144,7 @@ export const Ticket = () => {
               onChange={formik.handleChange}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
+              FormHelperTextProps={{sx: {fontSize: '0.875rem', p: '0.125rem 0.875rem 0 0.875rem', m: 0}}}
             />
             <Box sx={{ display: 'grid' }}>
               <TextField
@@ -156,6 +157,7 @@ export const Ticket = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.description && Boolean(formik.errors.description)}
                 helperText={formik.touched.description && formik.errors.description}
+                FormHelperTextProps={{sx: {fontSize: '0.875rem', p: '0.125rem 0.875rem 0 0.875rem', m: 0}}}
               />
            </Box>
             <FormControl>             
