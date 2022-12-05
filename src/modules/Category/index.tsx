@@ -88,7 +88,7 @@ export const Category = () => {
           <DialogContent>
             <Box sx={{ display: 'grid', gap: 3, pt: 3 }}>
               {userAuth.role === ROLES.SUPER_ADMIN && (
-                <FormControl>
+                <FormControl size='small'>
                   <InputLabel id='select-organization'>
                     Select Organization
                   </InputLabel>
@@ -105,7 +105,7 @@ export const Category = () => {
                   </SelectMUI>
                 </FormControl>
               )}
-              <FormControl>
+              <FormControl size='small'>
                 <InputLabel id='department-selector-id'>Department</InputLabel>
                 <SelectMUI
                   placeholder='Select Department'
@@ -117,17 +117,13 @@ export const Category = () => {
                   label='Department'
                   onChange={handleDepartmentChange}
                 >
-                  <MenuItem key={'None'} value={0}>
-                    <em> -Select- </em>
-                  </MenuItem>
+                  <MenuItem key={'None'} value={0}>-Select-</MenuItem>
                   {departmentsList?.map((item) => (
-                    <MenuItem key={item.name} value={item.id}>
-                      <span>{item.name}</span>
-                    </MenuItem>
+                    <MenuItem key={item.name} value={item.id}>{item.name}</MenuItem>
                   ))}
                 </SelectMUI>
               </FormControl>
-              <Box sx={{display: 'grid'}}>
+              <Box sx={{ display: 'grid' }}>
                 <TextField
                   label='Category'
                   value={category}
@@ -143,14 +139,15 @@ export const Category = () => {
                       setError('Special characters are not allowed.');
                     }
                   }}
+                  size='small'
                 />
                 {error && (
-                  <Typography variant='body1' component='p' sx={{color: 'error.main', p: '0.125rem 0.875rem 0 0.875rem'}}>
+                  <Typography variant='body1' component='p' sx={{ color: 'error.main', p: '0.125rem 0.875rem 0 0.875rem' }}>
                     {error}
                   </Typography>
                 )}
               </Box>
-              <FormControl>
+              <FormControl size='small'>
                 <InputLabel id='priority-selector-id'>Priority</InputLabel>
                 <SelectMUI
                   placeholder='Select Priority'
@@ -164,9 +161,7 @@ export const Category = () => {
                   }
                 >
                   {prioritiesList?.map((item) => (
-                    <MenuItem key={item.value} value={item.id}>
-                      <span>{item.value}</span>
-                    </MenuItem>
+                    <MenuItem key={item.value} value={item.id}>{item.value}</MenuItem>
                   ))}
                 </SelectMUI>
               </FormControl>

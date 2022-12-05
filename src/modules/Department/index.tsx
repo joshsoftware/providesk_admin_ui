@@ -16,6 +16,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {
   Box,
+  Card,
+  CardContent,
   Dialog,
   DialogActions,
   DialogContent,
@@ -77,7 +79,7 @@ export const DepartMent = () => {
           <DialogContent>
             <Box sx={{ display: 'grid', gap: 3, pt: 3 }}>
               {userAuth?.role === ROLES.SUPER_ADMIN && (
-                <FormControl>
+                <FormControl size='small'>
                   <InputLabel id='select-organization'>Organization</InputLabel>
                   <SelectMUI
                     labelId='select-organization'
@@ -98,6 +100,7 @@ export const DepartMent = () => {
                 type='text'
                 required={true}
                 onChange={handleDepartmentChange}
+                size='small'
               />
             </Box>
           </DialogContent>
@@ -114,34 +117,36 @@ export const DepartMent = () => {
           </DialogActions>
         </Dialog>
       </Box>
-      <Box>
-        <Loader isLoading={isLoading || creatingDepartment} />
-        <TableContainer component={Paper}>
-          <Table size='small' aria-label='simple table'>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
-                <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {departmentsList?.map((dept) => (
-                <TableRow
-                  key={dept?.name}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell>
-                    <Typography>{dept?.id}</Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography>{dept?.name}</Typography>
-                  </TableCell>
+      <Card>
+        <CardContent>
+          <Loader isLoading={isLoading || creatingDepartment} />
+          <TableContainer component={Paper} variant='outlined'>
+            <Table size='small' aria-label='simple table'>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
+              </TableHead>
+              <TableBody>
+                {departmentsList?.map((dept) => (
+                  <TableRow
+                    key={dept?.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell>
+                      <Typography>{dept?.id}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{dept?.name}</Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

@@ -64,13 +64,13 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
   }
 
   return (
-    <Box component={Paper} sx={{maxHeight: 'calc(100% - 64px)', maxWidth: '444px', width: 'calc(100% - 64px)'}}>
+    <Box component={Paper} sx={{ maxHeight: 'calc(100% - 64px)', maxWidth: '444px', width: 'calc(100% - 64px)' }}>
       <Loader isLoading={isFetchingDepartments || isUpdatingUser} />
-      <Box sx={{px: 4, py: 3}}>
+      <Box sx={{ px: 4, py: 3 }}>
         <Typography variant='h6'>Edit User</Typography>
       </Box>
-      <Box sx={{display: 'grid', gap: 3, px: 4, py: '1.25rem'}}>
-        <FormControl>
+      <Box sx={{ display: 'grid', gap: 3, px: 4, py: '1.25rem' }}>
+        <FormControl size='small'>
           <InputLabel id='select-role'>Change Role</InputLabel>
           <SelectMUI
             labelId='select-role'
@@ -95,7 +95,7 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
           onChange={(e) => setDepartmentId(parseInt(e.target.value))}
         />
       </Box>
-      <Box sx={{display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2}}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2 }}>
         <Button size='small' variant='text' onClick={() => setOpenEdit(false)}>Cancel</Button>
         <Button
           disabled={false}

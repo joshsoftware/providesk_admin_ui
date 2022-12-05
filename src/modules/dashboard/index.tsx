@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 
 import TablePagination from '@mui/material/TablePagination';
-import { Box, Divider, IconButton, Paper } from '@mui/material';
+import { Box, Paper } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
 import { CustomSelect } from 'modules/shared/Select';
@@ -9,13 +9,11 @@ import Search from 'modules/shared/Search';
 import ComplaintCard from 'modules/shared/ComplaintCard';
 import { UserContext } from 'App';
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
-import { CheckBox, RestartAltRounded } from '@mui/icons-material';
+import { RestartAltRounded } from '@mui/icons-material';
 
 import { Checkbox, Typography } from '@mui/material';
 import './dashboard.scss';
-import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
-import { Routes, useNavigate, useRoutes } from 'react-router-dom';
-import ROUTE from 'routes/constants';
+// import { useNavigate } from 'react-router-dom';
 import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
 
@@ -41,13 +39,10 @@ const statusOptions = [
     label: "For Approval"
   },
   {
-    value:"closed",
-    label:"Closed"
+    value: "closed",
+    label: "Closed"
   }
 ];
-
-
-const typeOption = [{ value: "complaint", label: "Complaint" }, { value: "request", label: "Request" }]
 
 const DEFAULT_FILTERS = {
   status: '',
@@ -61,10 +56,8 @@ const DEFAULT_FILTERS = {
   created_by_me: false,
 };
 
-
-
 const Dashboard = () => {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const { data, isLoading } = useGetRequestsList(filters);
   const { userAuth } = useContext(UserContext);
@@ -126,16 +119,16 @@ const Dashboard = () => {
     return updatedData
   }, [updatedData, filters.title]);
 
+  // const onClickPlus = () => {
+  //   navigate(ROUTE.TICKET)
+  // }
 
-  const onClickPlus = () => {
-    navigate(ROUTE.TICKET)
-  }
   return (
     <Box sx={{ display: 'flex', flex: '1', gap: 3, p: '1rem' }} className='complaint-grid-wrapper'>
       <Paper sx={{ display: 'grid', alignSelf: 'flex-start', p: 3 }} className='complaint-filters'>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
           <Typography variant='h6' sx={{ m: 0 }}>Filter By</Typography>
-          <Button variant="text" size='small' startIcon={<RestartAltRounded />} onClick={() => setFilters(DEFAULT_FILTERS)} sx={{  height: 'auto', color: 'primary.dark', p: 0, ml: 'auto' }}>Reset All</Button>
+          <Button variant="text" size='small' startIcon={<RestartAltRounded />} onClick={() => setFilters(DEFAULT_FILTERS)} sx={{ height: 'auto', color: 'primary.dark', p: 0, ml: 'auto' }}>Reset All</Button>
         </Box>
         <Box sx={{ display: 'grid', gap: '1rem' }} className='filter-input-group flex-1'>
           {userAuth.role !== "employee" &&
@@ -176,16 +169,16 @@ const Dashboard = () => {
             placeholder='Enter Title'
           />
           <Box sx={{ display: "flex", alignItems: 'center', borderRadius: '4px', border: '1px solid', borderColor: 'grey.400' }}>
-            <Checkbox checked={filters.assig_to_me} onChange={() => setFilters((p) => ({ ...p, "assig_to_me": !filters.assig_to_me }))} sx={{p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }} />
+            <Checkbox checked={filters.assig_to_me} onChange={() => setFilters((p) => ({ ...p, "assig_to_me": !filters.assig_to_me }))} sx={{ p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }} />
             <Typography>Assign to me</Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: 'center', borderRadius: '4px', border: '1px solid', borderColor: 'grey.400' }}>
-            <Checkbox checked={filters.created_by_me} onChange={() => setFilters((p) => ({ ...p, "created_by_me": !filters.created_by_me }))} sx={{p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }} />
+            <Checkbox checked={filters.created_by_me} onChange={() => setFilters((p) => ({ ...p, "created_by_me": !filters.created_by_me }))} sx={{ p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }} />
             <Typography>Created by me</Typography>
           </Box>
         </Box>
       </Paper>
-      <Box sx={{borderWidth: 0, borderStyle: 'solid', borderColor: 'grey.300'}} className='divider -vertical' />
+      <Box sx={{ borderWidth: 0, borderStyle: 'solid', borderColor: 'grey.300' }} className='divider -vertical' />
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
         {isLoading ? <Loader isLoading={isLoading} /> : updateddataSearch?.length === 0 ?
           <Typography variant='h6' sx={{ p: 3, textAlign: "center" }}>No Data</Typography> :
