@@ -10,6 +10,7 @@ export const postCreateCategory = ({
 };
 
 export const getDepartmentList = (org_id) => {
+  
   return get({ path: `organizations/${org_id}/departments` });
 };
 
