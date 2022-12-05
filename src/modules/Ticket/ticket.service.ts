@@ -7,7 +7,7 @@ export const postCreateTicket = (payload: ICreateTicketPayload) =>
 export const getUsersList = (dept_id, org_id?) => {
   if (dept_id === 'unassigned') {
     // to fetch employees who doesn't  belong to any department
-    return get({ path: `organization/${org_id}/users` });
+    return get({ path: `organizations/${org_id}/users` });
   }
   return get({ path: `/departments/${dept_id}/users` });
 };
