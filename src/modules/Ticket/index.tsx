@@ -130,7 +130,7 @@ export const Ticket = () => {
         <Typography variant='h5'>Create Request or Complaint</Typography>
       </Box>
 
-      <Paper elevation={2} sx={{ padding: 3 }}>
+      <Paper sx={{ padding: 3 }}>
         <Box component='form' onSubmit={formik.handleSubmit}>
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', rowGap: 3, columnGap: 4 }}>
             <TextField
