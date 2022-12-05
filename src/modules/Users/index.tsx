@@ -68,7 +68,7 @@ export const Users = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-        <Typography variant='h5'>Users List</Typography>
+        <Typography variant='h5'>Users</Typography>
       </Box>
       <Card>
         <CardContent>

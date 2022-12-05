@@ -69,7 +69,7 @@ export const DepartMent = () => {
     <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Typography variant='h5'>
-          Departments List
+          Departments
         </Typography>
         <Button variant="text" onClick={handleClickOpen} size='small' startIcon={<AddRounded sx={{ color: 'primary.main' }} />} sx={{ color: 'grey.900', ml: 'auto' }}>
           Create Department

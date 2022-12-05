@@ -45,7 +45,7 @@ export const DropMenu = ({ logout }) => {
         }}
       >
         <MenuItem onClick={handleClose}>{profile.name}</MenuItem>
-        <MenuItem onClick={logout}>Logout  </MenuItem>
+        <MenuItem onClick={logout}>Logout</MenuItem>
       </Menu>
     </>
   )

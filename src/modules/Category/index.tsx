@@ -78,7 +78,7 @@ export const Category = () => {
       <Loader isLoading={isFetchingDepartment || isCreatingCategory} />
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Typography variant='h5'>
-          Category Listing
+          Categories
         </Typography>
         <Button variant="text" onClick={handleClickOpen} size='small' startIcon={<AddRounded sx={{ color: 'primary.main' }} />} sx={{ color: 'grey.900', ml: 'auto' }}>
           Create Category
