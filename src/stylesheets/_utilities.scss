@@ -56,3 +56,21 @@
 .cursor-not-allowed {
   cursor: not-allowed !important;
 }
+
+// Divider
+.divider {
+
+  &.-vertical {
+    width: 100%;
+    height: unset;
+    border-right-width: none;
+    border-bottom-width: thin;
+  
+    @media (min-width: 768px) {
+      width: unset;
+      height: 100%;
+      border-right-width: thin;
+      border-bottom-width: unset;
+    }  
+  }
+}

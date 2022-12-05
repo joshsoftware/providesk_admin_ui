@@ -127,8 +127,8 @@ const Dashboard = () => {
     navigate(ROUTE.TICKET)
   }
   return (
-    <Box sx={{ display: 'flex', flex: '1', p: '1rem' }} className='complaint-grid-wrapper'>
-      <Paper sx={{ display: 'grid', alignSelf: 'flex-start', mb: '1.5rem', p: 3 }}>
+    <Box sx={{ display: 'flex', flex: '1', gap: 3, p: '1rem' }} className='complaint-grid-wrapper'>
+      <Paper sx={{ display: 'grid', alignSelf: 'flex-start', p: 3 }} className='complaint-filters'>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
           <Typography variant='h6' sx={{ m: 0 }}>Filter By</Typography>
           <Button variant="text" size='small' startIcon={<RestartAltRounded />} onClick={() => setFilters(DEFAULT_FILTERS)} sx={{  height: 'auto', color: 'primary.dark', p: 0, ml: 'auto' }}>Reset All</Button>
@@ -181,10 +181,11 @@ const Dashboard = () => {
           </Box>
         </Box>
       </Paper>
+      <Box sx={{borderWidth: 0, borderStyle: 'solid', borderColor: 'grey.300'}} className='divider -vertical' />
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
         {isLoading ? <Loader isLoading={isLoading} /> : updateddataSearch?.length === 0 ?
           <Typography variant='h6' sx={{ p: 3, textAlign: "center" }}>No Data</Typography> :
-          <Box sx={{ display: 'grid', gap: '1rem', flex: '1' }} className='complaint-card-grid'>
+          <Box sx={{ display: 'grid', gap: '1rem' }} className='complaint-card-grid'>
             {updateddataSearch?.map((complaint) => (
               <ComplaintCard details={complaint} />
             ))}

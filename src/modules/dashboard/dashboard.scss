@@ -24,6 +24,14 @@
   }
 }
 
+.complaint-filters {
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 18rem;
+  } 
+}
+
 .card-list {
 
   .card-list-item {
