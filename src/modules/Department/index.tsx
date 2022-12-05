@@ -16,6 +16,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {
   Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   InputLabel,
   MenuItem,
@@ -23,6 +27,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { AddRounded } from '@mui/icons-material';
 
 export const DepartMent = () => {
   const { userAuth } = React.useContext(UserContext);
@@ -42,116 +47,101 @@ export const DepartMent = () => {
     };
     mutate(payload);
     setDepartment('');
+    setOpen(false);
   }, [mutate, department]);
 
   const handleDepartmentChange = (e) => setDepartment(e.target.value);
   const handleOrganizationChange = (e) => setOrganizationId(e.target.value);
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          m: 1,
-        }}
-      >
-        <Paper elevation={2} sx={{ padding: 3, minWidth: '20rem', mb: 5 }}>
-          <Typography variant='h5' sx={{ mt: 1, textAlign: 'center' }}>
-            Create Department
-          </Typography>
-
-          <Box
-            sx={{
-              m: 5,
-              display: 'flex',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-            }}
-          >
-            {userAuth?.role === ROLES.SUPER_ADMIN && (
-              <FormControl variant='standard' sx={{ m: 2, minWidth: 120 }}>
-                <InputLabel id='select-organization'>Organization</InputLabel>
-                <SelectMUI
-                  labelId='select-organization'
-                  id='select-organization'
-                  value={organizationId}
-                  onChange={handleOrganizationChange}
-                  label='Organization'
-                >
-                  {userAuth?.organizations?.map((org) => (
-                    <MenuItem value={org.id}>{org.name}</MenuItem>
-                  ))}
-                </SelectMUI>
-              </FormControl>
-            )}
-
-            <TextField
-              sx={{ m: 2 }}
-              label='Department'
-              value={department}
-              type='text'
-              required={true}
-              variant='standard'
-              onChange={handleDepartmentChange}
-            />
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', px: 3, mb: 3 }}>
+        <Typography variant='h5'>
+          Departments List
+        </Typography>
+        <Button variant="text" onClick={handleClickOpen} size='small' startIcon={<AddRounded sx={{ color: 'primary.main' }} />} sx={{ color: 'grey.900', ml: 'auto' }}>
+          Create Department
+        </Button>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth='xs'>
+          <DialogTitle>Create Department</DialogTitle>
+          <DialogContent>
+            <Box sx={{ display: 'grid', gap: 3, pt: 3 }}>
+              {userAuth?.role === ROLES.SUPER_ADMIN && (
+                <FormControl>
+                  <InputLabel id='select-organization'>Organization</InputLabel>
+                  <SelectMUI
+                    labelId='select-organization'
+                    id='select-organization'
+                    value={organizationId}
+                    onChange={handleOrganizationChange}
+                    label='Organization'
+                  >
+                    {userAuth?.organizations?.map((org) => (
+                      <MenuItem value={org.id}>{org.name}</MenuItem>
+                    ))}
+                  </SelectMUI>
+                </FormControl>
+              )}
+              <TextField
+                label='Department'
+                value={department}
+                type='text'
+                required={true}
+                onChange={handleDepartmentChange}
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button size='small' variant='text' onClick={handleClose}>Cancel</Button>
             <Button
+              size='small'
               isLoading={creatingDepartment}
               onClick={() => createDepartment()}
-              style={{ height: '40px' }}
               disabled={!!organizationId && department.length < 2}
             >
               Create
             </Button>
-          </Box>
-        </Paper>
-        <Box
-          sx={{
-            width: '100%',
-            maxHeight: '60vh',
-            maxWidth: '600px',
-          }}
-        >
-          <Typography variant='h5' sx={{ mb: 4, textAlign: 'center' }}>
-            Departments List
-          </Typography>
-          <Loader isLoading={isLoading || creatingDepartment} />
-          <TableContainer component={Paper}>
-            <Table
-              sx={{
-                minWidth: 250,
-                maxHeight: '20vh',
-                overflow: 'scroll',
-              }}
-              aria-label='simple table'
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell className='fw-bold'>Id</TableCell>
-                  <TableCell className='fw-bold'>Name</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {departmentsList?.map((dept) => (
-                  <TableRow
-                    key={dept?.name}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component='th' scope='row'>
-                      <Typography>{dept?.id}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography>{dept?.name}</Typography>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+          </DialogActions>
+        </Dialog>
       </Box>
-    </>
+      <Box>
+        <Loader isLoading={isLoading || creatingDepartment} />
+        <TableContainer component={Paper}>
+          <Table size='small' aria-label='simple table'>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
+                <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {departmentsList?.map((dept) => (
+                <TableRow
+                  key={dept?.name}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component='th' scope='row'>
+                    <Typography>{dept?.id}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{dept?.name}</Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </Box>
   );
 };
