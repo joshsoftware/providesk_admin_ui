@@ -51,7 +51,7 @@ const TimelineLeft = ({ date, index }: { date: string; index: number }) => {
         fontWeight: 490,
       }}
     >
-      {DateFormate(date)}
+      {getLastDaysFrom(date)}
     </div>
   );
 };

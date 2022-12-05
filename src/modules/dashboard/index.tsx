@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 
 import TablePagination from '@mui/material/TablePagination';
-import { Box, IconButton } from '@mui/material';
+import { Box, Divider, IconButton, Paper } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
 import { CustomSelect } from 'modules/shared/Select';
@@ -17,6 +17,7 @@ import { Routes, useNavigate, useRoutes } from 'react-router-dom';
 import ROUTE from 'routes/constants';
 import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
+import { RestartAltRounded } from '@mui/icons-material';
 
 const statusOptions = [
   {
@@ -38,6 +39,10 @@ const statusOptions = [
   {
     value: 'for_approval',
     label: 'For Approval',
+  },
+  {
+    value: 'closed',
+    label: 'Closed',
   },
 ];
 
@@ -127,14 +132,29 @@ const Dashboard = () => {
   };
   return (
     <Box
-      sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
+      sx={{ display: 'flex', flex: '1', gap: 3, p: '1rem' }}
+      className='complaint-grid-wrapper'
     >
-      <Box
-        sx={{ display: 'flex', gap: '1.5rem', mb: '1.5rem' }}
-        className='complaint-card-filters'
+      <Paper
+        sx={{ display: 'grid', alignSelf: 'flex-start', p: 3 }}
+        className='complaint-filters'
       >
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+          <Typography variant='h6' sx={{ m: 0 }}>
+            Filter By
+          </Typography>
+          <Button
+            variant='text'
+            size='small'
+            startIcon={<RestartAltRounded />}
+            onClick={() => setFilters(DEFAULT_FILTERS)}
+            sx={{ height: 'auto', color: 'primary.dark', p: 0, ml: 'auto' }}
+          >
+            Reset All
+          </Button>
+        </Box>
         <Box
-          sx={{ display: 'grid', gap: '1.5rem' }}
+          sx={{ display: 'grid', gap: '1rem' }}
           className='filter-input-group flex-1'
         >
           {userAuth.role !== 'employee' && (
@@ -171,16 +191,40 @@ const Dashboard = () => {
               />
             </>
           )}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Search
+            label={'Search'}
+            value={filters.title}
+            onChange={onSearchTile}
+            name='title'
+            placeholder='Enter Title'
+          />
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              borderRadius: '4px',
+              border: '1px solid',
+              borderColor: 'grey.400',
+            }}
+          >
             <Checkbox
               checked={filters.assig_to_me}
               onChange={() =>
                 setFilters((p) => ({ ...p, assig_to_me: !filters.assig_to_me }))
               }
+              sx={{ p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }}
             />
             <Typography>Assign to me</Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              borderRadius: '4px',
+              border: '1px solid',
+              borderColor: 'grey.400',
+            }}
+          >
             <Checkbox
               checked={filters.created_by_me}
               onChange={() =>
@@ -189,27 +233,26 @@ const Dashboard = () => {
                   created_by_me: !filters.created_by_me,
                 }))
               }
+              sx={{ p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }}
             />
             <Typography>Created by me</Typography>
           </Box>
-          <Search
-            label={'Search'}
-            value={filters.title}
-            onChange={onSearchTile}
-            name='title'
-            placeholder='Enter Title'
-          />
         </Box>
-        <Button onClick={() => setFilters(DEFAULT_FILTERS)}>Reset</Button>
-      </Box>
-      <Box sx={{ flex: '1' }}>
+      </Paper>
+      <Box
+        sx={{ borderWidth: 0, borderStyle: 'solid', borderColor: 'grey.300' }}
+        className='divider -vertical'
+      />
+      <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
         {isLoading ? (
           <Loader isLoading={isLoading} />
         ) : updateddataSearch?.length === 0 ? (
-          <Typography sx={{ textAlign: 'center' }}>No Data</Typography>
+          <Typography variant='h6' sx={{ p: 3, textAlign: 'center' }}>
+            No Data
+          </Typography>
         ) : (
           <Box
-            sx={{ display: 'grid', gap: '1.5rem' }}
+            sx={{ display: 'grid', gap: '1rem' }}
             className='complaint-card-grid'
           >
             {updateddataSearch?.map((complaint) => (
@@ -217,29 +260,17 @@ const Dashboard = () => {
             ))}
           </Box>
         )}
+        <TablePagination
+          component='div'
+          count={Math.ceil(updatedData?.length / rowsPerPage || 0)}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{ fontSize: '0.75rem', mt: 'auto' }}
+        />
       </Box>
-      <TablePagination
-        component='div'
-        count={Math.ceil(updatedData?.length / rowsPerPage || 0)}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{ fontSize: '0.75rem' }}
-      />
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'end',
-          position: 'sticky',
-          bottom: 0,
-          zIndex: 1,
-        }}
-      >
-        <IconButton onClick={onClickPlus} sx={{ p: 0 }}>
-          <AddCircleSharpIcon color='primary' sx={{ fontSize: '2.25rem' }} />
-        </IconButton>
-      </Box>
+      {/* <IconButton onClick={onClickPlus} sx={{ p: 0 }}><AddCircleSharpIcon color="primary" sx={{ fontSize: '2.25rem' }} /></IconButton> */}
     </Box>
   );
 };

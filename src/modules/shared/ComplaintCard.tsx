@@ -67,13 +67,13 @@ const ComplaintCard: React.FC<Props> = (props) => {
   ];
 
   return (
-    <Card variant="outlined" onClick={onCardClick} className='complaint-card' sx={{ '&:hover': { borderColor: ticketStatusColours[status] } }}>
+    <Card variant="outlined" onClick={onCardClick} className='complaint-card' sx={{ '&:hover': { borderColor: 'primary.dark' } }}>
       <CardContent sx={{ pb: '0.5rem !important' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Typography variant='subtitle1' className='flex-1'>
             {title}
           </Typography>
-          <Chip label={status.charAt(0).toUpperCase() + status.slice(1)} className='text-truncate' size='small' sx={{ fontSize: '0.75rem', fontWeight: '700', color: 'common.white', px: '0.5rem' }} style={{ backgroundColor: ticketStatusColours[status] }} />
+          <Chip label={status.charAt(0).toUpperCase() + status.slice(1)} className='text-truncate' size='small' sx={{ backgroundColor: ticketStatusColours[status], fontSize: '0.75rem', fontWeight: '500', color: 'grey.900', px: '0.5rem', textTransform: 'capitalize' }} />
         </Box>
         <List className='card-list'>
           {complaintConfig.map((config) => (
@@ -83,7 +83,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
             </ListItem>
           ))}
         </List>
-        <Box className="bottom-bar" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', backgroundColor: ticketStatusColours[status] }}>
+        <Box className="bottom-bar" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', backgroundColor: 'primary.dark' }}>
           <Typography sx={{ fontSize: "0.875rem", lineHeight: '1.25rem', fontWeight: '600', color: 'common.white', mb: '0' }}>See More</Typography>
           <KeyboardDoubleArrowRightRounded sx={{ fontSize: '1.25rem', color: 'common.white' }} />
         </Box>
