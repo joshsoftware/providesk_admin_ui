@@ -1,5 +1,5 @@
+import * as React from 'react';
 import { useCallback, useContext, useState } from 'react';
-
 import { categoryValidationRegex, prioritiesList } from './constanst';
 import { useCreateCategory, useDepartments } from './category.hook';
 import CategoryList from './components/CategoryList';
@@ -10,7 +10,10 @@ import { ROLES } from 'routes/roleConstants';
 
 import {
   Box,
-  Paper,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   InputLabel,
   MenuItem,
@@ -19,6 +22,7 @@ import {
   Typography,
 } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
+import { AddRounded } from '@mui/icons-material';
 
 export const Category = () => {
   const { userAuth } = useContext(UserContext);
@@ -56,130 +60,122 @@ export const Category = () => {
       },
     };
     mutate(payload);
+    setOpen(false);
   }, [category, priority, departmentId]);
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <>
-      <div
-        style={{
-          marginTop: '3rem',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Loader isLoading={isFetchingDepartment || isCreatingCategory} />
-        <Paper elevation={2} sx={{ padding: 3, minWidth: '20rem', mb: 5 }}>
-          <Typography
-            variant='h5'
-            component='div'
-            sx={{ mt: 1, textAlign: 'center' }}
-          >
-            Create Category
-          </Typography>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              flexWrap: 'wrap',
-            }}
-          >
-            {userAuth.role === ROLES.SUPER_ADMIN && (
-              <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
-                <InputLabel id='select-organization'>
-                  Select Organization
-                </InputLabel>
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
+      <Loader isLoading={isFetchingDepartment || isCreatingCategory} />
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <Typography variant='h5'>
+          Category Listing
+        </Typography>
+        <Button variant="text" onClick={handleClickOpen} size='small' startIcon={<AddRounded sx={{ color: 'primary.main' }} />} sx={{ color: 'grey.900', ml: 'auto' }}>
+          Create Category
+        </Button>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth='xs'>
+          <DialogTitle>Create Department</DialogTitle>
+          <DialogContent>
+            <Box sx={{ display: 'grid', gap: 3, pt: 3 }}>
+              {userAuth.role === ROLES.SUPER_ADMIN && (
+                <FormControl>
+                  <InputLabel id='select-organization'>
+                    Select Organization
+                  </InputLabel>
+                  <SelectMUI
+                    labelId='select-organization'
+                    id='select-organization'
+                    value={organizationId}
+                    onChange={handleOrganizationChange}
+                    label='Select Organization'
+                  >
+                    {userAuth?.organizations?.map((org) => (
+                      <MenuItem value={org.id}>{org.name}</MenuItem>
+                    ))}
+                  </SelectMUI>
+                </FormControl>
+              )}
+              <FormControl>
+                <InputLabel id='department-selector-id'>Department</InputLabel>
                 <SelectMUI
-                  labelId='select-organization'
-                  id='select-organization'
-                  value={organizationId}
-                  onChange={handleOrganizationChange}
-                  label='Select Organization'
+                  placeholder='Select Department'
+                  required={true}
+                  labelId='department-selector-id'
+                  id='department-selector'
+                  value={departmentId?.toString()}
+                  disabled={userAuth.role === ROLES.DEPARTMENT_HEAD}
+                  label='Department'
+                  onChange={handleDepartmentChange}
                 >
-                  {userAuth?.organizations?.map((org) => (
-                    <MenuItem value={org.id}>{org.name}</MenuItem>
+                  <MenuItem key={'None'} value={0}>
+                    <em> -Select- </em>
+                  </MenuItem>
+                  {departmentsList?.map((item) => (
+                    <MenuItem key={item.name} value={item.id}>
+                      <span>{item.name}</span>
+                    </MenuItem>
                   ))}
                 </SelectMUI>
               </FormControl>
-            )}
-
-            <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
-              <InputLabel id='department-selector-id'>Department</InputLabel>
-              <SelectMUI
-                placeholder='Select Department'
-                required={true}
-                labelId='department-selector-id'
-                id='department-selector'
-                value={departmentId?.toString()}
-                disabled={userAuth.role === ROLES.DEPARTMENT_HEAD}
-                label='Department'
-                onChange={handleDepartmentChange}
-              >
-                <MenuItem key={'None'} value={0}>
-                  <em> -Select- </em>
-                </MenuItem>
-                {departmentsList?.map((item) => (
-                  <MenuItem key={item.name} value={item.id}>
-                    <span>{item.name}</span>
-                  </MenuItem>
-                ))}
-              </SelectMUI>
-            </FormControl>
-
-            <Box sx={{ m: 3, minWidth: 120 }}>
-              <TextField
-                label='Category'
-                value={category}
-                type='text'
-                error={!!error}
-                required={true}
-                autoFocus={true}
-                variant='standard'
-                onChange={(e) => {
-                  if (categoryValidationRegex.test(e.target.value)) {
-                    setCategory(e.target.value);
-                    setError('');
-                  } else {
-                    setError('Special characters are not allowed.');
+              <Box sx={{display: 'grid'}}>
+                <TextField
+                  label='Category'
+                  value={category}
+                  type='text'
+                  error={!!error}
+                  required={true}
+                  autoFocus={true}
+                  onChange={(e) => {
+                    if (categoryValidationRegex.test(e.target.value)) {
+                      setCategory(e.target.value);
+                      setError('');
+                    } else {
+                      setError('Special characters are not allowed.');
+                    }
+                  }}
+                />
+                {error && (
+                  <Typography variant='body1' component='p' sx={{color: 'error.main', p: '0.125rem 0.875rem 0 0.875rem'}}>
+                    {error}
+                  </Typography>
+                )}
+              </Box>
+              <FormControl>
+                <InputLabel id='priority-selector-id'>Priority</InputLabel>
+                <SelectMUI
+                  placeholder='Select Priority'
+                  required={true}
+                  labelId='priority-selector-id'
+                  id='priority-selector'
+                  value={priority?.toString()}
+                  label='Priority'
+                  onChange={(e: SelectChangeEvent) =>
+                    setPriority(parseInt(e.target.value))
                   }
-                }}
-              />
-              {error && (
-                <Typography
-                  variant='caption'
-                  display='block'
-                  color='#d32f2f'
-                  gutterBottom
-                  style={{ fontSize: '11px' }}
                 >
-                  {error}
-                </Typography>
-              )}
+                  {prioritiesList?.map((item) => (
+                    <MenuItem key={item.value} value={item.id}>
+                      <span>{item.value}</span>
+                    </MenuItem>
+                  ))}
+                </SelectMUI>
+              </FormControl>
             </Box>
-
-            <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
-              <InputLabel id='priority-selector-id'>Priority</InputLabel>
-              <SelectMUI
-                placeholder='Select Priority'
-                required={true}
-                labelId='priority-selector-id'
-                id='priority-selector'
-                value={priority?.toString()}
-                label='Priority'
-                onChange={(e: SelectChangeEvent) =>
-                  setPriority(parseInt(e.target.value))
-                }
-              >
-                {prioritiesList?.map((item) => (
-                  <MenuItem key={item.value} value={item.id}>
-                    <span>{item.value}</span>
-                  </MenuItem>
-                ))}
-              </SelectMUI>
-            </FormControl>
-
+          </DialogContent>
+          <DialogActions>
+            <Button size='small' variant='text' onClick={handleClose}>Cancel</Button>
             <Button
+              size='small'
               onClick={() => {
                 createCategory();
                 setPriority(0);
@@ -187,19 +183,16 @@ export const Category = () => {
                 setCategory('');
               }}
               isLoading={isCreatingCategory}
-              style={{ height: '40px' }}
-              sx={{ m: 3 }}
               disabled={
                 category.length < 2 || departmentId === 0 || isCreatingCategory
               }
             >
               Create
             </Button>
-          </div>
-        </Paper>
-        <br />
-        <CategoryList />
-      </div>
-    </>
+          </DialogActions>
+        </Dialog>
+      </Box>
+      <CategoryList />
+    </Box>
   );
 };

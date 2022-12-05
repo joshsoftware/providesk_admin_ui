@@ -47,7 +47,6 @@ export const  Select = ({
           name={name}
           onChange={onChange}
           onBlur={onBlur}
-          sx={sx}
           error={Boolean(error? error:false)}
         >
           {selectOptions.map((opt) => (

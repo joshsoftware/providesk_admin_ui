@@ -15,6 +15,8 @@ import {
   Typography,
   TableHead,
   TableRow,
+  Box,
+  Grid,
 } from '@mui/material';
 
 const CategoryList = () => {
@@ -48,68 +50,26 @@ const CategoryList = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        width: '80%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        margin: '1rem',
-        alignItems: 'center',
-      }}
-    >
+    <>
       <Loader isLoading={isFetchingDepartment || isFetchingCategories} />
-      <Divider>
-        <Typography variant='h4' component='div' align='center'>
-          Category Listing
-        </Typography>
-      </Divider>
-      <div style={{ margin: '12px 0' }}>
-        <Select
-          required={true}
-          sx={{ m: 0, width: '12rem' }}
-          label={'Department'}
-          value={departmentId}
-          options={deptOptions}
-          onChange={(e) => handleChange(e.target.value)}
-        />{' '}
-        <br />
-      </div>
-      <TableContainer
-        component={Paper}
-        style={{
-          maxHeight: '45vh',
-          overflowY: 'auto',
-          width: '60%',
-          minWidth: '280px',
-        }}
-      >
+      <Grid container sx={{mb: 3}}>
+        <Grid xs md={4}>
+          <Select
+            required={true}
+            label={'Department'}
+            value={departmentId}
+            options={deptOptions}
+            onChange={(e) => handleChange(e.target.value)}
+          />
+        </Grid>
+      </Grid>
+      <TableContainer component={Paper}>
         {categoriesList ? (
-          <Table
-            stickyHeader={true}
-            sx={{
-              minWidth: 250,
-              maxHeight: '20vh',
-              overflow: 'scroll',
-            }}
-            aria-label='sticky table'
-          >
+          <Table size='small'>
             <TableHead>
               <TableRow>
-                <TableCell
-                  component='th'
-                  scope='span'
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    maxWidth: '1rem',
-                  }}
-                >
-                  Id
-                </TableCell>
-                <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                  Name
-                </TableCell>
+                <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
+                <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -118,19 +78,23 @@ const CategoryList = () => {
                   key={row.name}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.name}</TableCell>
+                  <TableCell>
+                    <Typography>{row.id}</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{row.name}</Typography>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         ) : (
-          <p style={{ textAlign: 'center' }}>
-            {!departmentId && 'Select Department to few categories'}
-          </p>
+          <Typography variant='h6' sx={{ p: 3, textAlign: "center" }}>
+            {!departmentId && 'Select Department to view categories'}
+          </Typography>
         )}
       </TableContainer>
-    </div>
+    </>
   );
 };
 

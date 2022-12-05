@@ -65,7 +65,7 @@ export const DepartMent = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', px: 3, mb: 3 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Typography variant='h5'>
           Departments List
         </Typography>
@@ -130,7 +130,7 @@ export const DepartMent = () => {
                   key={dept?.name}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  <TableCell component='th' scope='row'>
+                  <TableCell>
                     <Typography>{dept?.id}</Typography>
                   </TableCell>
                   <TableCell>
