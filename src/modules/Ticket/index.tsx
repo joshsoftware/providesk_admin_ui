@@ -1,4 +1,4 @@
-import { useMemo, useState, useContext } from 'react';
+import { useMemo, useState, useContext, useCallback } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -12,7 +12,6 @@ import { useCategories, useDepartments } from 'modules/Category/category.hook';
 import { useCreateTicket, useUsers } from './ticket.hook';
 
 import {
-  Divider,
   FormControl,
   InputLabel,
   MenuItem,
@@ -22,9 +21,10 @@ import {
   Typography,
 } from '@mui/material';
 import { UploadBucket } from 'modules/shared/UploadBucket';
-import { s3GetSignedUrlForPath, s3Upload } from 'apis/utils/mediaUpload/awsmedia';
+import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
 
 import Loader from 'modules/Auth/components/Loader';
+import { toast } from 'react-toastify';
 
 export const Ticket = () => {
   const { userAuth } = useContext(UserContext);
@@ -40,12 +40,15 @@ export const Ticket = () => {
     useCategories(departmentId);
   const { data: usersList, isLoading: isFetchingUsers } =
     useUsers(departmentId);
+  const [file, setFile] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const {
     mutate,
     isLoading: creatingTicket,
     data: ticketConfirmation,
   } = useCreateTicket();
- const [link,setLink] = useState<string|undefined>()
+
   const deptOptions = useMemo(
     () =>
       departmentsList?.map((dept) => ({
@@ -54,6 +57,14 @@ export const Ticket = () => {
       })) || [],
     [departmentsList]
   );
+  const handleChangeFile = useCallback((e: File[]) => {
+    setFile((p) => [...p, ...e]);
+  }, []);
+  const removeFile = useCallback((index: number) => {
+    setFile((oldfile) => {
+      return oldfile.filter((val, ind) => ind !== index);
+    });
+  }, []);
 
   const categoryOptions = useMemo(() => {
     return (
@@ -112,15 +123,23 @@ export const Ticket = () => {
       department_id: '',
       ticket_type: '',
       resolver_id: '',
+      asset_url: [],
     },
     validationSchema: ValidationSchema,
     onSubmit: (values) => {
-      createTicket(values);
-      formik.resetForm();
+      let { pro, name } = uploadFile(file, setIsLoading);
+      Promise.all(pro)
+        .then((e) => {
+          setIsLoading(false);
+          createTicket({ ...values, asset_url: name });
+        })
+        .catch((e) => {
+          setIsLoading(false);
+          toast.error('unable to upload image');
+        });
     },
   });
 
-  
   return (
     <>
       <div
@@ -294,15 +313,24 @@ export const Ticket = () => {
                   }
                 />
               </FormControl>
-               <UploadBucket />
-                <Button onClick={()=>
-                s3GetSignedUrlForPath("Snap (2) (2).png")
-                .then((e)=>{console.log("message",e);setLink(e)})
-                .catch(e=>console.log(e))}>Buttton</Button>
-              <Button type='submit' className='mx-3' style={{ height: '40px' }}>
+              <UploadBucket
+                isLoading={isLoading}
+                file={file}
+                value={formik.values.asset_url}
+                name={'asset_url'}
+                handleChange={(e) => {
+                  handleChangeFile(e);
+                }}
+                removeFile={removeFile}
+              />
+              <Button
+                type='submit'
+                className='mx-3'
+                style={{ height: '40px' }}
+                isLoading={creatingTicket}
+              >
                 Create
               </Button>
-              <a href={link} target="_blank">Link</a>
             </div>
           </form>
           <br />

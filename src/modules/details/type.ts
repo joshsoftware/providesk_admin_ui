@@ -17,7 +17,7 @@ export interface ITicketActivity {
   get_description: string;
   reason_for_update: string;
   current_ticket_status: ticketStatusType;
-  asset_url: null;
+  asset_url: string[];
 }
 
 export interface ITicketDetails {
@@ -44,6 +44,7 @@ export interface ITicket {
   requester: string;
   requester_id: number;
   permited_transitions: ticketStatusType[];
+  asset_url?: string[];
 }
 
 export interface IEditTicketPayload {
@@ -52,6 +53,7 @@ export interface IEditTicketPayload {
   resolver_id: string;
   reason_for_update?: string;
   status: ticketStatusType;
+  asset_url?: string[];
 }
 
 export interface IReopenTicketPayload {
@@ -59,6 +61,7 @@ export interface IReopenTicketPayload {
   rating: number | '';
   state_action: 'reopen';
   started_reason: string;
+  asset_url: string[];
 }
 
 export type ticketStatusType =

@@ -27,6 +27,9 @@ import {
   Typography,
 } from '@mui/material';
 import { StyleLabel } from 'modules/shared/StyleLabel';
+import { UploadBucket } from 'modules/shared/UploadBucket';
+import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
+import { toast } from 'react-toastify';
 
 export const EditTicketForm = ({
   ticket,
@@ -52,6 +55,8 @@ export const EditTicketForm = ({
   const { mutate: reopenTicket, isLoading: isReopeningTicket } =
     useReopenTicket();
 
+  const [file, setFile] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const deptOptions = useMemo(
     () =>
       departmentsList?.map((dept) => ({
@@ -80,13 +85,21 @@ export const EditTicketForm = ({
   }, [usersList]);
 
   const handleUpdateTicket = useCallback(
-    ({ department_id, category_id, resolver_id, reason_for_update, status }) => {
+    ({
+      department_id,
+      category_id,
+      resolver_id,
+      reason_for_update,
+      status,
+      asset_url,
+    }) => {
       let ticketDetails: IEditTicketPayload = {
         department_id,
         category_id,
         resolver_id,
         reason_for_update,
         status,
+        asset_url,
       };
       editTicket({
         id,
@@ -98,12 +111,19 @@ export const EditTicketForm = ({
   );
 
   const handleReopenTicket = useCallback(
-    ({ is_customer_satisfied, rating, state_action, started_reason }) => {
+    ({
+      is_customer_satisfied,
+      rating,
+      state_action,
+      started_reason,
+      asset_url,
+    }) => {
       let ticketDetails: IReopenTicketPayload = {
         is_customer_satisfied,
         rating: parseInt(rating),
         state_action,
         started_reason,
+        asset_url,
       };
       reopenTicket({
         id,
@@ -113,7 +133,14 @@ export const EditTicketForm = ({
     },
     []
   );
-
+  const handleChangeFile = useCallback((e: File[]) => {
+    setFile((p) => [...p, ...e]);
+  }, []);
+  const removeFile = useCallback((index: number) => {
+    setFile((oldfile) => {
+      return oldfile.filter((val, ind) => ind != index);
+    });
+  }, []);
   const initialValues = {
     department_id: ticket?.department_id || '',
     category_id: ticket?.category_id || '',
@@ -124,6 +151,7 @@ export const EditTicketForm = ({
     rating: 0,
     state_action: 'reopen',
     started_reason: '',
+    asset_url: [] as string[],
   };
 
   const {
@@ -138,9 +166,19 @@ export const EditTicketForm = ({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      if (values.status === 'reopen') handleReopenTicket(values);
-      else handleUpdateTicket(values);
-      resetForm();
+      let { pro, name } = uploadFile(file, setIsLoading);
+      Promise.all(pro)
+        .then((e) => {
+          setIsLoading(false);
+          if (values.status === 'reopen')
+            handleReopenTicket({ ...values, asset_url: name });
+          else handleUpdateTicket({ ...values, asset_url: name });
+        })
+        .catch((e) => {
+          toast.error('failed to upload image');
+          setIsLoading(false);
+          console.log(e, 'error');
+        });
     },
   });
 
@@ -387,6 +425,15 @@ export const EditTicketForm = ({
             </Box>
           </Box>
         )}
+        <UploadBucket
+          isLoading={isLoading}
+          name={'asset_url'}
+          value={values.asset_url}
+          file={file}
+          handleChange={handleChangeFile}
+          removeFile={removeFile}
+          error={errors.asset_url as string | undefined}
+        />
         <Button
           type='submit'
           className='mx-3'

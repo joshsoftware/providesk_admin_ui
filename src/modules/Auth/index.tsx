@@ -33,8 +33,8 @@ const AuthContainer = () => {
     });
     let payload = {
       user: {
-        email: "hr.head@joshsoftware.com",
-        name: "finance",
+        email,
+        name,
       },
     };
     // make login api call with user data
@@ -44,7 +44,7 @@ const AuthContainer = () => {
         setUserAuth(response.data.data);
         saveToLocalStorage(LOCAL_STORAGE_KEYS.USER_AUTH, response.data.data);
       },
-      onError: (error) => { },
+      onError: (error) => {},
     });
   };
 

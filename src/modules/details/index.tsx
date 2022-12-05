@@ -23,6 +23,8 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import { ticketStatusColours } from './constants';
 
+import { ImageS3Tag } from './components/ImageTag';
+
 function Details() {
   const id: number = parseInt(useParams().id as string);
   const {
@@ -106,7 +108,12 @@ function Details() {
                   <TableRow>
                     <TableCell sx={{ color: '#63686b' }}>Status</TableCell>
                     <TableCell sx={{ fontWeight: 'bold' }}>
-                      <Chip label={ticket?.status} style={{backgroundColor:ticketStatusColours[ticket?.status]}}/>
+                      <Chip
+                        label={ticket?.status}
+                        style={{
+                          backgroundColor: ticketStatusColours[ticket?.status],
+                        }}
+                      />
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -114,7 +121,20 @@ function Details() {
                       Previous Comment
                     </TableCell>
                     <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.reason_for_approval || '_'}
+                      {ticket?.reason_for_update || '_'}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Image</TableCell>
+                    <TableCell>
+                      <Box
+                        display='flex'
+                        sx={{ width: '300px', overflowX: 'scroll' }}
+                      >
+                        {ticket?.asset_url?.map((item) => (
+                          <ImageS3Tag path={item} />
+                        ))}
+                      </Box>
                     </TableCell>
                   </TableRow>
                 </TableBody>

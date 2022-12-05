@@ -9,7 +9,6 @@ import Search from 'modules/shared/Search';
 import ComplaintCard from 'modules/shared/ComplaintCard';
 import { UserContext } from 'App';
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
-import { CheckBox } from '@mui/icons-material';
 
 import { Checkbox, Typography } from '@mui/material';
 import './dashboard.scss';
@@ -18,7 +17,6 @@ import { Routes, useNavigate, useRoutes } from 'react-router-dom';
 import ROUTE from 'routes/constants';
 import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
-import { UploadImageToS3WithReactS3 } from 'apis/utils/mediaUpload/Add';
 
 const statusOptions = [
   {
@@ -38,13 +36,15 @@ const statusOptions = [
     label: 'Resolved',
   },
   {
-    value: "for_approval",
-    label: "For Approval"
-  }
+    value: 'for_approval',
+    label: 'For Approval',
+  },
 ];
 
-
-const typeOption = [{ value: "complaint", label: "Complaint" }, { value: "request", label: "Request" }]
+const typeOption = [
+  { value: 'complaint', label: 'Complaint' },
+  { value: 'request', label: 'Request' },
+];
 
 const DEFAULT_FILTERS = {
   status: '',
@@ -58,14 +58,11 @@ const DEFAULT_FILTERS = {
   created_by_me: false,
 };
 
-
-
 const Dashboard = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const { data, isLoading } = useGetRequestsList(filters);
   const { userAuth } = useContext(UserContext);
-
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -118,20 +115,29 @@ const Dashboard = () => {
 
   const updateddataSearch = useMemo(() => {
     if (filters.title.length > 0) {
-      return updatedData.filter(item => item.title.toLowerCase().includes(filters.title.toLowerCase()))
+      return updatedData.filter((item) =>
+        item.title.toLowerCase().includes(filters.title.toLowerCase())
+      );
     }
-    return updatedData
+    return updatedData;
   }, [updatedData, filters.title]);
 
-
   const onClickPlus = () => {
-    navigate(ROUTE.TICKET)
-  }
+    navigate(ROUTE.TICKET);
+  };
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }} >
-      <Box sx={{ display: 'flex', gap: '1.5rem', mb: '1.5rem' }} className='complaint-card-filters'>
-        <Box sx={{ display: 'grid', gap: '1.5rem' }} className='filter-input-group flex-1'>
-          {userAuth.role !== "employee" &&
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
+    >
+      <Box
+        sx={{ display: 'flex', gap: '1.5rem', mb: '1.5rem' }}
+        className='complaint-card-filters'
+      >
+        <Box
+          sx={{ display: 'grid', gap: '1.5rem' }}
+          className='filter-input-group flex-1'
+        >
+          {userAuth.role !== 'employee' && (
             <>
               <CustomSelect
                 label={'Status'}
@@ -145,13 +151,15 @@ const Dashboard = () => {
                 options={deptOptions}
                 value={filters.department}
                 onChange={(e) => {
-                  setDepartmentId((departmentsList.filter((item) => item.name === e.target.value))[0].id)
+                  setDepartmentId(
+                    departmentsList.filter(
+                      (item) => item.name === e.target.value
+                    )[0].id
+                  );
 
-                  setFilters((p) => ({ ...p, "category": "" }))
-                  handleChange(e)
-                }
-
-                }
+                  setFilters((p) => ({ ...p, category: '' }));
+                  handleChange(e);
+                }}
                 name='department'
               />
               <CustomSelect
@@ -162,13 +170,26 @@ const Dashboard = () => {
                 name='category'
               />
             </>
-          }
-          <Box sx={{ display: "flex", alignItems: 'center' }}>
-            <Checkbox checked={filters.assig_to_me} onChange={() => setFilters((p) => ({ ...p, "assig_to_me": !filters.assig_to_me }))} />
+          )}
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Checkbox
+              checked={filters.assig_to_me}
+              onChange={() =>
+                setFilters((p) => ({ ...p, assig_to_me: !filters.assig_to_me }))
+              }
+            />
             <Typography>Assign to me</Typography>
           </Box>
-          <Box sx={{ display: "flex", alignItems: 'center' }}>
-            <Checkbox checked={filters.created_by_me} onChange={() => setFilters((p) => ({ ...p, "created_by_me": !filters.created_by_me }))} />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Checkbox
+              checked={filters.created_by_me}
+              onChange={() =>
+                setFilters((p) => ({
+                  ...p,
+                  created_by_me: !filters.created_by_me,
+                }))
+              }
+            />
             <Typography>Created by me</Typography>
           </Box>
           <Search
@@ -182,13 +203,20 @@ const Dashboard = () => {
         <Button onClick={() => setFilters(DEFAULT_FILTERS)}>Reset</Button>
       </Box>
       <Box sx={{ flex: '1' }}>
-        {isLoading ? <Loader isLoading={isLoading} /> : updateddataSearch?.length === 0 ?
-          <Typography sx={{ textAlign: "center" }}>No Data</Typography> :
-          <Box sx={{ display: 'grid', gap: '1.5rem' }} className='complaint-card-grid'>
+        {isLoading ? (
+          <Loader isLoading={isLoading} />
+        ) : updateddataSearch?.length === 0 ? (
+          <Typography sx={{ textAlign: 'center' }}>No Data</Typography>
+        ) : (
+          <Box
+            sx={{ display: 'grid', gap: '1.5rem' }}
+            className='complaint-card-grid'
+          >
             {updateddataSearch?.map((complaint) => (
               <ComplaintCard details={complaint} />
             ))}
-          </Box>}
+          </Box>
+        )}
       </Box>
       <TablePagination
         component='div'
@@ -199,10 +227,19 @@ const Dashboard = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
         sx={{ fontSize: '0.75rem' }}
       />
-      <Box sx={{ display: 'flex', justifyContent: 'end', position: "sticky", bottom: 0, zIndex: 1 }}>
-        <IconButton onClick={onClickPlus} sx={{ p: 0 }}><AddCircleSharpIcon color="primary" sx={{ fontSize: '2.25rem' }} /></IconButton>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'end',
+          position: 'sticky',
+          bottom: 0,
+          zIndex: 1,
+        }}
+      >
+        <IconButton onClick={onClickPlus} sx={{ p: 0 }}>
+          <AddCircleSharpIcon color='primary' sx={{ fontSize: '2.25rem' }} />
+        </IconButton>
       </Box>
-      <UploadImageToS3WithReactS3/>
     </Box>
   );
 };
