@@ -12,7 +12,7 @@ import { useCategories, useDepartments } from 'modules/Category/category.hook';
 import { useCreateTicket, useUsers } from './ticket.hook';
 
 import {
-  Divider,
+  Box,
   FormControl,
   InputLabel,
   MenuItem,
@@ -69,7 +69,6 @@ export const Ticket = () => {
       })) || []
     );
   }, [usersList]);
-
   const createTicket = (values) => {
     let ticket = values as ICreateTicketData;
     let payload = {
@@ -118,191 +117,125 @@ export const Ticket = () => {
   });
 
   return (
-    <>
-      <div
-        style={{
-          margin: '3rem 0',
-          display: 'flex',
-          justifyContent: 'center',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Loader
-          isLoading={
-            isFetchingDepartments ||
-            isFetchingCategories ||
-            isFetchingUsers ||
-            creatingTicket
-          }
-        />
-        <Paper elevation={2} sx={{ padding: 3, minWidth: '20rem' }}>
-          <Typography
-            variant='h5'
-            component='div'
-            style={{ textAlign: 'center' }}
-          >
-            Create Request or Complaint
-          </Typography>
-          <form onSubmit={formik.handleSubmit}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-              }}
-            >
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
+      <Loader
+        isLoading={
+          isFetchingDepartments ||
+          isFetchingCategories ||
+          isFetchingUsers ||
+          creatingTicket
+        }
+      />
+      <Box sx={{ px: 3, mb: 3 }}>
+        <Typography variant='h5'>Create Request or Complaint</Typography>
+      </Box>
+      
+      <Paper elevation={2} sx={{ padding: 3 }}>
+        <Box component='form' onSubmit={formik.handleSubmit}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', rowGap: 3, columnGap: 4 }}>
+            <TextField
+              label='Title'
+              name='title'
+              minRows={3}
+              value={formik.values.title}
+              type='text'
+              required={true}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              error={formik.touched.title && Boolean(formik.errors.title)}
+              helperText={formik.touched.title && formik.errors.title}
+              FormHelperTextProps={{sx: {fontSize: '0.875rem', p: '0.125rem 0.875rem 0 0.875rem', m: 0}}}
+            />
+            <Box sx={{ display: 'grid' }}>
               <TextField
-                sx={{ m: 2 }}
-                label='Title'
-                name='title'
-                minRows={3}
-                value={formik.values.title}
-                type='text'
-                required={true}
-                variant='standard'
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                error={formik.touched.title && Boolean(formik.errors.title)}
-                autoFocus={true}
-                helperText={formik.touched.title && formik.errors.title}
-              />
-              <Typography
-                variant='caption'
-                style={{ margin: '0 0.5rem', fontSize: '11px' }}
-              >
-                Description *
-              </Typography>
-              <textarea
-                style={{
-                  margin: '0 0.5rem',
-                  border: '0',
-                  borderBottom: '1px solid',
-                  whiteSpace: 'pre-wrap',
-                  outline: 'none',
-                }}
+                label='Description'
+                multiline
                 name='description'
-                rows={3}
                 value={formik.values.description}
                 required={true}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
+                error={formik.touched.description && Boolean(formik.errors.description)}
+                helperText={formik.touched.description && formik.errors.description}
+                FormHelperTextProps={{sx: {fontSize: '0.875rem', p: '0.125rem 0.875rem 0 0.875rem', m: 0}}}
               />
-              {formik.touched.description && formik.errors.description ? (
-                <Typography
-                  variant='caption'
-                  display='block'
-                  color='#d32f2f'
-                  gutterBottom
-                  style={{ fontSize: '11px', margin: '0.4rem 1rem' }}
-                >
-                  {formik.errors.description}
-                </Typography>
-              ) : (
-                ''
-              )}
-
-              <FormControl variant='standard' sx={{ m: 2, minWidth: 120 }}>
-                <InputLabel id='ticket-type-selector-id'>
-                  Ticket Type
-                </InputLabel>
-                <SelectMUI
-                  name='ticket_type'
-                  placeholder='Ticket Type'
-                  required={true}
-                  labelId='ticket-type-selector-id'
-                  id='priority-selector'
-                  value={formik.values.ticket_type}
-                  label='Ticket Type'
-                  onChange={formik.handleChange}
-                  error={
-                    formik.touched.ticket_type &&
-                    Boolean(formik.errors.ticket_type)
-                  }
-                >
-                  <MenuItem
-                    key={'Select'}
-                    value={''}
-                    style={{ textTransform: 'capitalize' }}
-                  >
-                    <span>None</span>
-                  </MenuItem>
-                  {ticketTypesList?.map((item) => (
-                    <MenuItem
-                      key={item}
-                      value={item}
-                      style={{ textTransform: 'capitalize' }}
-                    >
-                      <span>{item}</span>
-                    </MenuItem>
-                  ))}
-                </SelectMUI>
-              </FormControl>
-
-              <FormControl sx={{ m: 2, minWidth: 120 }}>
-                <Select
-                  name='department_id'
-                  required={true}
-                  label={'Department'}
-                  value={formik.values.department_id}
-                  options={deptOptions}
-                  onChange={(e) => {
-                    setDepartmentId(parseInt(e.target.value));
-                    formik.values.category_id = '';
-                    formik.values.resolver_id = '';
-                    formik.handleChange(e);
-                  }}
-                  error={
-                    (formik.touched.department_id &&
-                      formik.errors.department_id) ||
-                    ''
-                  }
-                />
-              </FormControl>
-
-              <FormControl sx={{ m: 2, minWidth: 120 }}>
-                <Select
-                  name='category_id'
-                  required={true}
-                  label={'Category'}
-                  value={formik.values.category_id}
-                  options={categoryOptions}
-                  onChange={formik.handleChange}
-                  error={
-                    (formik.touched.category_id && formik.errors.category_id) ||
-                    ''
-                  }
-                />
-              </FormControl>
-
-              <FormControl sx={{ m: 2, minWidth: 120 }}>
-                <Select
-                  name='resolver_id'
-                  required={true}
-                  label={'Resolver'}
-                  value={formik.values.resolver_id}
-                  options={userOptions}
-                  onChange={formik.handleChange}
-                  error={
-                    (formik.touched.resolver_id && formik.errors.resolver_id) ||
-                    ''
-                  }
-                />
-              </FormControl>
-
-              <Button
-                isLoading={creatingTicket}
-                type='submit'
-                style={{ height: '40px', margin: '1rem' }}
-              >
-                Create
-              </Button>
-            </div>
-          </form>
-          <br />
-        </Paper>
-      </div>
-    </>
+           </Box>
+            <FormControl>             
+              <Select
+                name='ticket_type'
+                placeholder='Ticket Type'
+                required={true}
+                options={ticketTypesList}                
+                value={formik.values.ticket_type}                
+                label='Ticket Type'
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.ticket_type &&
+                  (formik.errors.ticket_type)
+                }/>             
+            </FormControl>
+            <FormControl>
+              <Select
+                name='department_id'
+                required={true}
+                label={'Department'}
+                value={formik.values.department_id}
+                options={deptOptions}
+                onChange={(e) => {
+                  setDepartmentId(parseInt(e.target.value));
+                  formik.values.category_id = '';
+                  formik.values.resolver_id = '';
+                  formik.handleChange(e);
+                }}
+                error={
+                  (formik.touched.department_id &&
+                    formik.errors.department_id) 
+                  
+                }
+                onBlur={formik.handleBlur}
+              />
+            </FormControl>
+            <FormControl>
+              <Select
+                name='category_id'
+                required={true}
+                label={'Category'}
+                value={formik.values.category_id}
+                options={categoryOptions}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.category_id && formik.errors.category_id                   
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <Select
+                name='resolver_id'
+                required={true}
+                label={'Resolver'}
+                value={formik.values.resolver_id}
+                options={userOptions}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  (formik.touched.resolver_id && formik.errors.resolver_id) 
+                  
+                }
+              />
+            </FormControl>
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'end', pt: 3 }}>
+            <Button
+              isLoading={creatingTicket}
+              type='submit'
+            >
+              Create
+            </Button>
+          </Box>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
