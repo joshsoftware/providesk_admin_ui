@@ -25,7 +25,7 @@ export const getSidebarConfig = (role: string) => {
   const adminAccessSidebar = [
     ...employeeAccessSidebar,
     {
-      label: 'Department',
+      label: 'Departments',
       icon: <DomainIcon fontSize='small' />,
       path: ROUTE.DEPARTMENT,
     },

@@ -16,10 +16,10 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Paper,
   Select as SelectMUI,
   Typography,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 
 const EditUser = ({ user, organizationId, setOpenEdit }) => {
   const { userAuth } = useContext(UserContext);
@@ -64,80 +64,47 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
   }
 
   return (
-    <Box
-      sx={{
-        m: 'auto',
-        bgcolor: 'background.paper',
-        boxShadow: 24,
-        pt: 2,
-        px: 2,
-        pb: 3,
-        maxWidth: 600,
-      }}
-    >
-      <CloseIcon
-        style={{ float: 'right', cursor: 'pointer' }}
-        onClick={() => setOpenEdit(false)}
-      />
+    <Box component={Paper} sx={{ maxHeight: 'calc(100% - 64px)', maxWidth: '444px', width: 'calc(100% - 64px)' }}>
       <Loader isLoading={isFetchingDepartments || isUpdatingUser} />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          margin: 20,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography variant='h5'>Edit User</Typography>
-        <div
-          style={{
-            padding: '1rem',
-            display: 'flex',
-            flexDirection: 'column',
-            margin: 20,
-            maxWidth: 600,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <FormControl variant='standard' sx={{ m: '1rem 0', minWidth: 240 }}>
-            <InputLabel id='select-role'>Role</InputLabel>
-            <SelectMUI
-              labelId='select-role'
-              id='select-role'
-              value={role}
-              onChange={handleRoleChange}
-              label='Change Role'
-            >
-              {allowedRoles.map((role) => (
-                <MenuItem key={role} value={role.toLowerCase()}>
-                  {role.toUpperCase()}
-                </MenuItem>
-              ))}
-            </SelectMUI>
-          </FormControl>
-
-          <Select
-            sx={{ minWidth: 240 }}
-            name='department'
-            required={true}
-            label={'Department'}
-            value={departmentId}
-            options={deptOptions}
-            onChange={(e) => setDepartmentId(parseInt(e.target.value))}
-          />
-
-          <Button
-            disabled={false}
-            type='submit'
-            onClick={handleUpdateUser}
-            style={{ height: '40px', margin: '1.5rem auto' }}
+      <Box sx={{ px: 4, py: 3 }}>
+        <Typography variant='h6'>Edit User</Typography>
+      </Box>
+      <Box sx={{ display: 'grid', gap: 3, px: 4, py: '1.25rem' }}>
+        <FormControl size='small'>
+          <InputLabel id='select-role'>Change Role</InputLabel>
+          <SelectMUI
+            labelId='select-role'
+            id='select-role'
+            value={role}
+            onChange={handleRoleChange}
+            label='Change Role'
           >
-            Update
-          </Button>
-        </div>
-      </div>
+            {allowedRoles.map((role) => (
+              <MenuItem key={role} value={role.toLowerCase()}>
+                {role.toUpperCase()}
+              </MenuItem>
+            ))}
+          </SelectMUI>
+        </FormControl>
+        <Select
+          name='department'
+          required={true}
+          label={'Department'}
+          value={departmentId}
+          options={deptOptions}
+          onChange={(e) => setDepartmentId(parseInt(e.target.value))}
+        />
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2 }}>
+        <Button size='small' variant='text' onClick={() => setOpenEdit(false)}>Cancel</Button>
+        <Button
+          disabled={false}
+          type='submit'
+          onClick={handleUpdateUser}
+        >
+          Update
+        </Button>
+      </Box>
     </Box>
   );
 };
