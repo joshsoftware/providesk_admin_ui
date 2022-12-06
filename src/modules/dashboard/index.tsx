@@ -1,7 +1,7 @@
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 
 import TablePagination from '@mui/material/TablePagination';
-import { Box, Divider, IconButton, Paper } from '@mui/material';
+import { Box, Card, CardContent, Paper } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
 import { CustomSelect } from 'modules/shared/Select';
@@ -12,12 +12,12 @@ import { useCategories, useDepartments } from 'modules/Category/category.hook';
 
 import { Checkbox, Typography } from '@mui/material';
 import './dashboard.scss';
-import AddCircleSharpIcon from '@mui/icons-material/AddCircleSharp';
-import { Routes, useNavigate, useRoutes } from 'react-router-dom';
-import ROUTE from 'routes/constants';
+// import { useNavigate } from 'react-router-dom';
 import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
 import { RestartAltRounded } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+import ROUTE from 'routes/constants';
 
 const statusOptions = [
   {

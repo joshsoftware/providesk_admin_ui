@@ -8,6 +8,9 @@ import Loader from 'modules/Auth/components/Loader';
 import Search from 'modules/shared/Search';
 
 import {
+  Box,
+  Card,
+  CardContent,
   FormControl,
   IconButton,
   InputLabel,
@@ -63,170 +66,127 @@ export const Users = () => {
   }, [usersList, search]);
 
   return (
-    <div>
-      <Loader isLoading={isFetchingDepartments || isFetchingUsers} />
-      <div
+    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <Typography variant='h5'>Users</Typography>
+      </Box>
+      <Card>
+        <CardContent>
+          <Loader isLoading={isFetchingDepartments || isFetchingUsers} />
+          <Box sx={{ gap: 3, mb: 3 }} className="filers-wrapper">
+            <Box sx={{ flex: '1', gap: 3 }} className="form-control-wrapper">
+              {userAuth.role === ROLES.SUPER_ADMIN && (
+                <FormControl size='small' sx={{ minWidth: '15rem' }}>
+                  <InputLabel id='select-organization'>
+                    Select Organization
+                  </InputLabel>
+                  <SelectMUI
+                    labelId='select-organization'
+                    id='select-organization'
+                    value={organizationId}
+                    onChange={handleOrganizationChange}
+                    label='Select Organization'
+                  >
+                    {userAuth?.organizations?.map((org) => (
+                      <MenuItem key={org.name} value={org.id}>
+                        {org.name}
+                      </MenuItem>
+                    ))}
+                  </SelectMUI>
+                </FormControl>
+              )}
+              <FormControl size='small' sx={{ minWidth: '15rem' }}>
+                <InputLabel id='department-selector-id'>Department</InputLabel>
+                <SelectMUI
+                  placeholder='Select Department'
+                  required={true}
+                  labelId='department-selector-id'
+                  id='department-selector'
+                  value={departmentId?.toString()}
+                  label='Department'
+                  onChange={handleDepartmentChange}
+                >
+                  <MenuItem key={'None'} value={0}>-Select-</MenuItem>
+                  <MenuItem key={'unassigned'} value={'unassigned'}>Unassigned</MenuItem>
+                  {departmentsList?.map((item) => (
+                    <MenuItem key={item.name} value={item.id}>{item.name}</MenuItem>
+                  ))}
+                </SelectMUI>
+              </FormControl>
+            </Box>
+            <FormControl>
+              <Search
+                label={'Search Employee'}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                name='search'
+              />
+            </FormControl>
+          </Box>
+          <TableContainer component={Paper} variant='outlined'>
+            {usersList?.length > 0 ? (
+              <Table size='small' aria-label='sticky table'>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
+                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
+                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Role</TableCell>
+                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredUsers?.map((row) => (
+                    <TableRow
+                      key={row.name}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell>
+                        <Typography>{row.id}</Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography>{row.name}</Typography>
+                      </TableCell>
+                      <TableCell style={{ textTransform: 'uppercase' }}>
+                        <Typography>{row.role}</Typography>
+                      </TableCell>
+                      <TableCell sx={{ textAlign: 'right' }}>
+                        <IconButton
+                          aria-label='edit'
+                          onClick={(e) => {
+                            setUser(row);
+                            handleEdit(e);
+                          }}
+                          sx={{ p: 1 }}
+                        >
+                          <EditIcon sx={{ fontSize: '1rem' }} />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <Typography variant='h6' sx={{ p: 3, textAlign: "center" }}>
+                {departmentId
+                  ? 'No such employees found'
+                  : 'Select department to see employees'}
+              </Typography>
+            )}
+          </TableContainer>
+        </CardContent>
+      </Card>
+      <Modal
+        open={openEdit}
+        onClose={() => setOpenEdit(false)}
+        sx={{ overflow: 'scroll' }}
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          flexDirection: 'column',
         }}
       >
-        <Typography variant='h5'>Users List</Typography>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}
-        >
-          {userAuth.role === ROLES.SUPER_ADMIN && (
-            <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
-              <InputLabel id='select-organization'>
-                Select Organization
-              </InputLabel>
-              <SelectMUI
-                labelId='select-organization'
-                id='select-organization'
-                value={organizationId}
-                onChange={handleOrganizationChange}
-                label='Select Organization'
-              >
-                {userAuth?.organizations?.map((org) => (
-                  <MenuItem key={org.name} value={org.id}>
-                    {org.name}
-                  </MenuItem>
-                ))}
-              </SelectMUI>
-            </FormControl>
-          )}
-
-          <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
-            <InputLabel id='department-selector-id'>Department</InputLabel>
-            <SelectMUI
-              placeholder='Select Department'
-              required={true}
-              labelId='department-selector-id'
-              id='department-selector'
-              value={departmentId?.toString()}
-              label='Department'
-              onChange={handleDepartmentChange}
-            >
-              <MenuItem key={'None'} value={0}>
-                <em> -Select- </em>
-              </MenuItem>
-              <MenuItem key={'unassigned'} value={'unassigned'}>
-                <span> Unassigned </span>
-              </MenuItem>
-              {departmentsList?.map((item) => (
-                <MenuItem key={item.name} value={item.id}>
-                  <span>{item.name}</span>
-                </MenuItem>
-              ))}
-            </SelectMUI>
-          </FormControl>
-          <FormControl variant='standard' sx={{ m: 3, minWidth: 120 }}>
-            <Search
-              label={'Search Employee'}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              name='search'
-            />
-          </FormControl>
-        </div>
-        <TableContainer
-          component={Paper}
-          style={{
-            maxHeight: '45vh',
-            overflowY: 'auto',
-            width: '60%',
-            minWidth: '280px',
-          }}
-        >
-          {usersList?.length > 0 ? (
-            <Table
-              stickyHeader={true}
-              sx={{
-                minWidth: 250,
-                maxHeight: '20vh',
-                overflow: 'scroll',
-              }}
-              aria-label='sticky table'
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    component='th'
-                    scope='span'
-                    sx={{
-                      fontSize: '1rem',
-                      fontWeight: 'bold',
-                      maxWidth: '1rem',
-                    }}
-                  >
-                    Id
-                  </TableCell>
-                  <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                    Name
-                  </TableCell>
-                  <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                    Role
-                  </TableCell>
-                  <TableCell
-                    sx={{ fontSize: '1rem', fontWeight: 'bold' }}
-                  ></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredUsers?.map((row) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell>{row.id}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell style={{ textTransform: 'uppercase' }}>
-                      {row.role}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: 'right' }}>
-                      <IconButton
-                        aria-label='edit'
-                        size='large'
-                        onClick={(e) => {
-                          setUser(row);
-                          handleEdit(e);
-                        }}
-                      >
-                        <EditIcon fontSize='inherit' />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <p style={{ textAlign: 'center' }}>
-              {departmentId
-                ? 'No such employees found'
-                : 'Select department to see employees'}
-            </p>
-          )}
-        </TableContainer>
-        <Modal
-          open={openEdit}
-          onClose={() => setOpenEdit(false)}
-          sx={{ overflow: 'scroll' }}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <EditUser user={user} organizationId={1} setOpenEdit={setOpenEdit} />
-        </Modal>
-      </div>
-    </div>
+        <EditUser user={user} organizationId={1} setOpenEdit={setOpenEdit} />
+      </Modal>
+    </Box>
   );
 };
