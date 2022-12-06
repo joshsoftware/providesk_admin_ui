@@ -13,3 +13,25 @@ main#root {
   height: 100vh;
   @extend .scroll-y;
 }
+
+.filers-wrapper {
+  display: grid;
+  flex-direction: unset;
+  justify-content: unset;
+  align-items: unset;
+
+  @media (min-width: 768px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }  
+}
+
+.form-control-wrapper {
+  display: grid;
+  
+  @media (min-width: 768px) {
+    display: flex;
+  }
+}

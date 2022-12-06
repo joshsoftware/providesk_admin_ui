@@ -152,11 +152,11 @@ export const Ticket = () => {
           creatingTicket
         }
       />
-      <Box sx={{ px: 3, mb: 3 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Typography variant='h5'>Create Request or Complaint</Typography>
       </Box>
 
-      <Paper elevation={2} sx={{ padding: 3 }}>
+      <Paper sx={{ padding: 3 }}>
         <Box component='form' onSubmit={formik.handleSubmit}>
           <Box
             sx={{
@@ -177,13 +177,7 @@ export const Ticket = () => {
               onChange={formik.handleChange}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
-              FormHelperTextProps={{
-                sx: {
-                  fontSize: '0.875rem',
-                  p: '0.125rem 0.875rem 0 0.875rem',
-                  m: 0,
-                },
-              }}
+              FormHelperTextProps={{ sx: { fontSize: '0.875rem', p: '0.125rem 0.875rem 0 0.875rem', m: 0 } }}
             />
             <Box sx={{ display: 'grid' }}>
               <TextField
@@ -194,20 +188,9 @@ export const Ticket = () => {
                 required={true}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                error={
-                  formik.touched.description &&
-                  Boolean(formik.errors.description)
-                }
-                helperText={
-                  formik.touched.description && formik.errors.description
-                }
-                FormHelperTextProps={{
-                  sx: {
-                    fontSize: '0.875rem',
-                    p: '0.125rem 0.875rem 0 0.875rem',
-                    m: 0,
-                  },
-                }}
+                error={formik.touched.description && Boolean(formik.errors.description)}
+                helperText={formik.touched.description && formik.errors.description}
+                FormHelperTextProps={{ sx: { fontSize: '0.875rem', p: '0.125rem 0.875rem 0 0.875rem', m: 0 } }}
               />
             </Box>
             <FormControl>
@@ -220,8 +203,10 @@ export const Ticket = () => {
                 label='Ticket Type'
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.ticket_type && formik.errors.ticket_type}
-              />
+                error={
+                  formik.touched.ticket_type &&
+                  (formik.errors.ticket_type)
+                } />
             </FormControl>
             <FormControl>
               <Select
@@ -237,7 +222,8 @@ export const Ticket = () => {
                   formik.handleChange(e);
                 }}
                 error={
-                  formik.touched.department_id && formik.errors.department_id
+                  (formik.touched.department_id &&
+                    formik.errors.department_id)
                 }
                 onBlur={formik.handleBlur}
               />
@@ -251,7 +237,9 @@ export const Ticket = () => {
                 options={categoryOptions}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.category_id && formik.errors.category_id}
+                error={
+                  formik.touched.category_id && formik.errors.category_id
+                }
               />
             </FormControl>
             <FormControl>
@@ -263,7 +251,9 @@ export const Ticket = () => {
                 options={userOptions}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.resolver_id && formik.errors.resolver_id}
+                error={
+                  (formik.touched.resolver_id && formik.errors.resolver_id)
+                }
               />
             </FormControl>
           </Box>

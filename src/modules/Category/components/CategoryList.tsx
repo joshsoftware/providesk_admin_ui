@@ -6,7 +6,6 @@ import { UserContext } from 'App';
 import { useCategories, useDepartments } from '../category.hook';
 
 import {
-  Divider,
   Paper,
   Table,
   TableBody,
@@ -15,6 +14,9 @@ import {
   Typography,
   TableHead,
   TableRow,
+  Grid,
+  Card,
+  CardContent,
 } from '@mui/material';
 import { ROLES } from 'routes/roleConstants';
 
@@ -49,91 +51,54 @@ const CategoryList = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        width: '80%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        margin: '1rem',
-        alignItems: 'center',
-      }}
-    >
-      <Loader isLoading={isFetchingDepartment || isFetchingCategories} />
-      <Divider>
-        <Typography variant='h4' component='div' align='center'>
-          Category Listing
-        </Typography>
-      </Divider>
-      <div style={{ margin: '12px 0' }}>
-        <Select
-          required={true}
-          sx={{ m: 0, width: '12rem' }}
-          label={'Department'}
-          // value={departmentId}
-          value={departmentId?.toString()}
-          disabled={userAuth.role === ROLES.DEPARTMENT_HEAD}
-          options={deptOptions}
-          onChange={(e) => handleChange(e.target.value)}
-        />{' '}
-        <br />
-      </div>
-      <TableContainer
-        component={Paper}
-        style={{
-          maxHeight: '45vh',
-          overflowY: 'auto',
-          width: '60%',
-          minWidth: '280px',
-        }}
-      >
-        {categoriesList ? (
-          <Table
-            stickyHeader={true}
-            sx={{
-              minWidth: 250,
-              maxHeight: '20vh',
-              overflow: 'scroll',
-            }}
-            aria-label='sticky table'
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  component='th'
-                  scope='span'
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 'bold',
-                    maxWidth: '1rem',
-                  }}
-                >
-                  Id
-                </TableCell>
-                <TableCell sx={{ fontSize: '1rem', fontWeight: 'bold' }}>
-                  Name
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {categoriesList?.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell>{row.name}</TableCell>
+    <Card>
+      <CardContent>
+        <Loader isLoading={isFetchingDepartment || isFetchingCategories} />
+        <Grid container justifyContent="center" sx={{ mb: 3 }}>
+          <Grid xs md={4}>
+            <Select
+              required={true}
+              label={'Department'}
+              value={departmentId?.toString()}
+              options={deptOptions}
+              disabled={userAuth.role === ROLES.DEPARTMENT_HEAD}
+              onChange={(e) => handleChange(e.target.value)}
+            />
+          </Grid>
+        </Grid>
+        <TableContainer component={Paper} variant='outlined'>
+          {categoriesList ? (
+            <Table size='small'>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        ) : (
-          <p style={{ textAlign: 'center' }}>
-            {!departmentId && 'Select Department to few categories'}
-          </p>
-        )}
-      </TableContainer>
-    </div>
+              </TableHead>
+              <TableBody>
+                {categoriesList?.map((row) => (
+                  <TableRow
+                    key={row.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell>
+                      <Typography>{row.id}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{row.name}</Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <Typography variant='h6' sx={{ p: 3, textAlign: "center" }}>
+              {!departmentId && 'Select Department to view categories'}
+            </Typography>
+          )}
+        </TableContainer>
+      </CardContent>
+    </Card>
   );
 };
 
