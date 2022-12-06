@@ -122,10 +122,10 @@ export const DepartMent = () => {
           <Loader isLoading={isLoading || creatingDepartment} />
           <TableContainer component={Paper} variant='outlined'>
             <Table size='small' aria-label='simple table'>
-              <TableHead>
+              <TableHead sx={{backgroundColor: 'grey.100'}}>
                 <TableRow>
-                  <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
-                  <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>Id</TableCell>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>Name</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

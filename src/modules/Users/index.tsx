@@ -126,12 +126,12 @@ export const Users = () => {
           <TableContainer component={Paper} variant='outlined'>
             {usersList?.length > 0 ? (
               <Table size='small' aria-label='sticky table'>
-                <TableHead>
+                <TableHead sx={{backgroundColor: 'grey.100'}}>
                   <TableRow>
-                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
-                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
-                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Role</TableCell>
-                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}></TableCell>
+                    <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>Id</TableCell>
+                    <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>Name</TableCell>
+                    <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>Role</TableCell>
+                    <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

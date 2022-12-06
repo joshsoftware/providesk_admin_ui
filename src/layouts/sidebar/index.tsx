@@ -134,7 +134,7 @@ export default function Sidebar() {
                   <ListItemIcon sx={{ minWidth: 'unset', color: active === ele.path ? 'primary.main' : '' }}>
                     {ele?.icon}
                   </ListItemIcon>
-                  <Typography sx={{ fontSize: '0.75rem', fontWeight: '600', color: active === ele.path ? 'grey.900' : 'grey.700' }}>
+                  <Typography sx={{ fontSize: '0.75rem', fontWeight: '500', color: active === ele.path ? 'grey.900' : 'grey.700' }}>
                     {ele?.label}
                   </Typography>
                 </ListItemButton>
