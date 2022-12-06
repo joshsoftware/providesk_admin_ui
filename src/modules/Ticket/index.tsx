@@ -267,6 +267,16 @@ export const Ticket = () => {
               />
             </FormControl>
           </Box>
+          <UploadBucket
+            isLoading={isLoading}
+            file={file}
+            value={formik.values.asset_url}
+            name={'asset_url'}
+            handleChange={(e) => {
+              handleChangeFile(e);
+            }}
+            removeFile={removeFile}
+          />
           <Box sx={{ display: 'flex', justifyContent: 'end', pt: 3 }}>
             <Button isLoading={creatingTicket} type='submit'>
               Create

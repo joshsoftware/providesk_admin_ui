@@ -29,7 +29,7 @@ export const Category = () => {
 
   const [category, setCategory] = useState<string>('');
   const [departmentId, setDepartmentId] = useState<number>(
-    userAuth?.organizations?.[0]?.department_id || 0
+    userAuth?.organizations?.[0]?.department_id || 1
   );
   const [priority, setPriority] = useState<number>(0);
   const [error, setError] = useState<string>('');

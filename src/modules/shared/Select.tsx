@@ -6,12 +6,12 @@ import {
   FormControl,
   InputLabel,
   TextField,
-} from "@mui/material";
-import { ReactNode, useMemo } from "react";
-import { boolean } from "yup";
-import { StyledErrorText } from "./StyledErrorText";
+} from '@mui/material';
+import { ReactNode, useMemo } from 'react';
+import { boolean } from 'yup';
+import { StyledErrorText } from './StyledErrorText';
 
-export const  Select = ({
+export const Select = ({
   options,
   value,
   error,
@@ -29,16 +29,16 @@ export const  Select = ({
   const selectOptions: SelectOpt[] = useMemo(
     () =>
       options.map((opt) => {
-        if (typeof opt === "string") {
+        if (typeof opt === 'string') {
           return { label: opt, value: opt };
         }
         return opt;
       }),
     [options]
   );
-  
+  console.log(value, 'value');
   return (
-    <Box sx={{ width: "100%", ...sx }}>
+    <Box sx={{ width: '100%', ...sx }}>
       <FormControl fullWidth>
         <InputLabel>{label}</InputLabel>
         <MUISelect
@@ -48,7 +48,8 @@ export const  Select = ({
           onChange={onChange}
           onBlur={onBlur}
           sx={sx}
-          error={Boolean(error? error:false)}
+          error={Boolean(error ? error : false)}
+          disabled={disabled}
         >
           {selectOptions.map((opt) => (
             <MenuItem
@@ -72,17 +73,17 @@ export interface SelectProps {
   value: string | number;
   label: string;
   name?: string;
-  error?: string|boolean ;
+  error?: string | boolean;
   helperText?: string | ReactNode;
   required?: boolean;
   multiple?: boolean;
-  size?: "small" | "medium" | undefined;
+  size?: 'small' | 'medium' | undefined;
   sx?: any;
   placeholder?: string;
   disabled?: boolean;
   isLoading?: boolean;
 
-  onBlur?: (e:any) => void;
+  onBlur?: (e: any) => void;
 }
 export interface SelectOpt {
   label: string;
@@ -118,7 +119,7 @@ export const CustomSelect = ({
       value={value}
       onChange={onChange}
       name={name}
-      size="small"
+      size='small'
       fullWidth
     >
       {options.map((option: SelectOption) => (

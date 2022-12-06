@@ -70,7 +70,7 @@ const Dashboard = () => {
   const { userAuth } = useContext(UserContext);
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [departmentId, setDepartmentId] = useState<number>(1);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,22 +166,25 @@ const Dashboard = () => {
                 onChange={handleChange}
                 name='status'
               />
-              <CustomSelect
-                label={'departments'}
-                options={deptOptions}
-                value={filters.department}
-                onChange={(e) => {
-                  setDepartmentId(
-                    departmentsList.filter(
-                      (item) => item.name === e.target.value
-                    )[0].id
-                  );
+              {(userAuth.role === 'admin' ||
+                userAuth.role === 'super_admin') && (
+                <CustomSelect
+                  label={'departments'}
+                  options={deptOptions}
+                  value={filters.department}
+                  onChange={(e) => {
+                    setDepartmentId(
+                      departmentsList.filter(
+                        (item) => item.name === e.target.value
+                      )[0].id
+                    );
 
-                  setFilters((p) => ({ ...p, category: '' }));
-                  handleChange(e);
-                }}
-                name='department'
-              />
+                    setFilters((p) => ({ ...p, category: '' }));
+                    handleChange(e);
+                  }}
+                  name='department'
+                />
+              )}
               <CustomSelect
                 label={'Category'}
                 options={categoryOptions}
@@ -262,7 +265,8 @@ const Dashboard = () => {
         )}
         <TablePagination
           component='div'
-          count={Math.ceil(updatedData?.length / rowsPerPage || 0)}
+          rowsPerPageOptions={[8, 16, 32, 64, 128]}
+          count={data?.length || 0}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
@@ -270,7 +274,6 @@ const Dashboard = () => {
           sx={{ fontSize: '0.75rem', mt: 'auto' }}
         />
       </Box>
-      {/* <IconButton onClick={onClickPlus} sx={{ p: 0 }}><AddCircleSharpIcon color="primary" sx={{ fontSize: '2.25rem' }} /></IconButton> */}
     </Box>
   );
 };

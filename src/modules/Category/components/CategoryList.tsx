@@ -16,6 +16,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import { ROLES } from 'routes/roleConstants';
 
 const CategoryList = () => {
   const { userAuth } = useContext(UserContext);
@@ -28,7 +29,7 @@ const CategoryList = () => {
     useDepartments(organizationId);
 
   const [departmentId, setDepartmentId] = useState<number | ''>(
-    departmentsList?.[0]?.id || ''
+    userAuth?.organizations?.[0]?.department_id || 1
   );
 
   const { data: categoriesList, isLoading: isFetchingCategories } =
@@ -69,7 +70,9 @@ const CategoryList = () => {
           required={true}
           sx={{ m: 0, width: '12rem' }}
           label={'Department'}
-          value={departmentId}
+          // value={departmentId}
+          value={departmentId?.toString()}
+          disabled={userAuth.role === ROLES.DEPARTMENT_HEAD}
           options={deptOptions}
           onChange={(e) => handleChange(e.target.value)}
         />{' '}
