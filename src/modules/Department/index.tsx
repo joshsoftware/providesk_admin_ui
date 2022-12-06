@@ -57,24 +57,35 @@ export const DepartMent = () => {
 
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
+  const handleCreateDepartmentDialogOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleCreateDepartmentDialogClose = () => {
     setOpen(false);
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
+    >
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-        <Typography variant='h5'>
-          Departments
-        </Typography>
-        <Button variant="text" onClick={handleClickOpen} size='small' startIcon={<AddRounded sx={{ color: 'primary.main' }} />} sx={{ color: 'grey.900', ml: 'auto' }}>
+        <Typography variant='h5'>Departments</Typography>
+        <Button
+          variant='text'
+          onClick={handleCreateDepartmentDialogOpen}
+          size='small'
+          startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
+          sx={{ color: 'grey.900', ml: 'auto' }}
+        >
           Create Department
         </Button>
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth='xs'>
+        <Dialog
+          open={open}
+          onClose={handleCreateDepartmentDialogClose}
+          fullWidth
+          maxWidth='xs'
+        >
           <DialogTitle>Create Department</DialogTitle>
           <DialogContent>
             <Box sx={{ display: 'grid', gap: 3, pt: 3 }}>
@@ -105,7 +116,13 @@ export const DepartMent = () => {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button size='small' variant='text' onClick={handleClose}>Cancel</Button>
+            <Button
+              size='small'
+              variant='text'
+              onClick={handleCreateDepartmentDialogClose}
+            >
+              Cancel
+            </Button>
             <Button
               size='small'
               isLoading={creatingDepartment}
@@ -122,10 +139,14 @@ export const DepartMent = () => {
           <Loader isLoading={isLoading || creatingDepartment} />
           <TableContainer component={Paper} variant='outlined'>
             <Table size='small' aria-label='simple table'>
-              <TableHead sx={{backgroundColor: 'grey.100'}}>
+              <TableHead sx={{ backgroundColor: 'grey.100' }}>
                 <TableRow>
-                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>Id</TableCell>
-                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>Name</TableCell>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>
+                    Id
+                  </TableCell>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>
+                    Name
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

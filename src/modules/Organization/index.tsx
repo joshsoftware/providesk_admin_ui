@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { useCreateOrganization } from './organization.hook';
@@ -7,16 +7,20 @@ import Loader from 'modules/Auth/components/Loader';
 
 import {
   Box,
+  Card,
+  CardContent,
   Chip,
-  Divider,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
-  Input,
   InputAdornment,
-  Paper,
+  OutlinedInput,
   TextField,
   Typography,
 } from '@mui/material';
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import { AddBoxRounded, AddRounded } from '@mui/icons-material';
 
 export const Organization = () => {
   const [organization, setOrganization] = useState<string>('');
@@ -62,69 +66,85 @@ export const Organization = () => {
       mutate(payload);
       setOrganization('');
       setDomainsList([]);
+      setOpen(false);
     }
   }, [organization, domainsList]);
 
-  return (
-    <>
-      <div
-        style={{
-          margin: '3rem 0',
-          display: 'flex',
-          height: '80vh',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Loader isLoading={creatingOrganization} />
-        <Box
-          style={{
-            border: '1px solid #dddddd',
-            borderRadius: '0.3rem',
-            padding: '2rem',
-          }}
-        >
-          <Typography variant='h5' component='div' sx={{ textAlign: 'center' }}>
-            Create Organization
-          </Typography>
+  const [open, setOpen] = React.useState(false);
 
-          <div
-            style={{
-              margin: '1rem',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-            }}
-          >
-            <TextField
-              sx={{ m: 2, width: 240 }}
-              label='Organization'
-              value={organization}
-              type='text'
-              required={true}
-              variant='standard'
-              onChange={(e) => setOrganization(e.target.value)}
-            />
-            <div
-              style={{ width: '100%', margin: '0 0.5rem', padding: '0.5rem' }}
-            >
-              <Typography>Domains List: </Typography>
-              <FormControl sx={{ width: '100%' }} variant='standard'>
-                <Paper
-                  sx={{ p: 2, width: '100%' }}
-                  style={{ margin: '1rem 0' }}
-                >
+  const handleCreateOrganizationDialogOpen = () => {
+    setOpen(true);
+  };
+
+  const handleCreateOrganizationDialogClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <Typography variant='h5'>Organizations</Typography>
+        <Button
+          variant='text'
+          onClick={handleCreateOrganizationDialogOpen}
+          size='small'
+          startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
+          sx={{ color: 'grey.900', ml: 'auto' }}
+        >
+          Create Organization
+        </Button>
+        <Dialog
+          open={open}
+          onClose={handleCreateOrganizationDialogClose}
+          fullWidth
+          maxWidth='xs'
+        >
+          <DialogTitle>Create Organization</DialogTitle>
+          <DialogContent>
+            <Box sx={{ display: 'grid', gap: 3, pt: 3 }}>
+              <TextField
+                label='Organization'
+                value={organization}
+                type='text'
+                required={true}
+                onChange={(e) => setOrganization(e.target.value)}
+                size='small'
+                fullWidth
+              />
+              <FormControl size='small' fullWidth variant='outlined'>
+                <OutlinedInput
+                  placeholder='domain.com'
+                  value={domain}
+                  type='text'
+                  required={true}
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <AddBoxRounded
+                        fontSize='small'
+                        color='primary'
+                        aria-label='add new domain'
+                        onClick={handleAddDomain}
+                      ></AddBoxRounded>
+                    </InputAdornment>
+                  }
+                  onChange={(e) => setDomain(e.target.value)}
+                />
+              </FormControl>
+              <Box>
+                <Typography variant='body2' sx={{ mb: 1 }}>
+                  Domains List:
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
                   {domainsList.map((domain, index) => {
                     return (
                       <Chip
-                        sx={{ m: 2 }}
                         label={domain}
                         variant='outlined'
                         key={domain + index}
                         onDelete={() => handleDomainDelete(index)}
+                        sx={{ fontSize: '0.875rem' }}
                       />
                     );
                   })}
@@ -134,32 +154,21 @@ export const Organization = () => {
                       {organization.length > 0 ? organization : 'Organization'}
                     </small>
                   )}
-                </Paper>
-                <Input
-                  sx={{ margin: '1rem 0' }}
-                  placeholder='domain.com'
-                  value={domain}
-                  type='text'
-                  required={true}
-                  endAdornment={
-                    <InputAdornment position='end'>
-                      <AddBoxIcon
-                        fontSize='large'
-                        color='primary'
-                        aria-label='add new domain'
-                        onClick={handleAddDomain}
-                      ></AddBoxIcon>
-                    </InputAdornment>
-                  }
-                  onChange={(e) => setDomain(e.target.value)}
-                />
-              </FormControl>
-            </div>
-
+                </Box>
+              </Box>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              size='small'
+              variant='text'
+              onClick={handleCreateOrganizationDialogClose}
+            >
+              Cancel
+            </Button>
             <Button
               onClick={createOrganization}
               isLoading={creatingOrganization}
-              style={{ height: '40px', margin: '1rem 0' }}
               disabled={
                 organization.length < 2 ||
                 domainsList.length < 1 ||
@@ -168,10 +177,17 @@ export const Organization = () => {
             >
               Create
             </Button>
-          </div>
-        </Box>
-        <br />
-      </div>
-    </>
+          </DialogActions>
+        </Dialog>
+      </Box>
+      <Card>
+        <CardContent>
+          <Loader isLoading={creatingOrganization} />
+          <Typography variant='h6' sx={{ textAlign: 'center' }}>
+            No Data
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
