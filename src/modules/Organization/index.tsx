@@ -126,6 +126,7 @@ export const Organization = () => {
                         color='primary'
                         aria-label='add new domain'
                         onClick={handleAddDomain}
+                        className='cursor-pointer'
                       ></AddBoxRounded>
                     </InputAdornment>
                   }
