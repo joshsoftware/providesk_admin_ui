@@ -36,7 +36,7 @@ export const Select = ({
       }),
     [options]
   );
-  console.log(value, 'value');
+
   return (
     <Box sx={{ width: '100%', ...sx }}>
       <FormControl fullWidth>
