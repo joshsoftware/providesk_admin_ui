@@ -66,15 +66,17 @@ export const Users = () => {
   }, [usersList, search]);
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
+    >
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
         <Typography variant='h5'>Users</Typography>
       </Box>
       <Card>
         <CardContent>
           <Loader isLoading={isFetchingDepartments || isFetchingUsers} />
-          <Box sx={{ gap: 3, mb: 3 }} className="filers-wrapper">
-            <Box sx={{ flex: '1', gap: 3 }} className="form-control-wrapper">
+          <Box sx={{ gap: 3, mb: 3 }} className='filers-wrapper'>
+            <Box sx={{ flex: '1', gap: 3 }} className='form-control-wrapper'>
               {userAuth.role === ROLES.SUPER_ADMIN && (
                 <FormControl size='small' sx={{ minWidth: '15rem' }}>
                   <InputLabel id='select-organization'>
@@ -106,10 +108,16 @@ export const Users = () => {
                   label='Department'
                   onChange={handleDepartmentChange}
                 >
-                  <MenuItem key={'None'} value={0}>-Select-</MenuItem>
-                  <MenuItem key={'unassigned'} value={'unassigned'}>Unassigned</MenuItem>
+                  <MenuItem key={'None'} value={0}>
+                    -Select-
+                  </MenuItem>
+                  <MenuItem key={'unassigned'} value={'unassigned'}>
+                    Unassigned
+                  </MenuItem>
                   {departmentsList?.map((item) => (
-                    <MenuItem key={item.name} value={item.id}>{item.name}</MenuItem>
+                    <MenuItem key={item.name} value={item.id}>
+                      {item.name}
+                    </MenuItem>
                   ))}
                 </SelectMUI>
               </FormControl>
@@ -126,12 +134,26 @@ export const Users = () => {
           <TableContainer component={Paper} variant='outlined'>
             {usersList?.length > 0 ? (
               <Table size='small' aria-label='sticky table'>
-                <TableHead>
+                <TableHead sx={{ backgroundColor: 'grey.100' }}>
                   <TableRow>
-                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
-                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
-                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Role</TableCell>
-                    <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}></TableCell>
+                    <TableCell
+                      sx={{ color: 'primary.dark', fontWeight: '500' }}
+                    >
+                      Id
+                    </TableCell>
+                    <TableCell
+                      sx={{ color: 'primary.dark', fontWeight: '500' }}
+                    >
+                      Name
+                    </TableCell>
+                    <TableCell
+                      sx={{ color: 'primary.dark', fontWeight: '500' }}
+                    >
+                      Role
+                    </TableCell>
+                    <TableCell
+                      sx={{ color: 'primary.dark', fontWeight: '500' }}
+                    ></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -166,7 +188,7 @@ export const Users = () => {
                 </TableBody>
               </Table>
             ) : (
-              <Typography variant='h6' sx={{ p: 3, textAlign: "center" }}>
+              <Typography variant='h6' sx={{ p: 3, textAlign: 'center' }}>
                 {departmentId
                   ? 'No such employees found'
                   : 'Select department to see employees'}

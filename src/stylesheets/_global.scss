@@ -25,12 +25,12 @@ main#root {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-  }  
+  }
 }
 
 .form-control-wrapper {
   display: grid;
-  
+
   @media (min-width: 768px) {
     display: flex;
   }

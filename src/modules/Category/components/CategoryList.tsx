@@ -53,7 +53,7 @@ const CategoryList = () => {
     <Card>
       <CardContent>
         <Loader isLoading={isFetchingDepartment || isFetchingCategories} />
-        <Grid container justifyContent="center" sx={{ mb: 3 }}>
+        <Grid container justifyContent='center' sx={{ mb: 3 }}>
           <Grid xs md={4}>
             <Select
               required={true}
@@ -67,10 +67,14 @@ const CategoryList = () => {
         <TableContainer component={Paper} variant='outlined'>
           {categoriesList ? (
             <Table size='small'>
-              <TableHead>
+              <TableHead sx={{ backgroundColor: 'grey.100' }}>
                 <TableRow>
-                  <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Id</TableCell>
-                  <TableCell sx={{ color: 'primary.main', fontWeight: '700' }}>Name</TableCell>
+                  <TableCell sx={{ color: 'primary.dark', fontWeight: '500' }}>
+                    Id
+                  </TableCell>
+                  <TableCell sx={{ color: 'primary.dark', fontWeight: '500' }}>
+                    Name
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -90,7 +94,7 @@ const CategoryList = () => {
               </TableBody>
             </Table>
           ) : (
-            <Typography variant='h6' sx={{ p: 3, textAlign: "center" }}>
+            <Typography variant='h6' sx={{ p: 3, textAlign: 'center' }}>
               {!departmentId && 'Select Department to view categories'}
             </Typography>
           )}
