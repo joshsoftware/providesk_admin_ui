@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 import TablePagination from '@mui/material/TablePagination';
 import { Box, Card, CardContent, Paper } from '@mui/material';
@@ -18,6 +18,7 @@ import { Button } from 'modules/shared/Button';
 import { RestartAltRounded } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import ROUTE from 'routes/constants';
+import { ROLES } from 'routes/roleConstants';
 
 const statusOptions = [
   {
@@ -81,6 +82,15 @@ const Dashboard = () => {
     setFilters((p) => ({ ...p, title: event.target.value }));
   };
 
+  useEffect(() => {
+    if (userAuth.role === ROLES.DEPARTMENT_HEAD) {
+      setFilters((p) => ({
+        ...p,
+        department: userAuth?.organizations?.[0]?.department_id + '',
+      }));
+      setDepartmentId(userAuth?.organizations?.[0]?.department_id);
+    }
+  }, [userAuth]);
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -100,21 +110,21 @@ const Dashboard = () => {
     return (
       categoriesList?.map((cate) => ({
         label: cate.name,
-        value: cate.name,
+        value: cate.id,
       })) || []
     );
   }, [categoriesList]);
   const { data: departmentsList, isLoading: departmentsFetching } =
     useDepartments(1);
-
+  console.log(departmentsList, 'list');
   const deptOptions = useMemo(() => {
     return (
       departmentsList?.map((dept) => ({
         label: dept.name,
-        value: dept.name,
+        value: dept.id,
       })) || []
     );
-  }, [departmentId, departmentsList]);
+  }, [departmentsList]);
 
   const updatedData = data?.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
@@ -175,7 +185,7 @@ const Dashboard = () => {
                   onChange={(e) => {
                     setDepartmentId(
                       departmentsList.filter(
-                        (item) => item.name === e.target.value
+                        (item) => item.id === e.target.value
                       )[0].id
                     );
 
