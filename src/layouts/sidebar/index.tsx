@@ -76,22 +76,47 @@ export default function Sidebar() {
   };
 
   const sidebarConfig = getSidebarConfig(role);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position='static' open={open} sx={{ zIndex: '1', backgroundColor: 'primary.light', color: 'black', boxShadow: 'none' }}>
+      <AppBar
+        position='static'
+        open={open}
+        sx={{
+          zIndex: '1',
+          backgroundColor: 'primary.light',
+          color: 'black',
+          boxShadow: 'none',
+        }}
+      >
         <Toolbar sx={{ gap: '1rem' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem', mr: 'auto' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              mr: 'auto',
+            }}
+          >
             <IconButton
               aria-label='open drawer'
               onClick={open ? handleDrawerClose : handleDrawerOpen}
               edge='start'
               sx={{ color: 'common.black', ml: 0 }}
             >
-              {open ? <Close sx={{ fontSize: '1.5rem' }} /> : <Menu sx={{ fontSize: '1.5rem' }} />}
+              {open ? (
+                <Close sx={{ fontSize: '1.5rem' }} />
+              ) : (
+                <Menu sx={{ fontSize: '1.5rem' }} />
+              )}
             </IconButton>
-            <Typography variant='h6' noWrap onClick={() => navigate(ROUTE.HOME)} sx={{ cursor: "pointer" }}>
+            <Typography
+              variant='h6'
+              noWrap
+              onClick={() => navigate(ROUTE.HOME)}
+              sx={{ cursor: 'pointer' }}
+            >
               ProviDesk
             </Typography>
           </Box>
@@ -111,7 +136,9 @@ export default function Sidebar() {
         anchor='left'
         open={open}
       >
-        <DrawerHeader sx={{ backgroundColor: 'primary.light', justifyContent: 'center' }}></DrawerHeader>
+        <DrawerHeader
+          sx={{ backgroundColor: 'primary.light', justifyContent: 'center' }}
+        ></DrawerHeader>
         <List sx={{ py: '1.5rem' }}>
           {sidebarConfig.map((ele) => (
             <Link
@@ -131,10 +158,21 @@ export default function Sidebar() {
                 disablePadding
               >
                 <ListItemButton sx={{ gap: '1rem' }}>
-                  <ListItemIcon sx={{ minWidth: 'unset', color: active === ele.path ? 'primary.main' : '' }}>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 'unset',
+                      color: active === ele.path ? 'primary.main' : '',
+                    }}
+                  >
                     {ele?.icon}
                   </ListItemIcon>
-                  <Typography sx={{ fontSize: '0.75rem', fontWeight: '500', color: active === ele.path ? 'grey.900' : 'grey.700' }}>
+                  <Typography
+                    sx={{
+                      fontSize: '0.75rem',
+                      fontWeight: '500',
+                      color: active === ele.path ? 'grey.900' : 'grey.700',
+                    }}
+                  >
                     {ele?.label}
                   </Typography>
                 </ListItemButton>
