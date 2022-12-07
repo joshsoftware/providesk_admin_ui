@@ -8,9 +8,10 @@ export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
 
   let params = {
     type: queryParams?.type !== '' ? queryParams?.type : undefined,
-    category: queryParams?.category !== '' ? queryParams?.category : undefined,
+    category_id:
+      queryParams?.category !== '' ? queryParams?.category : undefined,
     status: queryParams?.status !== '' ? queryParams.status : undefined,
-    department:
+    department_id:
       queryParams?.department !== '' ? queryParams.department : undefined,
     assigned_to_me: queryParams?.assig_to_me === true ? true : undefined,
     created_by_me: queryParams?.created_by_me === true ? true : undefined,
