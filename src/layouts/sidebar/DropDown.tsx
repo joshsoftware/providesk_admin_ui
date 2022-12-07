@@ -1,9 +1,7 @@
-import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
-import { useContext, useState } from "react";
+import { Avatar, IconButton, Menu, MenuItem } from '@mui/material';
+import { useContext, useState } from 'react';
 
-import { UserContext } from "App";
-
-
+import { UserContext } from 'App';
 
 export const DropMenu = ({ logout }) => {
   const userContext = useContext(UserContext);
@@ -21,17 +19,26 @@ export const DropMenu = ({ logout }) => {
   return (
     <>
       <IconButton
-        id="demo-positioned-button"
+        id='demo-positioned-button'
         aria-controls={open ? 'demo-positioned-menu' : undefined}
-        aria-haspopup="true"
+        aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-        <Avatar sx={{ backgroundColor: 'rgba(0,0,0,0.1)', fontSize: '1rem', fontWeight: '700', color: 'black' }}>{profile.name.toLocaleUpperCase().charAt(0)}</Avatar>
+        <Avatar
+          sx={{
+            backgroundColor: 'rgba(0,0,0,0.1)',
+            fontSize: '1rem',
+            fontWeight: '700',
+            color: 'black',
+          }}
+        >
+          {profile.name.toLocaleUpperCase().charAt(0)}
+        </Avatar>
       </IconButton>
       <Menu
-        id="demo-positioned-menu"
-        aria-labelledby="demo-positioned-button"
+        id='demo-positioned-menu'
+        aria-labelledby='demo-positioned-button'
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -48,5 +55,5 @@ export const DropMenu = ({ logout }) => {
         <MenuItem onClick={logout}>Logout</MenuItem>
       </Menu>
     </>
-  )
-}
+  );
+};
