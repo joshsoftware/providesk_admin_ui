@@ -3,16 +3,21 @@ import { Navigate } from 'react-router-dom';
 import { Organization } from 'modules/Organization';
 import { DepartMent } from 'modules/Department';
 import { Category } from 'modules/Category';
-import { Ticket } from 'modules/Ticket';
 import AuthContainer from 'modules/Auth';
 import Dashboard from 'modules/dashboard';
 import PrivateRoute from 'modules/shared/HOC/privateRoute';
-import Details from 'modules/details';
+
+// import Details from 'modules/details';
 import UnauthorizedAccess from 'modules/Auth/components/UnauthorizedAccess';
 import withLayout from 'layouts';
 import { ROLES } from './roleConstants';
 import ROUTE from './constants';
 import { Users } from 'modules/Users';
+import { lazy, Suspense } from 'react';
+import Loader from 'modules/Auth/components/Loader';
+
+const Details = lazy(() => import('modules/details'));
+const Ticket = lazy(() => import('modules/Ticket'));
 
 export const routeConfig = [
   {
@@ -40,7 +45,11 @@ export const routeConfig = [
     path: ROUTE.DETAILS,
     element: (
       <PrivateRoute
-        Component={withLayout(<Details />)}
+        Component={withLayout(
+          <Suspense fallback={<Loader isLoading={true} />}>
+            <Details />
+          </Suspense>
+        )}
         AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
       />
     ),
@@ -85,7 +94,11 @@ export const routeConfig = [
     path: ROUTE.TICKET,
     element: (
       <PrivateRoute
-        Component={withLayout(<Ticket />)}
+        Component={withLayout(
+          <Suspense fallback={<Loader isLoading={true} />}>
+            <Ticket />
+          </Suspense>
+        )}
         AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
       />
     ),
