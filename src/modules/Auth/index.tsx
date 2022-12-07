@@ -4,7 +4,6 @@ import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import jwt_decode from 'jwt-decode';
 
-import Login from 'assets/svg/Login.svg';
 import Loader from './components/Loader';
 import { userProfileType } from './auth.types';
 import { useLogin } from './login.hooks';
@@ -44,7 +43,7 @@ const AuthContainer = () => {
         setUserAuth(response.data.data);
         saveToLocalStorage(LOCAL_STORAGE_KEYS.USER_AUTH, response.data.data);
       },
-      onError: (error) => { },
+      onError: (error) => {},
     });
   };
 
@@ -99,7 +98,7 @@ const AuthContainer = () => {
             className='img-box'
           >
             <Heading />
-            <img src={Login} alt='Login' className='img-auth' />
+            <img src='./images/auth.svg' alt='Login' className='img-auth' />
           </Box>
           <Box
             sx={{
