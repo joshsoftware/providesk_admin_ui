@@ -4,7 +4,7 @@ import TablePagination from '@mui/material/TablePagination';
 import { Box, Card, CardContent, Paper } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
-import { CustomSelect } from 'modules/shared/Select';
+import Select, { CustomSelect } from 'modules/shared/Select';
 import Search from 'modules/shared/Search';
 import ComplaintCard from 'modules/shared/ComplaintCard';
 import { UserContext } from 'App';
@@ -19,6 +19,7 @@ import { RestartAltRounded } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import ROUTE from 'routes/constants';
 import { ROLES } from 'routes/roleConstants';
+import { useUsers } from 'modules/Ticket/ticket.hook';
 
 const statusOptions = [
   {
@@ -73,6 +74,10 @@ const Dashboard = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(8);
   const [departmentId, setDepartmentId] = useState<number>(1);
+  const [organizationId, setOrganizationId] = useState<number>(
+    userAuth?.organizations?.[0]?.id
+  );
+  const [resolverEmpId, setResolverEmpId] = useState<string | undefined>('');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilters((p) => ({ ...p, [event.target.name]: event.target.value }));
@@ -90,7 +95,9 @@ const Dashboard = () => {
       }));
       setDepartmentId(userAuth?.organizations?.[0]?.department_id);
     }
+    setOrganizationId(userAuth?.organizations?.[0]?.id);
   }, [userAuth]);
+
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -114,9 +121,10 @@ const Dashboard = () => {
       })) || []
     );
   }, [categoriesList]);
+
   const { data: departmentsList, isLoading: departmentsFetching } =
-    useDepartments(1);
-  console.log(departmentsList, 'list');
+    useDepartments(organizationId);
+
   const deptOptions = useMemo(() => {
     return (
       departmentsList?.map((dept) => ({
@@ -126,16 +134,41 @@ const Dashboard = () => {
     );
   }, [departmentsList]);
 
-  const updatedData = data?.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
-
-  const updateddataSearch = useMemo(() => {
+  const updatedListdataSearchfilter = useMemo(() => {
     if (filters.title.length > 0) {
-      return updatedData.filter((item) =>
+      return data?.filter((item) =>
         item.title.toLowerCase().includes(filters.title.toLowerCase())
       );
     }
-    return updatedData;
-  }, [updatedData, filters.title]);
+    return data;
+  }, [data, filters.title]);
+
+  //add resolver userFilter on Frontend
+  const updatedListResolverEmployeeFilter = useMemo(() => {
+    if (resolverEmpId)
+      return updatedListdataSearchfilter?.filter(
+        (item) => item.resolver_id == resolverEmpId
+      );
+    return updatedListdataSearchfilter;
+  }, [updatedListdataSearchfilter, resolverEmpId]);
+
+  const updatedDataFinalList = updatedListResolverEmployeeFilter?.slice(
+    page * rowsPerPage,
+    (page + 1) * rowsPerPage
+  );
+
+  const { data: usersList, isLoading: isFetchingUsers } =
+    useUsers(departmentId);
+  const userResolverList = useMemo(() => {
+    const list =
+      usersList?.map((emp) => {
+        return {
+          label: emp.name,
+          value: emp.id + '',
+        };
+      }) || [];
+    return [{ label: 'None', value: '' }, ...list];
+  }, [usersList]);
 
   const onClickPlus = () => {
     navigate(ROUTE.TICKET);
@@ -157,7 +190,10 @@ const Dashboard = () => {
             variant='text'
             size='small'
             startIcon={<RestartAltRounded />}
-            onClick={() => setFilters(DEFAULT_FILTERS)}
+            onClick={() => {
+              setFilters(DEFAULT_FILTERS);
+              setResolverEmpId('');
+            }}
             sx={{ height: 'auto', color: 'primary.dark', p: 0, ml: 'auto' }}
           >
             Reset All
@@ -179,7 +215,7 @@ const Dashboard = () => {
               {(userAuth.role === 'admin' ||
                 userAuth.role === 'super_admin') && (
                 <CustomSelect
-                  label={'departments'}
+                  label={'Departments'}
                   options={deptOptions}
                   value={filters.department}
                   onChange={(e) => {
@@ -190,11 +226,24 @@ const Dashboard = () => {
                     );
 
                     setFilters((p) => ({ ...p, category: '' }));
+                    setResolverEmpId('');
                     handleChange(e);
                   }}
                   name='department'
                 />
               )}
+              {
+                <Select
+                  label={'Resolver Employee'}
+                  options={userResolverList}
+                  value={resolverEmpId + ''}
+                  onChange={(e) => {
+                    setResolverEmpId(e.target.value);
+                  }}
+                  name='resolver_Employee'
+                  disabled={filters.department == ''}
+                />
+              }
               <CustomSelect
                 label={'Category'}
                 options={categoryOptions}
@@ -259,7 +308,7 @@ const Dashboard = () => {
       <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
         {isLoading ? (
           <Loader isLoading={isLoading} />
-        ) : updateddataSearch?.length === 0 ? (
+        ) : updatedDataFinalList?.length === 0 ? (
           <Typography variant='h6' sx={{ p: 3, textAlign: 'center' }}>
             No Data
           </Typography>
@@ -268,7 +317,7 @@ const Dashboard = () => {
             sx={{ display: 'grid', gap: '1rem' }}
             className='complaint-card-grid'
           >
-            {updateddataSearch?.map((complaint) => (
+            {updatedDataFinalList?.map((complaint) => (
               <ComplaintCard details={complaint} />
             ))}
           </Box>
@@ -276,7 +325,7 @@ const Dashboard = () => {
         <TablePagination
           component='div'
           rowsPerPageOptions={[8, 16, 32, 64, 128]}
-          count={data?.length || 0}
+          count={updatedListResolverEmployeeFilter?.length || 0}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}

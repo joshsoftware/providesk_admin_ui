@@ -57,7 +57,6 @@ const TimelineLeft = ({ date, index }: { date: string; index: number }) => {
 };
 
 const TimeLineDescription = ({ activity }: { activity: ITicketActivity }) => {
-  console.log('activeity', activity);
   return (
     <Paper elevation={8} style={{ width: '40vw', maxWidth: '100%' }}>
       <div style={{ padding: '0.5rem 0', margin: '0.5rem' }}>
