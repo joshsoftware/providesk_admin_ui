@@ -1,8 +1,8 @@
-import { Button } from './Button';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { Box } from '@mui/system';
 import { IconButton, Typography } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { CloseRounded, FileUploadRounded } from '@mui/icons-material';
+
+import { Button } from './Button';
 
 export const UploadBucket = ({
   isLoading,
@@ -26,38 +26,61 @@ export const UploadBucket = ({
   };
 
   return (
-    <Box>
-      <input
-        style={{ display: 'none' }}
-        type='file'
-        id={'id'}
-        onChange={(e) => {
-          if (e.target.files?.length! > 0) {
-            onChangeFile(e.target.files);
-          }
-        }}
-      />
-      <label htmlFor='id'>
-        <Button
-          variant='contained'
-          component='span'
-          isLoading={isLoading}
-          startIcon={<FileUploadIcon />}
-        >
-          Upload
-        </Button>
-      </label>
+    <Box
+      display={'grid'}
+      gap={2}
+      p={2}
+      borderColor={'grey.400'}
+      borderRadius={1}
+      sx={{ backgroundColor: 'grey.100' }}
+    >
+      <Box textAlign={'center'}>
+        <input
+          style={{ display: 'none' }}
+          type='file'
+          id={'id'}
+          onChange={(e) => {
+            if (e.target.files?.length! > 0) {
+              onChangeFile(e.target.files);
+            }
+          }}
+        />
+        <label htmlFor='id'>
+          <Button
+            fullWidth
+            variant='text'
+            component='span'
+            isLoading={isLoading}
+            startIcon={<FileUploadRounded />}
+          >
+            Upload
+          </Button>
+        </label>
+      </Box>
       {file?.map((item, index) => (
         <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
+          display={'flex'}
+          alignItems={'center'}
+          gap={3}
+          pl={3}
+          pr={2}
+          py={1}
+          border={1}
+          borderColor={'grey.400'}
+          borderRadius={1}
         >
-          <Typography>{item.name}</Typography>
-          <IconButton onClick={() => removeFile(index)}>
-            <CloseIcon />
+          <Typography
+            variant='body2'
+            flex={1}
+            overflow={'hidden'}
+            textOverflow={'ellipsis'}
+            whiteSpace={'nowrap'}
+            mr={'auto'}
+          >
+            {item.name}
+          </Typography>
+          <IconButton onClick={() => removeFile(index)} sx={{ p: 1 }}>
+            <CloseRounded sx={{ fontSize: 16 }} />
           </IconButton>
         </Box>
       ))}
