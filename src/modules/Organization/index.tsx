@@ -96,7 +96,6 @@ export const Organization = () => {
         <Button
           variant='text'
           onClick={handleCreateOrganizationDialogOpen}
-          size='small'
           startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
           sx={{ color: 'grey.900', ml: 'auto' }}
         >
@@ -168,7 +167,6 @@ export const Organization = () => {
           </DialogContent>
           <DialogActions>
             <Button
-              size='small'
               variant='text'
               onClick={handleCreateOrganizationDialogClose}
             >

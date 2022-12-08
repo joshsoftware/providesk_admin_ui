@@ -1,7 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Card, CardContent, Chip, List, ListItem, Typography } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Chip,
+  List,
+  ListItem,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import KeyboardDoubleArrowRightRounded from '@mui/icons-material/KeyboardDoubleArrowRightRounded';
 
@@ -25,7 +32,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
     department,
     resolver,
     requester,
-    reason_for_update
+    reason_for_update,
   } = details;
 
   const navigate = useNavigate();
@@ -57,35 +64,84 @@ const ComplaintCard: React.FC<Props> = (props) => {
       value: resolver,
     },
     {
-      label: "Last Comment",
-      value: reason_for_update || "_"
+      label: 'Last Comment',
+      value: reason_for_update || '_',
     },
     {
       label: 'Last Updated Time',
-      value: DateFormate(updated_at) || '_'
+      value: DateFormate(updated_at) || '_',
     },
   ];
 
   return (
-    <Card variant="outlined" onClick={onCardClick} className='complaint-card' sx={{ '&:hover': { borderColor: 'primary.dark' } }}>
+    <Card
+      variant='outlined'
+      onClick={onCardClick}
+      className='complaint-card'
+      sx={{ '&:hover': { borderColor: 'primary.main' } }}
+    >
       <CardContent sx={{ pb: '0.5rem !important' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Typography variant='subtitle1' className='flex-1'>
             {title}
           </Typography>
-          <Chip label={status.charAt(0).toUpperCase() + status.slice(1)} className='text-truncate' size='small' sx={{ backgroundColor: ticketStatusColours[status], fontSize: '0.75rem', fontWeight: '500', color: 'grey.900', px: '0.5rem', textTransform: 'capitalize' }} />
+          <Chip
+            label={status.charAt(0).toUpperCase() + status.slice(1)}
+            className='text-truncate'
+            size='small'
+            sx={{
+              backgroundColor: ticketStatusColours[status],
+              fontSize: '0.75rem',
+              fontWeight: '500',
+              color: 'grey.900',
+              px: '0.5rem',
+              textTransform: 'capitalize',
+            }}
+          />
         </Box>
         <List className='card-list'>
           {complaintConfig.map((config) => (
-            <ListItem sx={{ gap: '1rem', p: '0.5rem' }} className='card-list-item'>
-              <Typography variant='body2' sx={{ mr: 'auto' }}>{config.label}</Typography>
-              <Typography variant='body2' sx={{ fontWeight: '700' }} className='text-truncate'>{config.value}</Typography>
+            <ListItem
+              sx={{ gap: '1rem', p: '0.5rem' }}
+              className='card-list-item'
+            >
+              <Typography variant='body2' sx={{ mr: 'auto' }}>
+                {config.label}
+              </Typography>
+              <Typography
+                variant='body2'
+                sx={{ fontWeight: '700' }}
+                className='text-truncate'
+              >
+                {config.value}
+              </Typography>
             </ListItem>
           ))}
         </List>
-        <Box className="bottom-bar" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', backgroundColor: 'primary.dark' }}>
-          <Typography sx={{ fontSize: "0.875rem", lineHeight: '1.25rem', fontWeight: '500', color: 'common.white', mb: '0' }}>See More</Typography>
-          <KeyboardDoubleArrowRightRounded sx={{ fontSize: '1.25rem', color: 'common.white' }} />
+        <Box
+          className='bottom-bar'
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.25rem',
+            backgroundColor: 'primary.main',
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: '0.875rem',
+              lineHeight: '1.25rem',
+              fontWeight: '500',
+              color: 'common.white',
+              mb: '0',
+            }}
+          >
+            See More
+          </Typography>
+          <KeyboardDoubleArrowRightRounded
+            sx={{ fontSize: '1.25rem', color: 'common.white' }}
+          />
         </Box>
       </CardContent>
     </Card>

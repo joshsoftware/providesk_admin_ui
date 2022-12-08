@@ -1,25 +1,37 @@
-import AccessDenied from 'assets/svg/AccessDenied.svg';
+import { Box, Card, CardContent, Typography } from '@mui/material';
 
 const UnauthorizedAccess = () => {
   return (
-    <div
-      style={{
-        height: '90vh',
-        margin: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
     >
-      <h1 style={{ margin: '0 0 2rem 0' }}>Unauthorized Access</h1>
-      <div>
-        <img src={AccessDenied} alt='Login' height={300}></img>
-      </div>
-      <h5 style={{ margin: '2rem 0', textAlign: 'center' }}>
-        You are attempting to access or change data outside of your scope.
-      </h5>
-    </div>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <Typography variant='h5'>Unauthorized Access</Typography>
+      </Box>
+      <Card sx={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+        <CardContent
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: '1',
+            gap: 3,
+          }}
+        >
+          <Box sx={{ p: 3 }}>
+            <img
+              src='./images/access-denied.svg'
+              alt='AccessDenied'
+              height={300}
+            />
+          </Box>
+          <Typography variant='subtitle1'>
+            You are attempting to access or change data outside of your scope.
+          </Typography>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 
