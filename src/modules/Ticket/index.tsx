@@ -156,7 +156,6 @@ function Ticket({
     ticket_type: yup.string().required('Select type'),
     resolver_id: yup.string().required('Assign to resolver'),
   });
-  console.log(isEdit, data, 'inTicket');
 
   const handleUpdateAsset = useCallback(
     (setFormikValue, index: number, valuesAsset: string[]) => {
@@ -199,7 +198,7 @@ function Ticket({
         });
     },
   });
-  console.log(formik.values, 'values', userOptions);
+
   return (
     <Dialog
       sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}

@@ -31,6 +31,7 @@ import { StyleLabel } from 'modules/shared/StyleLabel';
 import { UploadBucket } from 'modules/shared/UploadBucket';
 import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
 import { toast } from 'react-toastify';
+import moment from 'moment';
 
 export const UpdateTicketForm = ({
   ticket,
@@ -94,6 +95,7 @@ export const UpdateTicketForm = ({
       reason_for_update,
       status,
       asset_url,
+      eta,
     }) => {
       let ticketDetails: IEditTicketPayload = {
         department_id,
@@ -102,6 +104,7 @@ export const UpdateTicketForm = ({
         reason_for_update,
         status,
         asset_url,
+        eta: eta !== '' ? moment(new Date(eta)).format('L') : undefined,
       };
       editTicket({
         id,

@@ -183,10 +183,6 @@ const Dashboard = () => {
     return [{ label: 'None', value: '' }, ...list];
   }, [usersList]);
 
-  const onClickPlus = () => {
-    navigate(ROUTE.TICKET);
-  };
-
   const [open, setOpen] = React.useState(false);
 
   return (

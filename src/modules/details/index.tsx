@@ -24,6 +24,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ticketStatusColours } from './constants';
 
 import { ImageS3Tag } from './components/ImageTag';
+import moment from 'moment';
 const Ticket = lazy(() => import('modules/Ticket'));
 
 function Details() {
@@ -136,7 +137,7 @@ function Details() {
                   <TableRow>
                     <TableCell sx={{ color: '#63686b' }}>ETA</TableCell>
                     <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.eta || '_'}
+                      {ticket?.eta ? moment(ticket?.eta).format('ll') : '_'}
                     </TableCell>
                   </TableRow>
                   <TableRow>

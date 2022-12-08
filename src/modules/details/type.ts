@@ -55,6 +55,7 @@ export interface IEditTicketPayload {
   reason_for_update?: string;
   status: ticketStatusType;
   asset_url?: string[];
+  eta?: string;
 }
 
 export interface IReopenTicketPayload {
