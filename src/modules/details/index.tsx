@@ -145,6 +145,12 @@ function Details() {
           <Modal
             open={openProgressTicket}
             onClose={() => setOpenProgressTicket(false)}
+            sx={{ overflow: 'scroll' }}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
             <UpdateTicketForm
               ticket={ticketDetails}

@@ -1,5 +1,17 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
+import moment from 'moment';
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select as SelectMUI,
+  TextField,
+  Typography,
+} from '@mui/material';
 
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
 import { useUsers } from 'modules/Ticket/ticket.hook';
@@ -15,23 +27,8 @@ import { Button } from 'modules/shared/Button';
 import { editTicketValidationSchema as validationSchema } from '../details.helpers';
 import RadioGroupRating from './Rating';
 import Loader from 'modules/Auth/components/Loader';
-
-import CloseIcon from '@mui/icons-material/Close';
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select as SelectMUI,
-  TextareaAutosize,
-  TextField,
-  Typography,
-} from '@mui/material';
-import { StyleLabel } from 'modules/shared/StyleLabel';
 import { UploadBucket } from 'modules/shared/UploadBucket';
 import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
-import { toast } from 'react-toastify';
-import moment from 'moment';
 
 export const UpdateTicketForm = ({
   ticket,
@@ -190,20 +187,13 @@ export const UpdateTicketForm = ({
 
   return (
     <Box
+      component={Paper}
       sx={{
-        m: 'auto',
-        bgcolor: 'background.paper',
-        boxShadow: 24,
-        pt: 2,
-        px: 2,
-        pb: 3,
-        maxWidth: 600,
+        maxHeight: 'calc(100% - 64px)',
+        maxWidth: '444px',
+        width: 'calc(100% - 64px)',
       }}
     >
-      <CloseIcon
-        style={{ float: 'right', cursor: 'pointer' }}
-        onClick={() => setOpenEdit(false)}
-      />
       <Loader
         isLoading={
           isUpdatingTicket ||
@@ -213,250 +203,207 @@ export const UpdateTicketForm = ({
           isFetchingUsers
         }
       />
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          margin: 20,
-          alignItems: 'center',
-        }}
-      >
-        <FormControl variant='standard' sx={{ m: 2, minWidth: 120 }}>
-          <InputLabel id='ticket-status-selector-id'>Status</InputLabel>
-          <SelectMUI
-            name='status'
-            id='ticket-status-selector-id'
-            placeholder='Current Status'
-            required={true}
-            value={values.status}
-            label='Ticket Type'
-            onChange={handleChange}
-            error={touched.status && Boolean(errors.status)}
-          >
-            <MenuItem
-              key={ticket?.status}
-              value={ticket?.status || ''}
-              selected
-              style={{ textTransform: 'capitalize' }}
+      <Box sx={{ px: 4, py: 3 }}>
+        <Typography variant='h6'>Update Ticket</Typography>
+      </Box>
+      <Box component={'form'} onSubmit={handleSubmit}>
+        <Box sx={{ display: 'grid', gap: 3, px: 4, py: '1.25rem' }}>
+          <FormControl size='small'>
+            <InputLabel id='ticket-status-selector-id'>Status</InputLabel>
+            <SelectMUI
+              name='status'
+              id='ticket-status-selector-id'
+              placeholder='Status'
+              required={true}
+              value={values.status}
+              label='Status'
+              onChange={handleChange}
+              error={touched.status && Boolean(errors.status)}
             >
-              <span>{ticket?.status}</span>
-            </MenuItem>
-            {ticket?.permited_transitions?.map((item) => (
               <MenuItem
-                key={item}
-                value={item}
+                key={ticket?.status}
+                value={ticket?.status || ''}
+                selected
                 style={{ textTransform: 'capitalize' }}
               >
-                <span>{item}</span>
+                {ticket?.status}
               </MenuItem>
-            ))}
-          </SelectMUI>
-        </FormControl>
-
-        {values.status !== 'reopen' && (
-          <Box
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-            }}
-          >
-            <FormControl sx={{ m: 2, minWidth: 240 }}>
-              <Select
-                name='department_id'
-                required={true}
-                label={'Department'}
-                value={values.department_id}
-                options={deptOptions}
-                onChange={(e) => {
-                  setDepartmentId(parseInt(e.target.value));
-                  values.category_id = '';
-                  values.resolver_id = '';
-                  handleChange(e);
-                }}
-                error={(touched.department_id && errors.department_id) || ''}
-              />
-            </FormControl>
-
-            <FormControl sx={{ m: 2, minWidth: 240 }}>
-              <Select
-                name='category_id'
-                required={true}
-                label={'Category'}
-                value={values.category_id}
-                options={categoryOptions}
-                onChange={handleChange}
-                error={(touched.category_id && errors.category_id) || ''}
-              />
-            </FormControl>
-
-            <FormControl sx={{ m: 2, minWidth: 240 }}>
-              <Select
-                name='resolver_id'
-                required={true}
-                label={'Resolver'}
-                value={values.resolver_id}
-                options={userOptions}
-                onChange={handleChange}
-                error={(touched.resolver_id && errors.resolver_id) || ''}
-              />
-            </FormControl>
-            <FormControl>
+              {ticket?.permited_transitions?.map((item) => (
+                <MenuItem
+                  key={item}
+                  value={item}
+                  style={{ textTransform: 'capitalize' }}
+                >
+                  {item}
+                </MenuItem>
+              ))}
+            </SelectMUI>
+          </FormControl>
+          {values.status !== 'reopen' && (
+            <>
+              <FormControl>
+                <Select
+                  name='department_id'
+                  required={true}
+                  label={'Department'}
+                  value={values.department_id}
+                  options={deptOptions}
+                  onChange={(e) => {
+                    setDepartmentId(parseInt(e.target.value));
+                    values.category_id = '';
+                    values.resolver_id = '';
+                    handleChange(e);
+                  }}
+                  error={(touched.department_id && errors.department_id) || ''}
+                />
+              </FormControl>
+              <FormControl>
+                <Select
+                  name='category_id'
+                  required={true}
+                  label={'Category'}
+                  value={values.category_id}
+                  options={categoryOptions}
+                  onChange={handleChange}
+                  error={(touched.category_id && errors.category_id) || ''}
+                />
+              </FormControl>
+              <FormControl>
+                <Select
+                  name='resolver_id'
+                  required={true}
+                  label={'Resolver'}
+                  value={values.resolver_id}
+                  options={userOptions}
+                  onChange={handleChange}
+                  error={(touched.resolver_id && errors.resolver_id) || ''}
+                />
+              </FormControl>
               <TextField
-                type={'date'}
-                name='eta'
                 label='ETA'
+                type='date'
+                name='eta'
                 value={values.eta}
                 onChange={handleChange}
+                size='small'
               />
-            </FormControl>
-            <Box>
-              <StyleLabel
-                text={'Comment'}
-                required={true}
-                sx={{
-                  fontSize: '11px',
-                }}
-              />
-              <TextareaAutosize
+              <TextField
+                label='Comment'
+                multiline
                 required
                 name='reason_for_update'
                 value={values.reason_for_update}
-                minRows={3}
-                maxRows={5}
-                style={{
-                  border: '0',
-                  borderBottom: '1px solid',
-                  whiteSpace: 'pre-wrap',
-                  outline: 'none',
-                  width: '240px',
-                }}
                 placeholder='Leave a comment'
                 onChange={handleChange}
                 onBlur={handleBlur}
-              />
-              {touched.reason_for_update && errors.reason_for_update && (
-                <Typography
-                  variant='caption'
-                  display='block'
-                  color='#f44336'
-                  gutterBottom
-                  style={{ fontSize: '11px', margin: 0, padding: 0 }}
-                >
-                  {errors.reason_for_update}
-                </Typography>
-              )}
-            </Box>
-          </Box>
-        )}
-
-        {values.status === 'reopen' && (
-          <Box>
-            <FormControl variant='standard' sx={{ m: 2, minWidth: 240 }}>
-              <InputLabel id='feedback-select-label'>
-                Are you satisfied with the work done?
-              </InputLabel>
-              <SelectMUI
-                labelId='feedback-select-label'
-                id='feedback-select'
-                value={values.is_customer_satisfied}
-                label='Are you satisfied with the work done?'
-                onChange={handleChange}
-              >
-                <MenuItem value={'false'}>No</MenuItem>
-                <MenuItem value={'true'}>Yes</MenuItem>
-              </SelectMUI>
-            </FormControl>
-
-            <InputLabel
-              id='rating'
-              sx={{
-                m: 2,
-                minWidth: 240,
-
-                fontSize: '11px',
-                my: 1,
-              }}
-            >
-              Rate the work done
-            </InputLabel>
-            <Box sx={{ mx: 2, minWidth: 240 }}>
-              <RadioGroupRating
-                value={values.rating as number}
-                handleChange={handleChange}
-              />
-              {touched.rating && errors.rating && (
-                <Typography
-                  variant='caption'
-                  display='block'
-                  color='#f44336'
-                  gutterBottom
-                  style={{ fontSize: '11px', margin: 0, padding: 0 }}
-                >
-                  {errors.rating}
-                </Typography>
-              )}
-            </Box>
-
-            <Box sx={{ m: 2 }}>
-              <StyleLabel
-                text={'Reason'}
-                required={true}
-                sx={{
-                  fontSize: '11px',
+                size='small'
+                error={
+                  touched.reason_for_update && Boolean(errors.reason_for_update)
+                }
+                helperText={errors.reason_for_update}
+                FormHelperTextProps={{
+                  sx: {
+                    fontSize: '0.875rem',
+                    p: '0.125rem 0.875rem 0 0.875rem',
+                    m: 0,
+                  },
                 }}
               />
-              <TextareaAutosize
-                required
-                name='started_reason'
-                value={values.started_reason}
-                minRows={3}
-                maxRows={5}
-                style={{
-                  border: '0',
-                  borderBottom: '1px solid',
-                  whiteSpace: 'pre-wrap',
-                  outline: 'none',
-                  width: '240px',
-                }}
-                placeholder='Leave a comment'
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              {touched.started_reason && errors.started_reason && (
-                <Typography
-                  variant='caption'
-                  display='block'
-                  color='#f44336'
-                  gutterBottom
-                  style={{ fontSize: '11px', margin: 0, padding: 0 }}
+            </>
+          )}
+          {values.status === 'reopen' && (
+            <>
+              <FormControl size='small'>
+                <InputLabel id='feedback-select-label'>
+                  Are you satisfied with the work done?
+                </InputLabel>
+                <SelectMUI
+                  labelId='feedback-select-label'
+                  id='feedback-select'
+                  value={values.is_customer_satisfied}
+                  label='Are you satisfied with the work done?'
+                  onChange={handleChange}
                 >
-                  {errors.started_reason}
-                </Typography>
-              )}
-            </Box>
-          </Box>
-        )}
-        <UploadBucket
-          isLoading={isLoading}
-          name={'asset_url'}
-          value={values.asset_url}
-          file={file}
-          handleChange={handleChangeFile}
-          removeFile={removeFile}
-          error={errors.asset_url as string | undefined}
-        />
-        <Button
-          type='submit'
-          className='mx-3'
-          isLoading={isReopeningTicket || isUpdatingTicket}
-          style={{ height: '40px', marginTop: '1rem' }}
-        >
-          {values.status === 'reopen' ? 'Reopen' : 'Update'}
-        </Button>
-      </form>
+                  <MenuItem value={'false'}>No</MenuItem>
+                  <MenuItem value={'true'}>Yes</MenuItem>
+                </SelectMUI>
+              </FormControl>
+              <Box>
+                <InputLabel
+                  id='rating'
+                  sx={{
+                    fontSize: '0.625rem',
+                  }}
+                >
+                  Rate the work done
+                </InputLabel>
+                <Box>
+                  <RadioGroupRating
+                    value={values.rating as number}
+                    handleChange={handleChange}
+                  />
+                  {touched.rating && errors.rating && (
+                    <Typography
+                      variant='caption'
+                      display='block'
+                      color='#f44336'
+                      gutterBottom
+                      style={{ fontSize: '11px', margin: 0, padding: 0 }}
+                    >
+                      {errors.rating}
+                    </Typography>
+                  )}
+                </Box>
+              </Box>
+              <Box>
+                <TextField
+                  fullWidth
+                  label='Reason'
+                  required
+                  name='started_reason'
+                  value={values.started_reason}
+                  placeholder='Leave a comment'
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  size='small'
+                />
+                {touched.started_reason && errors.started_reason && (
+                  <Typography
+                    sx={{
+                      fontSize: '0.875rem',
+                      p: '0.125rem 0.875rem 0 0.875rem',
+                      m: 0,
+                      color: 'error.main',
+                    }}
+                  >
+                    {errors.started_reason}
+                  </Typography>
+                )}
+              </Box>
+            </>
+          )}
+          <UploadBucket
+            isLoading={isLoading}
+            name={'asset_url'}
+            value={values.asset_url}
+            file={file}
+            handleChange={handleChangeFile}
+            removeFile={removeFile}
+            error={errors.asset_url as string | undefined}
+          />
+        </Box>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2 }}>
+          <Button variant='text' onClick={() => setOpenEdit(false)}>
+            Cancel
+          </Button>
+          <Button
+            type='submit'
+            isLoading={isReopeningTicket || isUpdatingTicket}
+          >
+            {values.status === 'reopen' ? 'Reopen' : 'Update'}
+          </Button>
+        </Box>
+      </Box>
     </Box>
   );
 };
