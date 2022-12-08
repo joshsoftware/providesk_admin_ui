@@ -232,18 +232,17 @@ const Dashboard = () => {
                   name='department'
                 />
               )}
-              {
-                <Select
-                  label={'Resolver Employee'}
-                  options={userResolverList}
-                  value={resolverEmpId + ''}
-                  onChange={(e) => {
-                    setResolverEmpId(e.target.value);
-                  }}
-                  name='resolver_Employee'
-                  disabled={filters.department == ''}
-                />
-              }
+
+              <Select
+                label={'Resolver Employee'}
+                options={userResolverList}
+                value={resolverEmpId + ''}
+                onChange={(e) => {
+                  setResolverEmpId(e.target.value);
+                }}
+                name='resolver_Employee'
+                disabled={filters.department == ''}
+              />
               <CustomSelect
                 label={'Category'}
                 options={categoryOptions}

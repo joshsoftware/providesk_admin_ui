@@ -23,14 +23,14 @@ import { ROLES } from 'routes/roleConstants';
 const CategoryList = () => {
   const { userAuth } = useContext(UserContext);
 
-  const [organizationId, setOrganizationId] = useState<number | ''>(
-    userAuth?.organizations?.[0]?.id || ''
+  const [organizationId, setOrganizationId] = useState<number>(
+    userAuth?.organizations?.[0]?.id
   );
 
   const { data: departmentsList, isLoading: isFetchingDepartment } =
     useDepartments(organizationId);
 
-  const [departmentId, setDepartmentId] = useState<number | ''>(
+  const [departmentId, setDepartmentId] = useState<number | string>(
     userAuth?.organizations?.[0]?.department_id || 1
   );
 

@@ -272,9 +272,7 @@ function Ticket() {
             file={file}
             value={formik.values.asset_url}
             name={'asset_url'}
-            handleChange={(e) => {
-              handleChangeFile(e);
-            }}
+            handleChange={handleChangeFile}
             removeFile={removeFile}
           />
           <Box sx={{ display: 'flex', justifyContent: 'end', pt: 3 }}>
