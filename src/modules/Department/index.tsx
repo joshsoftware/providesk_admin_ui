@@ -74,7 +74,6 @@ export const DepartMent = () => {
         <Button
           variant='text'
           onClick={handleCreateDepartmentDialogOpen}
-          size='small'
           startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
           sx={{ color: 'grey.900', ml: 'auto' }}
         >
@@ -116,15 +115,10 @@ export const DepartMent = () => {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button
-              size='small'
-              variant='text'
-              onClick={handleCreateDepartmentDialogClose}
-            >
+            <Button variant='text' onClick={handleCreateDepartmentDialogClose}>
               Cancel
             </Button>
             <Button
-              size='small'
               isLoading={creatingDepartment}
               onClick={() => createDepartment()}
               disabled={!!organizationId && department.length < 2}

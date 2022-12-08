@@ -103,7 +103,7 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
         />
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2 }}>
-        <Button size='small' variant='text' onClick={() => setOpenEdit(false)}>
+        <Button variant='text' onClick={() => setOpenEdit(false)}>
           Cancel
         </Button>
         <Button disabled={false} type='submit' onClick={handleUpdateUser}>

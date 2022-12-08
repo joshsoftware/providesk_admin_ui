@@ -3,20 +3,40 @@ import { createTheme } from '@mui/material';
 export const palette = {
   primary: {
     main: '#0091ea',
-    light: '#DEEBF1',
-    assigned: '#0091ea',
-    inprogress: '#4527a0',
-    resolved: '#43a047',
-    for_approval: '#e65100',
-    closed: '#424242',
-    rejected: '#c62828'
+    light: '#D7E6F4',
+    dark: '#002952',
+  },
+  text: {
+    primary: '#002952',
   },
   background: {
-    default: '#F8F9FA'
-  }
+    default: '#F8F9FA',
+  },
 };
 
 export const theme = createTheme({
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+        size: 'small',
+      },
+    },
+    MuiAppBar: {
+      defaultProps: {
+        position: 'static',
+        sx: {
+          backgroundColor: 'primary.light',
+          zIndex: 1,
+        },
+      },
+    },
+  },
   palette,
   spacing: [0, 4, 8, 16, 24, 32, 40, 48],
   typography: {
@@ -90,6 +110,9 @@ export const theme = createTheme({
     body2: {
       fontSize: '0.75rem',
       lineHeight: 1.5,
-    }
+    },
+    button: {
+      textTransform: 'capitalize',
+    },
   },
 });

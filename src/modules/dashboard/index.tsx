@@ -35,13 +35,13 @@ const statusOptions = [
     label: 'Resolved',
   },
   {
-    value: "for_approval",
-    label: "For Approval"
+    value: 'for_approval',
+    label: 'For Approval',
   },
   {
-    value: "closed",
-    label: "Closed"
-  }
+    value: 'closed',
+    label: 'Closed',
+  },
 ];
 
 const DEFAULT_FILTERS = {
@@ -61,7 +61,6 @@ const Dashboard = () => {
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const { data, isLoading } = useGetRequestsList(filters);
   const { userAuth } = useContext(UserContext);
-
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -114,9 +113,11 @@ const Dashboard = () => {
 
   const updateddataSearch = useMemo(() => {
     if (filters.title.length > 0) {
-      return updatedData.filter(item => item.title.toLowerCase().includes(filters.title.toLowerCase()))
+      return updatedData.filter((item) =>
+        item.title.toLowerCase().includes(filters.title.toLowerCase())
+      );
     }
-    return updatedData
+    return updatedData;
   }, [updatedData, filters.title]);
 
   // const onClickPlus = () => {
@@ -124,22 +125,54 @@ const Dashboard = () => {
   // }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', gap: 3, p: '1rem' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: '1',
+        gap: 3,
+        p: '1rem',
+      }}
+    >
       <Box sx={{ display: 'flex' }}>
-        <Typography variant='h5'>
-          Dashboard
-        </Typography>
+        <Typography variant='h5'>Dashboard</Typography>
       </Box>
       <Card sx={{ display: 'flex' }}>
-        <CardContent sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
-          <Box sx={{ display: 'flex', flex: '1', gap: 3 }} className='complaint-grid-wrapper'>
-            <Paper elevation={0} sx={{ display: 'grid', alignSelf: 'flex-start' }} className='complaint-filters'>
+        <CardContent
+          sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}
+        >
+          <Box
+            sx={{ display: 'flex', flex: '1', gap: 3 }}
+            className='complaint-grid-wrapper'
+          >
+            <Paper
+              elevation={0}
+              sx={{ display: 'grid', alignSelf: 'flex-start' }}
+              className='complaint-filters'
+            >
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                <Typography variant='h6' sx={{ m: 0 }}>Filter By</Typography>
-                <Button variant="text" size='small' startIcon={<RestartAltRounded />} onClick={() => setFilters(DEFAULT_FILTERS)} sx={{ height: 'auto', color: 'primary.dark', p: 0, ml: 'auto' }}>Reset All</Button>
+                <Typography variant='h6' sx={{ m: 0 }}>
+                  Filter By
+                </Typography>
+                <Button
+                  variant='text'
+                  startIcon={<RestartAltRounded />}
+                  onClick={() => setFilters(DEFAULT_FILTERS)}
+                  sx={{
+                    height: 'auto',
+                    color: 'primary.dark',
+                    p: 0,
+                    ml: 'auto',
+                  }}
+                >
+                  Reset All
+                </Button>
               </Box>
-              <Box sx={{ display: 'grid', gap: '1rem' }} className='filter-input-group flex-1'>
-                {userAuth.role !== "employee" &&
+              <Box
+                sx={{ display: 'grid', gap: '1rem' }}
+                className='filter-input-group flex-1'
+              >
+                {userAuth.role !== 'employee' && (
                   <>
                     <CustomSelect
                       label={'Status'}
@@ -153,11 +186,14 @@ const Dashboard = () => {
                       options={deptOptions}
                       value={filters.department}
                       onChange={(e) => {
-                        setDepartmentId((departmentsList.filter((item) => item.name === e.target.value))[0].id)
-                        setFilters((p) => ({ ...p, "category": "" }))
-                        handleChange(e)
-                      }
-                      }
+                        setDepartmentId(
+                          departmentsList.filter(
+                            (item) => item.name === e.target.value
+                          )[0].id
+                        );
+                        setFilters((p) => ({ ...p, category: '' }));
+                        handleChange(e);
+                      }}
                       name='department'
                     />
                     <CustomSelect
@@ -168,7 +204,7 @@ const Dashboard = () => {
                       name='category'
                     />
                   </>
-                }
+                )}
                 <Search
                   label={'Search'}
                   value={filters.title}
@@ -176,25 +212,75 @@ const Dashboard = () => {
                   name='title'
                   placeholder='Enter Title'
                 />
-                <Box sx={{ display: "flex", alignItems: 'center', borderRadius: '4px', border: '1px solid', borderColor: 'grey.400' }}>
-                  <Checkbox checked={filters.assig_to_me} onChange={() => setFilters((p) => ({ ...p, "assig_to_me": !filters.assig_to_me }))} sx={{ p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }} />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderRadius: '4px',
+                    border: '1px solid',
+                    borderColor: 'grey.400',
+                  }}
+                >
+                  <Checkbox
+                    checked={filters.assig_to_me}
+                    onChange={() =>
+                      setFilters((p) => ({
+                        ...p,
+                        assig_to_me: !filters.assig_to_me,
+                      }))
+                    }
+                    sx={{ p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                  />
                   <Typography>Assign to me</Typography>
                 </Box>
-                <Box sx={{ display: "flex", alignItems: 'center', borderRadius: '4px', border: '1px solid', borderColor: 'grey.400' }}>
-                  <Checkbox checked={filters.created_by_me} onChange={() => setFilters((p) => ({ ...p, "created_by_me": !filters.created_by_me }))} sx={{ p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }} />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderRadius: '4px',
+                    border: '1px solid',
+                    borderColor: 'grey.400',
+                  }}
+                >
+                  <Checkbox
+                    checked={filters.created_by_me}
+                    onChange={() =>
+                      setFilters((p) => ({
+                        ...p,
+                        created_by_me: !filters.created_by_me,
+                      }))
+                    }
+                    sx={{ p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }}
+                  />
                   <Typography>Created by me</Typography>
                 </Box>
               </Box>
             </Paper>
-            <Box sx={{ borderWidth: 0, borderStyle: 'solid', borderColor: 'grey.300' }} className='divider -vertical' />
+            <Box
+              sx={{
+                borderWidth: 0,
+                borderStyle: 'solid',
+                borderColor: 'grey.300',
+              }}
+              className='divider -vertical'
+            />
             <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}>
-              {isLoading ? <Loader isLoading={isLoading} /> : updateddataSearch?.length === 0 ?
-                <Typography variant='h6' sx={{ p: 3, textAlign: "center" }}>No Data</Typography> :
-                <Box sx={{ display: 'grid', gap: '1rem' }} className='complaint-card-grid'>
+              {isLoading ? (
+                <Loader isLoading={isLoading} />
+              ) : updateddataSearch?.length === 0 ? (
+                <Typography variant='h6' sx={{ p: 3, textAlign: 'center' }}>
+                  No Data
+                </Typography>
+              ) : (
+                <Box
+                  sx={{ display: 'grid', gap: '1rem' }}
+                  className='complaint-card-grid'
+                >
                   {updateddataSearch?.map((complaint) => (
                     <ComplaintCard details={complaint} />
                   ))}
-                </Box>}
+                </Box>
+              )}
               <TablePagination
                 component='div'
                 count={Math.ceil(updatedData?.length / rowsPerPage || 0)}

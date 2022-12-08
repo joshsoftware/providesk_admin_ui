@@ -83,7 +83,6 @@ export const Category = () => {
         <Button
           variant='text'
           onClick={handleCreateCategoryDialogOpen}
-          size='small'
           startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
           sx={{ color: 'grey.900', ml: 'auto' }}
         >
@@ -192,15 +191,10 @@ export const Category = () => {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button
-              size='small'
-              variant='text'
-              onClick={handleCreateCategoryDialogClose}
-            >
+            <Button variant='text' onClick={handleCreateCategoryDialogClose}>
               Cancel
             </Button>
             <Button
-              size='small'
               onClick={() => {
                 createCategory();
                 setPriority(0);
