@@ -1,6 +1,10 @@
 import { Box } from '@mui/system';
 import { IconButton, Typography } from '@mui/material';
-import { CloseRounded, FileUploadRounded } from '@mui/icons-material';
+import {
+  AttachmentRounded,
+  CloseRounded,
+  FileUploadRounded,
+} from '@mui/icons-material';
 
 import { Button } from './Button';
 
@@ -68,17 +72,20 @@ export const UploadBucket = ({
           border={1}
           borderColor={'grey.400'}
           borderRadius={1}
+          sx={{ backgroundColor: 'primary.light' }}
         >
-          <Typography
-            variant='body2'
-            flex={1}
-            overflow={'hidden'}
-            textOverflow={'ellipsis'}
-            whiteSpace={'nowrap'}
-            mr={'auto'}
-          >
-            {item.name}
-          </Typography>
+          <Box display={'flex'} alignItems={'center'} gap={2} mr={'auto'}>
+            <AttachmentRounded sx={{ fontSize: 16 }} />
+            <Typography
+              variant='body2'
+              flex={1}
+              overflow={'hidden'}
+              textOverflow={'ellipsis'}
+              whiteSpace={'nowrap'}
+            >
+              {item.name}
+            </Typography>
+          </Box>
           <IconButton onClick={() => removeFile(index)} sx={{ p: 1 }}>
             <CloseRounded sx={{ fontSize: 16 }} />
           </IconButton>

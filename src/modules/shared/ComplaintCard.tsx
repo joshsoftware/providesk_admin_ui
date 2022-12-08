@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import {
   Card,
   CardContent,
@@ -82,7 +81,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
     >
       <CardContent sx={{ pb: '0.5rem !important' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Typography variant='subtitle1' className='flex-1'>
+          <Typography variant='subtitle1' flex={1} textTransform='capitalize'>
             {title}
           </Typography>
           <Chip
@@ -91,11 +90,9 @@ const ComplaintCard: React.FC<Props> = (props) => {
             size='small'
             sx={{
               backgroundColor: ticketStatusColours[status],
-              fontSize: '0.75rem',
-              fontWeight: '500',
-              color: 'grey.900',
-              px: '0.5rem',
+              fontSize: 12,
               textTransform: 'capitalize',
+              borderRadius: 1,
             }}
           />
         </Box>
