@@ -160,7 +160,7 @@ const Dashboard = () => {
                   onClick={() => setFilters(DEFAULT_FILTERS)}
                   sx={{
                     height: 'auto',
-                    color: 'primary.dark',
+                    color: 'primary.main',
                     p: 0,
                     ml: 'auto',
                   }}

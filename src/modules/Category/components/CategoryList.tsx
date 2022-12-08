@@ -69,10 +69,10 @@ const CategoryList = () => {
             <Table size='small'>
               <TableHead sx={{ backgroundColor: 'grey.100' }}>
                 <TableRow>
-                  <TableCell sx={{ color: 'primary.dark', fontWeight: '500' }}>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>
                     Id
                   </TableCell>
-                  <TableCell sx={{ color: 'primary.dark', fontWeight: '500' }}>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>
                     Name
                   </TableCell>
                 </TableRow>
