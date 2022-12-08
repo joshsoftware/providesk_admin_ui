@@ -5,6 +5,7 @@ export interface ICreateTicketData {
   department_id: number;
   ticket_type: number;
   resolver_id: number;
+  asset_url: string[];
 }
 
 export interface ICreateTicketPayload {
@@ -23,4 +24,10 @@ export interface ITicketType {
 export interface ICreateTicketError {
   message: string;
   errors: string;
+}
+
+export interface IEditTicketParams {
+  id: number | string;
+  ticket_details: ICreateTicketData;
+  setOpenEdit: (e: boolean) => void;
 }

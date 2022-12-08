@@ -88,7 +88,7 @@ export interface IReopenTicketParams {
   setOpenEdit: (value: React.SetStateAction<boolean>) => void;
 }
 
-export interface IEditTicketParams {
+export interface IProgressTicketParams {
   ticket_details: { ticket: IEditTicketPayload };
   id: number;
   setOpenEdit: (value: React.SetStateAction<boolean>) => void;

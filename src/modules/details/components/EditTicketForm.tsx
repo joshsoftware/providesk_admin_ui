@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
 import { useUsers } from 'modules/Ticket/ticket.hook';
-import { useEditTicket, useReopenTicket } from '../details.hook';
+import { useProcessTicket, useReopenTicket } from '../details.hook';
 import {
   IEditTicketPayload,
   IEditTicketProps,
@@ -51,7 +51,8 @@ export const EditTicketForm = ({
     useCategories(departmentId);
   const { data: usersList, isLoading: isFetchingUsers } =
     useUsers(departmentId);
-  const { mutate: editTicket, isLoading: isUpdatingTicket } = useEditTicket();
+  const { mutate: editTicket, isLoading: isUpdatingTicket } =
+    useProcessTicket();
   const { mutate: reopenTicket, isLoading: isReopeningTicket } =
     useReopenTicket();
 

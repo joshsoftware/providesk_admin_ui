@@ -2,8 +2,16 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
-import { getUsersList, postCreateTicket } from './ticket.service';
-import { ICreateTicketPayload, ICreateTicketError } from './type';
+import {
+  getUsersList,
+  postCreateTicket,
+  putEditTicket,
+} from './ticket.service';
+import {
+  ICreateTicketPayload,
+  ICreateTicketError,
+  IEditTicketParams,
+} from './type';
 
 import API_CONSTANTS from 'hooks/constants';
 import { useNavigate } from 'react-router-dom';
@@ -45,4 +53,23 @@ export const useUsers = (dept_id, org_id?) => {
     }
   );
   return { data: data?.data?.data?.users, isLoading };
+};
+
+export const useEditTicket = () => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    ({ id, ticket_details, setOpenEdit }: IEditTicketParams) =>
+      putEditTicket({ id, ticket_details }),
+    {
+      onSuccess: (res, params) => {
+        toast.success(res?.data?.message || 'Ticked updated successfully.');
+        params.setOpenEdit(false);
+        queryClient.invalidateQueries([API_CONSTANTS.DETAILS_SPECEFIC]);
+      },
+      onError: (err: AxiosError) => {
+        let error = err?.response?.data as ICreateTicketError;
+        toast.error(error?.errors || 'Failed to update ticket.');
+      },
+    }
+  );
 };

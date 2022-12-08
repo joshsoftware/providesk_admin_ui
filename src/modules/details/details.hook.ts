@@ -3,28 +3,30 @@ import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
 import API_CONSTANTS from 'hooks/constants';
-import { IEditTicketParams, IReopenTicketParams } from './type';
+import { IProgressTicketParams, IReopenTicketParams } from './type';
 import { ICreateTicketError } from 'modules/Ticket/type';
 import {
   getDetailsTicket,
-  putEditTicket,
+  putProgressTicket,
   putReopenTicket,
 } from './details.service';
 
-export const useEditTicket = () => {
+export const useProcessTicket = () => {
   const queryClient = useQueryClient();
   return useMutation(
-    ({ id, ticket_details, setOpenEdit }: IEditTicketParams) =>
-      putEditTicket({ id, ticket_details }),
+    ({ id, ticket_details, setOpenEdit }: IProgressTicketParams) =>
+      putProgressTicket({ id, ticket_details }),
     {
       onSuccess: (res, params) => {
-        toast.success(res?.data?.message || 'Ticked updated successfully.');
+        toast.success(
+          res?.data?.message || 'Ticked status updated successfully.'
+        );
         params.setOpenEdit(false);
         queryClient.invalidateQueries([API_CONSTANTS.DETAILS_SPECEFIC]);
       },
       onError: (err: AxiosError) => {
         let error = err?.response?.data as ICreateTicketError;
-        toast.error(error?.errors || 'Failed to update ticket.');
+        toast.error(error?.errors || 'Failed to update ticket status.');
       },
     }
   );
