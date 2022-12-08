@@ -1,7 +1,10 @@
 import { get, put } from 'apis/apiHelper';
 
-export const putEditTicket = ({ id, ticket_details: payload }) => {
-  return put({ path: `/tickets/${id}`, payloadParams: payload });
+export const putProgressTicket = ({ id, ticket_details: payload }) => {
+  return put({
+    path: `/tickets/${id}/update_ticket_progress`,
+    payloadParams: payload,
+  });
 };
 
 export const putReopenTicket = ({ id, ticket_result: payload }) => {

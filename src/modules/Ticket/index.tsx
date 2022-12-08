@@ -1,4 +1,4 @@
-import { useMemo, useState, useContext } from 'react';
+import { useMemo, useState, useContext, useCallback } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 
@@ -21,9 +21,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import Loader from 'modules/Auth/components/Loader';
+import { UploadBucket } from 'modules/shared/UploadBucket';
+import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
 
-export const Ticket = () => {
+import Loader from 'modules/Auth/components/Loader';
+import { toast } from 'react-toastify';
+
+function Ticket() {
   const { userAuth } = useContext(UserContext);
 
   const [organizationId, setOrganizationId] = useState<number | ''>(
@@ -37,6 +41,9 @@ export const Ticket = () => {
     useCategories(departmentId);
   const { data: usersList, isLoading: isFetchingUsers } =
     useUsers(departmentId);
+  const [file, setFile] = useState<File[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const {
     mutate,
     isLoading: creatingTicket,
@@ -51,6 +58,14 @@ export const Ticket = () => {
       })) || [],
     [departmentsList]
   );
+  const handleChangeFile = useCallback((e: File[]) => {
+    setFile((p) => [...p, ...e]);
+  }, []);
+  const removeFile = useCallback((index: number) => {
+    setFile((oldfile) => {
+      return oldfile.filter((val, ind) => ind !== index);
+    });
+  }, []);
 
   const categoryOptions = useMemo(() => {
     return (
@@ -108,16 +123,27 @@ export const Ticket = () => {
       department_id: '',
       ticket_type: '',
       resolver_id: '',
+      asset_url: [],
     },
     validationSchema: ValidationSchema,
     onSubmit: (values) => {
-      createTicket(values);
-      formik.resetForm();
+      let { pro, name } = uploadFile(file, setIsLoading);
+      Promise.all(pro)
+        .then((e) => {
+          setIsLoading(false);
+          createTicket({ ...values, asset_url: name });
+        })
+        .catch((e) => {
+          setIsLoading(false);
+          toast.error('unable to upload image');
+        });
     },
   });
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
+    >
       <Loader
         isLoading={
           isFetchingDepartments ||
@@ -126,13 +152,20 @@ export const Ticket = () => {
           creatingTicket
         }
       />
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+      <Box sx={{ px: 3, mb: 3 }}>
         <Typography variant='h5'>Create Request or Complaint</Typography>
       </Box>
 
-      <Paper sx={{ padding: 3 }}>
+      <Paper elevation={2} sx={{ padding: 3 }}>
         <Box component='form' onSubmit={formik.handleSubmit}>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', rowGap: 3, columnGap: 4 }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              rowGap: 3,
+              columnGap: 4,
+            }}
+          >
             <TextField
               label='Title'
               name='title'
@@ -144,7 +177,13 @@ export const Ticket = () => {
               onChange={formik.handleChange}
               error={formik.touched.title && Boolean(formik.errors.title)}
               helperText={formik.touched.title && formik.errors.title}
-              FormHelperTextProps={{ sx: { fontSize: '0.875rem', p: '0.125rem 0.875rem 0 0.875rem', m: 0 } }}
+              FormHelperTextProps={{
+                sx: {
+                  fontSize: '0.875rem',
+                  p: '0.125rem 0.875rem 0 0.875rem',
+                  m: 0,
+                },
+              }}
             />
             <Box sx={{ display: 'grid' }}>
               <TextField
@@ -155,9 +194,20 @@ export const Ticket = () => {
                 required={true}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                error={formik.touched.description && Boolean(formik.errors.description)}
-                helperText={formik.touched.description && formik.errors.description}
-                FormHelperTextProps={{ sx: { fontSize: '0.875rem', p: '0.125rem 0.875rem 0 0.875rem', m: 0 } }}
+                error={
+                  formik.touched.description &&
+                  Boolean(formik.errors.description)
+                }
+                helperText={
+                  formik.touched.description && formik.errors.description
+                }
+                FormHelperTextProps={{
+                  sx: {
+                    fontSize: '0.875rem',
+                    p: '0.125rem 0.875rem 0 0.875rem',
+                    m: 0,
+                  },
+                }}
               />
             </Box>
             <FormControl>
@@ -170,10 +220,8 @@ export const Ticket = () => {
                 label='Ticket Type'
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.ticket_type &&
-                  (formik.errors.ticket_type)
-                } />
+                error={formik.touched.ticket_type && formik.errors.ticket_type}
+              />
             </FormControl>
             <FormControl>
               <Select
@@ -189,9 +237,7 @@ export const Ticket = () => {
                   formik.handleChange(e);
                 }}
                 error={
-                  (formik.touched.department_id &&
-                    formik.errors.department_id)
-
+                  formik.touched.department_id && formik.errors.department_id
                 }
                 onBlur={formik.handleBlur}
               />
@@ -205,9 +251,7 @@ export const Ticket = () => {
                 options={categoryOptions}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  formik.touched.category_id && formik.errors.category_id
-                }
+                error={formik.touched.category_id && formik.errors.category_id}
               />
             </FormControl>
             <FormControl>
@@ -219,18 +263,20 @@ export const Ticket = () => {
                 options={userOptions}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={
-                  (formik.touched.resolver_id && formik.errors.resolver_id)
-
-                }
+                error={formik.touched.resolver_id && formik.errors.resolver_id}
               />
             </FormControl>
           </Box>
+          <UploadBucket
+            isLoading={isLoading}
+            file={file}
+            value={formik.values.asset_url}
+            name={'asset_url'}
+            handleChange={handleChangeFile}
+            removeFile={removeFile}
+          />
           <Box sx={{ display: 'flex', justifyContent: 'end', pt: 3 }}>
-            <Button
-              isLoading={creatingTicket}
-              type='submit'
-            >
+            <Button isLoading={creatingTicket} type='submit'>
               Create
             </Button>
           </Box>
@@ -238,4 +284,5 @@ export const Ticket = () => {
       </Paper>
     </Box>
   );
-};
+}
+export default Ticket;

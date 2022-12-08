@@ -18,19 +18,20 @@ import {
   Card,
   CardContent,
 } from '@mui/material';
+import { ROLES } from 'routes/roleConstants';
 
 const CategoryList = () => {
   const { userAuth } = useContext(UserContext);
 
-  const [organizationId, setOrganizationId] = useState<number | ''>(
-    userAuth?.organizations?.[0]?.id || ''
+  const [organizationId, setOrganizationId] = useState<number>(
+    userAuth?.organizations?.[0]?.id
   );
 
   const { data: departmentsList, isLoading: isFetchingDepartment } =
     useDepartments(organizationId);
 
-  const [departmentId, setDepartmentId] = useState<number | ''>(
-    departmentsList?.[0]?.id || ''
+  const [departmentId, setDepartmentId] = useState<number | string>(
+    userAuth?.organizations?.[0]?.department_id || 1
   );
 
   const { data: categoriesList, isLoading: isFetchingCategories } =
@@ -58,8 +59,9 @@ const CategoryList = () => {
             <Select
               required={true}
               label={'Department'}
-              value={departmentId}
+              value={departmentId?.toString()}
               options={deptOptions}
+              disabled={userAuth.role === ROLES.DEPARTMENT_HEAD}
               onChange={(e) => handleChange(e.target.value)}
             />
           </Grid>

@@ -11,3 +11,7 @@ export type CreateOrganizationErrorType = {
   message: string;
   errors: string;
 };
+export type GetOrganizationErrorType = {
+  message: string;
+  errors: string;
+};

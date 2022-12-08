@@ -1,3 +1,4 @@
+import API_CONSTANTS from 'hooks/constants';
 import { IFetchComplaintListRequest } from 'modules/dashboard/types';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
@@ -8,15 +9,16 @@ export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
 
   let params = {
     type: queryParams?.type !== '' ? queryParams?.type : undefined,
-    category: queryParams?.category !== '' ? queryParams?.category : undefined,
+    category_id:
+      queryParams?.category !== '' ? queryParams?.category : undefined,
     status: queryParams?.status !== '' ? queryParams.status : undefined,
-    department:
+    department_id:
       queryParams?.department !== '' ? queryParams.department : undefined,
     assigned_to_me: queryParams?.assig_to_me === true ? true : undefined,
     created_by_me: queryParams?.created_by_me === true ? true : undefined,
   };
   const { data, isLoading, isFetching } = useQuery(
-    ['complaint-list', params],
+    [API_CONSTANTS.COMPLAINT_LIST, params],
     () => getRequestList(path, params),
     {
       onError: (e) => {

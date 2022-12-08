@@ -11,6 +11,7 @@ import { Box, Chip, Paper, Typography } from '@mui/material';
 import { DateFormate, getLastDaysFrom } from 'apis/utils/date.utils';
 import { ticketStatusColours } from '../constants';
 import { ITicketActivity } from '../type';
+import { ImageS3Tag } from './ImageTag';
 
 export const TimelineComponent = ({ activities }: any) => {
   return (
@@ -74,6 +75,9 @@ const TimeLineDescription = ({ activity }: { activity: ITicketActivity }) => {
             <span> {activity?.reason_for_update}</span>
           </p>
         )}
+        {activity?.asset_url?.map((item) => (
+          <ImageS3Tag path={item as string} />
+        ))}
       </div>
     </Paper>
   );

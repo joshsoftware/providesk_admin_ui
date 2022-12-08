@@ -1,4 +1,4 @@
-import { post, get } from 'apis/apiHelper';
+import { post, get, put } from 'apis/apiHelper';
 import { ICreateTicketPayload } from './type';
 
 export const postCreateTicket = (payload: ICreateTicketPayload) =>
@@ -10,4 +10,8 @@ export const getUsersList = (dept_id, org_id?) => {
     return get({ path: `organizations/${org_id}/users` });
   }
   return get({ path: `/departments/${dept_id}/users` });
+};
+
+export const putEditTicket = ({ id, ticket_details: payload }) => {
+  return put({ path: `/tickets/${id}`, payloadParams: payload });
 };

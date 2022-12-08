@@ -6,9 +6,9 @@ import {
   FormControl,
   InputLabel,
   TextField,
-} from "@mui/material";
-import { ReactNode, useMemo } from "react";
-import { StyledErrorText } from "./StyledErrorText";
+} from '@mui/material';
+import { ReactNode, useMemo } from 'react';
+import { StyledErrorText } from './StyledErrorText';
 
 export const Select = ({
   options,
@@ -19,11 +19,12 @@ export const Select = ({
   name,
   onBlur,
   sx,
+  disabled
 }: SelectProps) => {
   const selectOptions: SelectOpt[] = useMemo(
     () =>
       options.map((opt) => {
-        if (typeof opt === "string") {
+        if (typeof opt === 'string') {
           return { label: opt, value: opt };
         }
         return opt;
@@ -42,6 +43,7 @@ export const Select = ({
           onChange={onChange}
           onBlur={onBlur}
           error={Boolean(error ? error : false)}
+          disabled={disabled}
         >
           {selectOptions.map((opt) => (
             <MenuItem
@@ -69,7 +71,7 @@ export interface SelectProps {
   helperText?: string | ReactNode;
   required?: boolean;
   multiple?: boolean;
-  size?: "small" | "medium" | undefined;
+  size?: 'small' | 'medium' | undefined;
   sx?: any;
   placeholder?: string;
   disabled?: boolean;
@@ -110,7 +112,7 @@ export const CustomSelect = ({
       value={value}
       onChange={onChange}
       name={name}
-      size="small"
+      size='small'
       fullWidth
     >
       {options.map((option: SelectOption) => (
