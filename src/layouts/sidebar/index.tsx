@@ -92,7 +92,7 @@ export default function Sidebar() {
               aria-label='open drawer'
               onClick={open ? handleDrawerClose : handleDrawerOpen}
               edge='start'
-              sx={{ color: 'primary.dark', ml: 0 }}
+              sx={{ color: 'text.primary', ml: 0 }}
             >
               {open ? (
                 <Close sx={{ fontSize: '1.5rem' }} />
@@ -125,7 +125,11 @@ export default function Sidebar() {
         open={open}
       >
         <DrawerHeader
-          sx={{ backgroundColor: 'primary.light', justifyContent: 'center' }}
+          sx={{
+            backgroundColor: 'primary.light',
+            justifyContent: 'center',
+            boxShadow: 3,
+          }}
         ></DrawerHeader>
         <List sx={{ py: '1.5rem' }}>
           {sidebarConfig.map((ele) => (
