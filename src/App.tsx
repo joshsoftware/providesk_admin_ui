@@ -12,7 +12,13 @@ import { loadLocalStorage } from 'shared/localStorageHelpers';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 // Create a client
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 // User context is used to store user auth details
 export const UserContext = createContext<IUserContextType>({

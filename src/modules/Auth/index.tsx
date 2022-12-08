@@ -32,8 +32,8 @@ const AuthContainer = () => {
     });
     let payload = {
       user: {
-        email: email,
-        name: name,
+        name,
+        email,
       },
     };
     // make login api call with user data

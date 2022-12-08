@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { useCreateOrganization } from './organization.hook';
+import { useCreateOrganization, useGetOrganization } from './organization.hook';
 import { Button } from 'modules/shared/Button';
 import Loader from 'modules/Auth/components/Loader';
 
@@ -17,6 +17,11 @@ import {
   FormControl,
   InputAdornment,
   OutlinedInput,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from '@mui/material';
@@ -79,6 +84,8 @@ export const Organization = () => {
   const handleCreateOrganizationDialogClose = () => {
     setOpen(false);
   };
+  const { data: organizationList, isLoading: isLoadingOrganizationList } =
+    useGetOrganization();
 
   return (
     <Box
@@ -182,9 +189,42 @@ export const Organization = () => {
       <Card>
         <CardContent>
           <Loader isLoading={creatingOrganization} />
-          <Typography variant='h6' sx={{ textAlign: 'center' }}>
-            No Data
-          </Typography>
+          <Table size='small'>
+            <TableHead sx={{ backgroundColor: 'grey.100' }}>
+              <TableRow>
+                <TableCell sx={{ color: 'primary.dark', fontWeight: '500' }}>
+                  Id
+                </TableCell>
+                <TableCell sx={{ color: 'primary.dark', fontWeight: '500' }}>
+                  Name
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {isLoadingOrganizationList ? (
+                <Loader isLoading={isLoadingOrganizationList} />
+              ) : (
+                organizationList?.map((row, index) => (
+                  <TableRow
+                    key={row.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell>
+                      <Typography>{index + 1}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography>{row.name}</Typography>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+          {organizationList?.length === 0 && (
+            <Typography variant='h6' sx={{ textAlign: 'center' }}>
+              No Data
+            </Typography>
+          )}
         </CardContent>
       </Card>
     </Box>
