@@ -43,7 +43,7 @@ export const getSidebarConfig = (role: string) => {
 
   const superAdminAccessSidebar = [
     {
-      label: 'Organization',
+      label: 'Organizations',
       icon: <ApartmentIcon fontSize='small' />,
       path: ROUTE.ORGANIZATION,
     },

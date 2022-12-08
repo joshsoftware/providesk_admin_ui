@@ -65,25 +65,36 @@ export const Category = () => {
 
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
+  const handleCreateCategoryDialogOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleCreateCategoryDialogClose = () => {
     setOpen(false);
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}>
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
+    >
       <Loader isLoading={isFetchingDepartment || isCreatingCategory} />
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-        <Typography variant='h5'>
-          Categories
-        </Typography>
-        <Button variant="text" onClick={handleClickOpen} size='small' startIcon={<AddRounded sx={{ color: 'primary.main' }} />} sx={{ color: 'grey.900', ml: 'auto' }}>
+        <Typography variant='h5'>Categories</Typography>
+        <Button
+          variant='text'
+          onClick={handleCreateCategoryDialogOpen}
+          size='small'
+          startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
+          sx={{ color: 'grey.900', ml: 'auto' }}
+        >
           Create Category
         </Button>
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth='xs'>
+        <Dialog
+          open={open}
+          onClose={handleCreateCategoryDialogClose}
+          fullWidth
+          maxWidth='xs'
+        >
           <DialogTitle>Create Department</DialogTitle>
           <DialogContent>
             <Box sx={{ display: 'grid', gap: 3, pt: 3 }}>
@@ -117,9 +128,13 @@ export const Category = () => {
                   label='Department'
                   onChange={handleDepartmentChange}
                 >
-                  <MenuItem key={'None'} value={0}>-Select-</MenuItem>
+                  <MenuItem key={'None'} value={0}>
+                    -Select-
+                  </MenuItem>
                   {departmentsList?.map((item) => (
-                    <MenuItem key={item.name} value={item.id}>{item.name}</MenuItem>
+                    <MenuItem key={item.name} value={item.id}>
+                      {item.name}
+                    </MenuItem>
                   ))}
                 </SelectMUI>
               </FormControl>
@@ -142,7 +157,14 @@ export const Category = () => {
                   size='small'
                 />
                 {error && (
-                  <Typography variant='body1' component='p' sx={{ color: 'error.main', p: '0.125rem 0.875rem 0 0.875rem' }}>
+                  <Typography
+                    variant='body1'
+                    component='p'
+                    sx={{
+                      color: 'error.main',
+                      p: '0.125rem 0.875rem 0 0.875rem',
+                    }}
+                  >
                     {error}
                   </Typography>
                 )}
@@ -161,14 +183,22 @@ export const Category = () => {
                   }
                 >
                   {prioritiesList?.map((item) => (
-                    <MenuItem key={item.value} value={item.id}>{item.value}</MenuItem>
+                    <MenuItem key={item.value} value={item.id}>
+                      {item.value}
+                    </MenuItem>
                   ))}
                 </SelectMUI>
               </FormControl>
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button size='small' variant='text' onClick={handleClose}>Cancel</Button>
+            <Button
+              size='small'
+              variant='text'
+              onClick={handleCreateCategoryDialogClose}
+            >
+              Cancel
+            </Button>
             <Button
               size='small'
               onClick={() => {

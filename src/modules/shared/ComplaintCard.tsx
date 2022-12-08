@@ -84,7 +84,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
           ))}
         </List>
         <Box className="bottom-bar" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', backgroundColor: 'primary.dark' }}>
-          <Typography sx={{ fontSize: "0.875rem", lineHeight: '1.25rem', fontWeight: '600', color: 'common.white', mb: '0' }}>See More</Typography>
+          <Typography sx={{ fontSize: "0.875rem", lineHeight: '1.25rem', fontWeight: '500', color: 'common.white', mb: '0' }}>See More</Typography>
           <KeyboardDoubleArrowRightRounded sx={{ fontSize: '1.25rem', color: 'common.white' }} />
         </Box>
       </CardContent>
