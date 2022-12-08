@@ -28,6 +28,6 @@ export interface ICreateTicketError {
 
 export interface IEditTicketParams {
   id: number | string;
-  ticket_details: ICreateTicketData;
+  ticket_details: ICreateTicketPayload;
   setOpenEdit: (e: boolean) => void;
 }
