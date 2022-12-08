@@ -1,6 +1,7 @@
 import { useMemo, useState, useContext, useCallback } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { Button } from 'modules/shared/Button';
 import Select from 'modules/shared/Select';
@@ -15,6 +16,7 @@ import {
   Box,
   Dialog,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Paper,
@@ -28,19 +30,30 @@ import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
 import Loader from 'modules/Auth/components/Loader';
 import { toast } from 'react-toastify';
 import { BooleanNullable } from 'aws-sdk/clients/glue';
+import { ITicket } from 'modules/details/type';
+import { Value } from 'sass';
 
 function Ticket({
   open,
-  setOpenEdit,
+  setOpen,
   data,
   isEdit,
 }: {
   open: boolean;
-  setOpenEdit: (a: boolean) => void;
-  data?: ICreateTicketData;
+  setOpen: (a: boolean) => void;
+  data?: ITicket;
+  isEdit: boolean;
 }) {
   const { userAuth } = useContext(UserContext);
-
+  const intialValuesEdit = {
+    title: data?.title,
+    description: data?.description,
+    category_id: data?.category_id,
+    department_id: data?.department_id,
+    ticket_type: data?.ticket_type,
+    resolver_id: data?.resolver_id,
+    asset_url: data?.asset_url,
+  };
   const [organizationId, setOrganizationId] = useState<number | ''>(
     userAuth?.organizations?.[0]?.id || ''
   );
@@ -113,7 +126,7 @@ function Ticket({
   const updateTicket = useCallback((values) => {
     let ticket = values as ICreateTicketData;
     let payload: IEditTicketParams = {
-      id: data.id as number,
+      id: data?.id!,
       ticket_details: {
         ticket: {
           ...ticket,
@@ -121,7 +134,7 @@ function Ticket({
           description: ticket.description.trim(),
         },
       },
-      setOpenEdit,
+      setOpenEdit: setOpen,
     };
     updateMutate(payload);
   }, []);
@@ -143,17 +156,28 @@ function Ticket({
     ticket_type: yup.string().required('Select type'),
     resolver_id: yup.string().required('Assign to resolver'),
   });
+  console.log(isEdit, data, 'inTicket');
+
+  const handleUpdateAsset = useCallback(
+    (setFormikValue, index: number, valuesAsset: string[]) => {
+      let asset_val = valuesAsset.filter((item, ind) => index !== ind);
+      setFormikValue('asset_url', asset_val);
+    },
+    []
+  );
 
   const formik = useFormik({
-    initialValues: {
-      title: '',
-      description: '',
-      category_id: '',
-      department_id: '',
-      ticket_type: '',
-      resolver_id: '',
-      asset_url: [],
-    },
+    initialValues: isEdit
+      ? intialValuesEdit
+      : {
+          title: '',
+          description: '',
+          category_id: '',
+          department_id: '',
+          ticket_type: '',
+          resolver_id: '',
+          asset_url: [] as string[],
+        },
     validationSchema: ValidationSchema,
     onSubmit: (values) => {
       let { pro, name } = uploadFile(file, setIsLoading);
@@ -163,15 +187,19 @@ function Ticket({
 
           !isEdit
             ? createTicket({ ...values, asset_url: name })
-            : updateTicket({ ...values, asset_url: name });
+            : updateTicket({
+                ...values,
+                asset_url: [...(values.asset_url as string[]), ...name],
+              });
         })
         .catch((e) => {
           setIsLoading(false);
+          console.log(e, 'error');
           toast.error('unable to upload image');
         });
     },
   });
-
+  console.log(formik.values, 'values', userOptions);
   return (
     <Dialog
       sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
@@ -194,8 +222,21 @@ function Ticket({
             creatingTicket
           }
         />
-        <Box sx={{ px: 3, mb: 3 }}>
-          <Typography variant='h5'>Create Request or Complaint</Typography>
+        <Box
+          sx={{
+            px: 3,
+            mb: 3,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant='h5'>
+            {!isEdit ? 'Create Request or Complaint' : 'Edit  Ticket'}
+          </Typography>
+          <IconButton onClick={() => setOpen(false)}>
+            <CloseIcon fontWeight={'bold'} />{' '}
+          </IconButton>
         </Box>
 
         <Paper elevation={2} sx={{ padding: 3 }}>
@@ -258,7 +299,7 @@ function Ticket({
                   placeholder='Ticket Type'
                   required={true}
                   options={ticketTypesList}
-                  value={formik.values.ticket_type}
+                  value={formik.values.ticket_type!}
                   label='Ticket Type'
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -272,7 +313,7 @@ function Ticket({
                   name='department_id'
                   required={true}
                   label={'Department'}
-                  value={formik.values.department_id}
+                  value={formik.values.department_id!}
                   options={deptOptions}
                   onChange={(e) => {
                     setDepartmentId(parseInt(e.target.value));
@@ -291,7 +332,7 @@ function Ticket({
                   name='category_id'
                   required={true}
                   label={'Category'}
-                  value={formik.values.category_id}
+                  value={formik.values.category_id as string}
                   options={categoryOptions}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -305,7 +346,7 @@ function Ticket({
                   name='resolver_id'
                   required={true}
                   label={'Resolver'}
-                  value={formik.values.resolver_id}
+                  value={formik.values.resolver_id!}
                   options={userOptions}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -318,14 +359,36 @@ function Ticket({
             <UploadBucket
               isLoading={isLoading}
               file={file}
-              value={formik.values.asset_url}
+              value={formik.values.asset_url!}
               name={'asset_url'}
               handleChange={handleChangeFile}
               removeFile={removeFile}
             />
+            {formik.values.asset_url?.map((item, index) => (
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Typography>{item}</Typography>
+                <IconButton
+                  onClick={() => {
+                    handleUpdateAsset(
+                      formik.setFieldValue,
+                      index,
+                      formik.values.asset_url!
+                    );
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+            ))}
             <Box sx={{ display: 'flex', justifyContent: 'end', pt: 3 }}>
               <Button isLoading={creatingTicket} type='submit'>
-                Create
+                {!isEdit ? 'Create' : 'Update'}
               </Button>
             </Box>
           </Box>

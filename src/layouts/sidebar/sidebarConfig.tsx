@@ -15,11 +15,6 @@ export const getSidebarConfig = (role: string) => {
       icon: <DashboardIcon fontSize='small' />,
       path: ROUTE.DASHBOARD,
     },
-    {
-      label: 'Ticket',
-      icon: <ConfirmationNumberIcon fontSize='small' />,
-      path: ROUTE.TICKET,
-    },
   ];
 
   const adminAccessSidebar = [

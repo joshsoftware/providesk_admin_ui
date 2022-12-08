@@ -90,17 +90,17 @@ export const routeConfig = [
       />
     ),
   },
-  {
-    path: ROUTE.TICKET,
-    element: (
-      <PrivateRoute
-        Component={withLayout(
-          <Suspense fallback={<Loader isLoading={true} />}>
-            <Ticket />
-          </Suspense>
-        )}
-        AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
-      />
-    ),
-  },
+  // {
+  //   path: ROUTE.TICKET,
+  //   element: (
+  //     <PrivateRoute
+  //       Component={withLayout(
+  //         <Suspense fallback={<Loader isLoading={true} />}>
+  //           <Ticket />
+  //         </Suspense>
+  //       )}
+  //       AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
+  //     />
+  //   ),
+  // },
 ];

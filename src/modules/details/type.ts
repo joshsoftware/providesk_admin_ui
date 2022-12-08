@@ -45,6 +45,7 @@ export interface ITicket {
   requester_id: number;
   permited_transitions: ticketStatusType[];
   asset_url?: string[];
+  eta?: string;
 }
 
 export interface IEditTicketPayload {

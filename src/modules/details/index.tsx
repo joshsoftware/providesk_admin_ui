@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useTicketDetails } from './details.hook';
 import Loader from 'modules/Auth/components/Loader';
 import { TimelineComponent } from './components/Timeline';
-import { EditTicketForm } from './components/EditTicketForm';
+import { UpdateTicketForm } from './components/EditTicketForm';
 
 import {
   Box,
@@ -24,6 +24,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ticketStatusColours } from './constants';
 
 import { ImageS3Tag } from './components/ImageTag';
+const Ticket = lazy(() => import('modules/Ticket'));
 
 function Details() {
   const id: number = parseInt(useParams().id as string);
@@ -34,7 +35,8 @@ function Details() {
   } = useTicketDetails(id);
 
   const [ticket, setTicket] = useState(ticketDetails);
-  const [openEdit, setOpenEdit] = useState(false);
+  const [openProgressTicket, setOpenProgressTicket] = useState(false);
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
 
   useEffect(() => {
     setTicket(ticketDetails);
@@ -55,9 +57,16 @@ function Details() {
               <IconButton
                 aria-label='edit'
                 size='large'
-                onClick={() => setOpenEdit(true)}
+                onClick={() => setOpenProgressTicket(true)}
               >
-                <EditIcon fontSize='inherit' />
+                Update
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  setOpenEdit(true);
+                }}
+              >
+                Edit
               </IconButton>
             </div>
             <TableContainer>
@@ -125,6 +134,12 @@ function Details() {
                     </TableCell>
                   </TableRow>
                   <TableRow>
+                    <TableCell sx={{ color: '#63686b' }}>ETA</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>
+                      {ticket?.eta || '_'}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
                     <TableCell>Image</TableCell>
                     <TableCell>
                       <Box
@@ -143,8 +158,8 @@ function Details() {
           </Box>
 
           <Modal
-            open={openEdit}
-            onClose={() => setOpenEdit(false)}
+            open={openProgressTicket}
+            onClose={() => setOpenProgressTicket(false)}
             sx={{ overflow: 'scroll' }}
             style={{
               display: 'flex',
@@ -152,12 +167,22 @@ function Details() {
               alignItems: 'center',
             }}
           >
-            <EditTicketForm
+            <UpdateTicketForm
               ticket={ticketDetails}
               id={id}
-              setOpenEdit={setOpenEdit}
+              setOpenEdit={setOpenProgressTicket}
             />
           </Modal>
+          {openEdit && (
+            <Suspense fallback={<Loader isLoading={true} />}>
+              <Ticket
+                open={openEdit}
+                setOpen={setOpenEdit}
+                isEdit={true}
+                data={ticketDetails}
+              />
+            </Suspense>
+          )}
         </Grid>
         <Grid
           item

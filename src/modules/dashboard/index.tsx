@@ -1,17 +1,15 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  lazy,
+  Suspense,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 
 import TablePagination from '@mui/material/TablePagination';
-import {
-  Box,
-  Card,
-  CardContent,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Paper,
-} from '@mui/material';
+import { Box, Card, CardContent, Paper } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
 import Select, { CustomSelect } from 'modules/shared/Select';
@@ -30,6 +28,7 @@ import { useNavigate } from 'react-router-dom';
 import ROUTE from 'routes/constants';
 import { ROLES } from 'routes/roleConstants';
 import { useUsers } from 'modules/Ticket/ticket.hook';
+const Ticket = lazy(() => import('modules/Ticket'));
 
 const statusOptions = [
   {
@@ -55,6 +54,10 @@ const statusOptions = [
   {
     value: 'closed',
     label: 'Closed',
+  },
+  {
+    value: 'on_hold',
+    label: 'On Hold',
   },
 ];
 
@@ -186,46 +189,22 @@ const Dashboard = () => {
 
   const [open, setOpen] = React.useState(false);
 
-  const handleCreateTicketDialogOpen = () => {
-    setOpen(true);
-  };
-
-  const handleCreateTicketDialogClose = () => {
-    setOpen(false);
-  };
-
   return (
     <Box display='flex' flexDirection='column' flex='1' gap={3} p={3}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant='h5'>Dashboard</Typography>
         <Button
           variant='text'
-          onClick={handleCreateTicketDialogOpen}
+          onClick={() => setOpen(true)}
           size='small'
           startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
           sx={{ color: 'grey.900', ml: 'auto' }}
         >
           Create Ticket
         </Button>
-        <Dialog
-          open={open}
-          onClose={handleCreateTicketDialogClose}
-          fullWidth
-          maxWidth='xs'
-        >
-          <DialogTitle>Create Ticket</DialogTitle>
-          <DialogContent>Create Ticket Form Here</DialogContent>
-          <DialogActions>
-            <Button
-              size='small'
-              variant='text'
-              onClick={handleCreateTicketDialogClose}
-            >
-              Cancel
-            </Button>
-            <Button size='small'>Create</Button>
-          </DialogActions>
-        </Dialog>
+        <Suspense fallback={<Loader isLoading={true} />}>
+          <Ticket open={open} setOpen={setOpen} isEdit={false} />
+        </Suspense>
       </Box>
       <Card sx={{ display: 'flex', flex: 1 }}>
         <CardContent

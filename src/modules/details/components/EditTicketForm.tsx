@@ -24,6 +24,7 @@ import {
   MenuItem,
   Select as SelectMUI,
   TextareaAutosize,
+  TextField,
   Typography,
 } from '@mui/material';
 import { StyleLabel } from 'modules/shared/StyleLabel';
@@ -31,7 +32,7 @@ import { UploadBucket } from 'modules/shared/UploadBucket';
 import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
 import { toast } from 'react-toastify';
 
-export const EditTicketForm = ({
+export const UpdateTicketForm = ({
   ticket,
   id,
   setOpenEdit,
@@ -153,6 +154,7 @@ export const EditTicketForm = ({
     state_action: 'reopen',
     started_reason: '',
     asset_url: [] as string[],
+    eta: '',
   };
 
   const {
@@ -298,7 +300,15 @@ export const EditTicketForm = ({
                 error={(touched.resolver_id && errors.resolver_id) || ''}
               />
             </FormControl>
-
+            <FormControl>
+              <TextField
+                type={'date'}
+                name='eta'
+                label='ETA'
+                value={values.eta}
+                onChange={handleChange}
+              />
+            </FormControl>
             <Box>
               <StyleLabel
                 text={'Comment'}

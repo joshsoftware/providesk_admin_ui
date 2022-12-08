@@ -105,6 +105,7 @@ export default function Sidebar() {
                 src='./images/providesk-logo.svg'
                 alt='ProviDesk'
                 height={28}
+                onClick={() => navigate(ROUTE.DASHBOARD)}
               />
             </Box>
           </Box>
