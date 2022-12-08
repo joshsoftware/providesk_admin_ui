@@ -10,7 +10,6 @@ import { getSidebarConfig } from './sidebarConfig';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -78,18 +77,8 @@ export default function Sidebar() {
   const sidebarConfig = getSidebarConfig(role);
   const navigate = useNavigate();
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar
-        position='static'
-        open={open}
-        sx={{
-          zIndex: '1',
-          backgroundColor: 'primary.light',
-          color: 'black',
-          boxShadow: 'none',
-        }}
-      >
+    <Box display={'flex'}>
+      <AppBar open={open}>
         <Toolbar sx={{ gap: '1rem' }}>
           <Box
             sx={{
@@ -103,7 +92,7 @@ export default function Sidebar() {
               aria-label='open drawer'
               onClick={open ? handleDrawerClose : handleDrawerOpen}
               edge='start'
-              sx={{ color: 'common.black', ml: 0 }}
+              sx={{ color: 'text.primary', ml: 0 }}
             >
               {open ? (
                 <Close sx={{ fontSize: '1.5rem' }} />
@@ -111,14 +100,13 @@ export default function Sidebar() {
                 <Menu sx={{ fontSize: '1.5rem' }} />
               )}
             </IconButton>
-            <Typography
-              variant='h6'
-              noWrap
-              onClick={() => navigate(ROUTE.HOME)}
-              sx={{ cursor: 'pointer' }}
-            >
-              ProviDesk
-            </Typography>
+            <Box display={'flex'} sx={{ cursor: 'pointer' }}>
+              <img
+                src='./images/providesk-logo.svg'
+                alt='ProviDesk'
+                height={28}
+              />
+            </Box>
           </Box>
           <DropMenu logout={onLogout} />
         </Toolbar>
@@ -137,7 +125,11 @@ export default function Sidebar() {
         open={open}
       >
         <DrawerHeader
-          sx={{ backgroundColor: 'primary.light', justifyContent: 'center' }}
+          sx={{
+            backgroundColor: 'primary.light',
+            justifyContent: 'center',
+            boxShadow: 3,
+          }}
         ></DrawerHeader>
         <List sx={{ py: '1.5rem' }}>
           {sidebarConfig.map((ele) => (

@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
 import { postCreateDepartment } from './department.service';
-import 'react-toastify/dist/ReactToastify.css';
 import API_CONSTANTS from 'hooks/constants';
 import { ICreateDepartmentError } from './type';
 

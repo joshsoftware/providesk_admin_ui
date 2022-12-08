@@ -74,7 +74,6 @@ export const DepartMent = () => {
         <Button
           variant='text'
           onClick={handleCreateDepartmentDialogOpen}
-          size='small'
           startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
           sx={{ color: 'grey.900', ml: 'auto' }}
         >
@@ -116,15 +115,10 @@ export const DepartMent = () => {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button
-              size='small'
-              variant='text'
-              onClick={handleCreateDepartmentDialogClose}
-            >
+            <Button variant='text' onClick={handleCreateDepartmentDialogClose}>
               Cancel
             </Button>
             <Button
-              size='small'
               isLoading={creatingDepartment}
               onClick={() => createDepartment()}
               disabled={!!organizationId && department.length < 2}
@@ -141,10 +135,10 @@ export const DepartMent = () => {
             <Table size='small' aria-label='simple table'>
               <TableHead sx={{ backgroundColor: 'grey.100' }}>
                 <TableRow>
-                  <TableCell sx={{ color: 'primary.dark', fontWeight: '500' }}>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>
                     Id
                   </TableCell>
-                  <TableCell sx={{ color: 'primary.dark', fontWeight: '500' }}>
+                  <TableCell sx={{ color: 'primary.main', fontWeight: '500' }}>
                     Name
                   </TableCell>
                 </TableRow>

@@ -1,11 +1,9 @@
 import { createContext, useState } from 'react';
-import { CssBaseline, ThemeProvider } from '@mui/material';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-import { theme } from 'theme';
 import { IUserContextType } from 'modules/Auth/auth.types';
 import { routeConfig } from 'routes/routeConfig';
 import { GOOGLE_CLIENT_ID, LOCAL_STORAGE_KEYS } from 'shared/appConstants';
@@ -39,20 +37,15 @@ function App() {
   const userProfile = loadLocalStorage(LOCAL_STORAGE_KEYS.USER_PROFILE);
 
   return (
-    <>
-      <CssBaseline />
-      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-        <QueryClientProvider client={queryClient}>
-          <UserContext.Provider value={{ userAuth, userProfile, setUserAuth }}>
-            <ThemeProvider theme={theme}>
-              <ToastContainer position='top-right' autoClose={5000} />
-              <RouterProvider router={router} />
-            </ThemeProvider>
-          </UserContext.Provider>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </GoogleOAuthProvider>
-    </>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <QueryClientProvider client={queryClient}>
+        <UserContext.Provider value={{ userAuth, userProfile, setUserAuth }}>
+          <ToastContainer position='top-right' autoClose={5000} />
+          <RouterProvider router={router} />
+        </UserContext.Provider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
   );
 }
 
