@@ -22,6 +22,7 @@ import { UpdateTicketForm } from './components/EditTicketForm';
 import { ticketStatusColours } from './constants';
 import { ImageS3Tag } from './components/ImageTag';
 import { Button } from 'modules/shared/Button';
+import { STATUS } from 'modules/dashboard/constant';
 
 const Ticket = lazy(() => import('modules/Ticket'));
 
@@ -51,7 +52,7 @@ function Details() {
             {ticket?.title}
           </Typography>
           <Chip
-            label={ticket?.status}
+            label={STATUS[ticket?.status]}
             size='small'
             sx={{
               backgroundColor: ticketStatusColours[ticket?.status],

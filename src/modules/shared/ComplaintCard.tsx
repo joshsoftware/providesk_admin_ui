@@ -15,6 +15,8 @@ import { IComplaintDetails } from 'modules/dashboard/types';
 import ROUTE from 'routes/constants';
 import { ticketStatusColours } from 'modules/details/constants';
 import { DateFormate } from 'apis/utils/date.utils';
+import { STATUS } from 'modules/dashboard/constant';
+import moment from 'moment';
 interface Props {
   details: IComplaintDetails;
 }
@@ -32,6 +34,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
     resolver,
     requester,
     reason_for_update,
+    eta,
   } = details;
 
   const navigate = useNavigate();
@@ -63,6 +66,10 @@ const ComplaintCard: React.FC<Props> = (props) => {
       value: resolver,
     },
     {
+      label: 'ETA',
+      value: eta ? moment(new Date(eta)).format('ll') : '_',
+    },
+    {
       label: 'Last Comment',
       value: reason_for_update || '_',
     },
@@ -85,7 +92,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
             {title}
           </Typography>
           <Chip
-            label={status.charAt(0).toUpperCase() + status.slice(1)}
+            label={STATUS[status]}
             className='text-truncate'
             size='small'
             sx={{

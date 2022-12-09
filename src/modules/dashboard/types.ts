@@ -1,4 +1,4 @@
-import { StringifyOptions } from "querystring";
+import { StringifyOptions } from 'querystring';
 
 export interface IComplaintDetails {
   id: number;
@@ -16,7 +16,8 @@ export interface IComplaintDetails {
   resolver: string;
   requester: string;
   permited_events: string[];
-  reason_for_update:string
+  reason_for_update: string;
+  eta?: string;
 }
 
 export interface GetRequestsListResponse {
@@ -30,9 +31,8 @@ export interface IFetchComplaintListRequest {
   title?: string;
   page?: number;
   perPage?: number;
-  type?:string,  
-  category?:string,
-  assig_to_me?:boolean,
-  created_by_me?:boolean,
-
+  type?: string;
+  category?: string;
+  assig_to_me?: boolean;
+  created_by_me?: boolean;
 }

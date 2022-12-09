@@ -10,6 +10,7 @@ import {
 import { Box, Chip, Paper, Typography } from '@mui/material';
 
 import { getLastDaysFrom } from 'apis/utils/date.utils';
+import { STATUS } from 'modules/dashboard/constant';
 import { ticketStatusColours } from '../constants';
 import { ITicketActivity } from '../type';
 import { ImageS3Tag } from './ImageTag';
@@ -74,7 +75,7 @@ const TimeLineDescription = ({ activity }: { activity: ITicketActivity }) => {
       )}
       <Box>
         <Chip
-          label={activity?.current_ticket_status}
+          label={STATUS[activity?.current_ticket_status]}
           size='small'
           sx={{
             backgroundColor:

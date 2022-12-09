@@ -33,7 +33,7 @@ const Ticket = lazy(() => import('modules/Ticket'));
 const statusOptions = [
   {
     value: 'reopen',
-    label: 'reopen',
+    label: 'Reopen',
   },
   {
     value: 'assigned',
