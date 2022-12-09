@@ -53,12 +53,8 @@ function Details() {
           </Typography>
           <Chip
             label={STATUS[ticket?.status]}
-            size='small'
             sx={{
               backgroundColor: ticketStatusColours[ticket?.status],
-              fontSize: 12,
-              textTransform: 'capitalize',
-              borderRadius: 1,
             }}
           />
         </Box>
