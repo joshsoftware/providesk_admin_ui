@@ -101,7 +101,8 @@ export const UpdateTicketForm = ({
         reason_for_update,
         status,
         asset_url,
-        eta: eta !== '' ? moment(new Date(eta)).format('L') : undefined,
+        eta:
+          eta !== '' ? moment(new Date(eta)).format('DD/MM/YYYY') : undefined,
       };
       editTicket({
         id,

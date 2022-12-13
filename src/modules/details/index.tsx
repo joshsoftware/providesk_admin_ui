@@ -1,5 +1,6 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, lazy, Suspense, useContext } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import moment from 'moment';
 import {
   Box,
@@ -12,10 +13,12 @@ import {
   TableRow,
   TableCell,
   Paper,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import { EditRounded } from '@mui/icons-material';
 
-import { useTicketDetails } from './details.hook';
+import { useAskForUpdate, useTicketDetails } from './details.hook';
 import Loader from 'modules/Auth/components/Loader';
 import { TimelineComponent } from './components/Timeline';
 import { UpdateTicketForm } from './components/EditTicketForm';
@@ -23,6 +26,10 @@ import { ticketStatusColours } from './constants';
 import { ImageS3Tag } from './components/ImageTag';
 import { Button } from 'modules/shared/Button';
 import { STATUS } from 'modules/dashboard/constant';
+import { useQuery } from 'react-query';
+import { EtaButtonShow } from './utils';
+import { UserContext } from 'App';
+import { display } from '@mui/system';
 
 const Ticket = lazy(() => import('modules/Ticket'));
 
@@ -37,11 +44,19 @@ function Details() {
   const [ticket, setTicket] = useState(ticketDetails);
   const [openProgressTicket, setOpenProgressTicket] = useState(false);
   const [openEdit, setOpenEdit] = useState<boolean>(false);
+  const { userProfile } = useContext(UserContext);
 
   useEffect(() => {
     setTicket(ticketDetails);
   }, [ticketDetails]);
+  const loc = useLocation();
 
+  const {
+    data: askForUpdateData,
+    isLoading: isLoadingAskForUpdate,
+    refetch: refetchAskForUpdate,
+  } = useAskForUpdate(ticket?.id, window.location.href);
+  const askForUpdate = () => {};
   return (
     <Box
       sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
@@ -63,24 +78,30 @@ function Details() {
           />
         </Box>
         <Box sx={{ ml: 'auto' }}>
-          <Button
-            variant='text'
-            startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
-            sx={{ color: 'grey.900' }}
-            onClick={() => {
-              setOpenEdit(true);
-            }}
-          >
-            Edit Ticket
-          </Button>
-          <Button
-            variant='text'
-            startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
-            sx={{ color: 'grey.900' }}
-            onClick={() => setOpenProgressTicket(true)}
-          >
-            Update Ticket
-          </Button>
+          {userProfile?.email === ticket?.requester_email &&
+            ticket.status === 'assigned' && (
+              <Button
+                variant='text'
+                startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
+                sx={{ color: 'grey.900' }}
+                onClick={() => {
+                  setOpenEdit(true);
+                }}
+              >
+                Edit Ticket
+              </Button>
+            )}
+          {
+            // userProfile?.email !== ticket?.requester_email &&
+            <Button
+              variant='text'
+              startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
+              sx={{ color: 'grey.900' }}
+              onClick={() => setOpenProgressTicket(true)}
+            >
+              Update Ticket
+            </Button>
+          }
         </Box>
       </Box>
       <Box display={'flex'} flexDirection={{ sm: 'row', xs: 'column' }} gap={3}>
@@ -174,6 +195,22 @@ function Details() {
           <TimelineComponent activities={activities} />
         </Box>
       </Box>
+      {EtaButtonShow({
+        eta: ticket?.eta,
+        createDate: activities?.[0]?.created_at,
+      }) &&
+        userProfile?.email === ticket?.requester_email && (
+          <Box sx={{ marginLeft: '12px' }}>
+            <IconButton
+              onClick={() => refetchAskForUpdate()}
+              disabled={!ticket?.ask_for_update}
+            >
+              <LiveHelpIcon
+                color={ticket?.ask_for_update ? 'secondary' : 'disabled'}
+              />
+            </IconButton>
+          </Box>
+        )}
     </Box>
   );
 }

@@ -6,6 +6,7 @@ import API_CONSTANTS from 'hooks/constants';
 import { IProgressTicketParams, IReopenTicketParams } from './type';
 import { ICreateTicketError } from 'modules/Ticket/type';
 import {
+  getAskForUpdate,
   getDetailsTicket,
   putProgressTicket,
   putReopenTicket,
@@ -68,4 +69,22 @@ export const useTicketDetails = (id: number) => {
     activities: data?.data?.data?.activites,
     isLoading,
   };
+};
+
+export const useAskForUpdate = (id: number, pathTicket: string) => {
+  const { data, isLoading, refetch } = useQuery(
+    [API_CONSTANTS.ASK_FOR_UPDATE, id],
+    () => getAskForUpdate(id, pathTicket),
+    {
+      onSuccess: () => {
+        toast.success('Email sent successfully');
+      },
+      onError: (e) => {
+        toast.error('unable to send Email');
+        console.log(e);
+      },
+      enabled: false,
+    }
+  );
+  return { data, isLoading, refetch };
 };
