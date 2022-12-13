@@ -76,13 +76,9 @@ const TimeLineDescription = ({ activity }: { activity: ITicketActivity }) => {
       <Box>
         <Chip
           label={STATUS[activity?.current_ticket_status]}
-          size='small'
           sx={{
             backgroundColor:
               ticketStatusColours[activity?.current_ticket_status],
-            fontSize: 12,
-            textTransform: 'capitalize',
-            borderRadius: 1,
           }}
         />
       </Box>

@@ -94,12 +94,8 @@ const ComplaintCard: React.FC<Props> = (props) => {
           <Chip
             label={STATUS[status]}
             className='text-truncate'
-            size='small'
             sx={{
               backgroundColor: ticketStatusColours[status],
-              fontSize: 12,
-              textTransform: 'capitalize',
-              borderRadius: 1,
             }}
           />
         </Box>
