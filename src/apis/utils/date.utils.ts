@@ -8,3 +8,9 @@ export const getLastDaysFrom = (date: string) => {
     ? moment(date).fromNow()
     : moment(date).format('ll');
 };
+
+export const dateDifferenceInDays = (first: string) => {
+  let date1 = moment(first);
+  let date2 = moment();
+  return date2.diff(date1, 'days');
+};

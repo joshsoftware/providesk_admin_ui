@@ -10,6 +10,7 @@ const ROUTE = {
   TICKET: '/ticket',
   HOME: '/',
   UNAUTHORIZED: '/unauthorized',
+  REPORTS: '/reports',
 };
 
 export default ROUTE;

@@ -15,6 +15,7 @@ import ROUTE from './constants';
 import { Users } from 'modules/Users';
 import { lazy, Suspense } from 'react';
 import Loader from 'modules/Auth/components/Loader';
+import { TicketAsTime } from 'modules/Reports';
 
 const Details = lazy(() => import('modules/details'));
 const Ticket = lazy(() => import('modules/Ticket'));
@@ -27,6 +28,10 @@ export const routeConfig = [
   {
     path: ROUTE.LOGIN,
     element: <AuthContainer />,
+  },
+  {
+    path: ROUTE.REPORTS,
+    element: withLayout(<TicketAsTime />),
   },
   {
     path: ROUTE.UNAUTHORIZED,
