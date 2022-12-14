@@ -72,12 +72,14 @@ export const useTicketDetails = (id: number) => {
 };
 
 export const useAskForUpdate = (id: number, pathTicket: string) => {
+  const queryClient = useQueryClient();
   const { data, isLoading, refetch } = useQuery(
     [API_CONSTANTS.ASK_FOR_UPDATE, id],
     () => getAskForUpdate(id, pathTicket),
     {
       onSuccess: () => {
         toast.success('Email sent successfully');
+        queryClient.invalidateQueries([API_CONSTANTS.DETAILS_SPECEFIC, id]);
       },
       onError: (e) => {
         toast.error('unable to send Email');
