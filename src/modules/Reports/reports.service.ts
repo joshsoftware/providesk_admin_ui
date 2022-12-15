@@ -52,7 +52,7 @@ export const getOverdueTicket: () => Promise<OverdueReponce> = () => {
           organization_id: null,
           reason_for_update: null,
           asset_url: [],
-          eta: '2022-12-13',
+          eta: '2022-12-15',
           asked_for_update_at: null,
         },
         {
@@ -130,7 +130,7 @@ export const getOverdueTicket: () => Promise<OverdueReponce> = () => {
     },
   };
   return mockAPICall<OverdueReponce>(data);
-  return get({ path: '/overdue' });
+  return get({ path: '/tickets/timeline' });
 };
 
 export function mockAPICall<Res>(resolveData): Promise<Res> {
