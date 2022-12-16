@@ -32,6 +32,8 @@ const AuthContainer = () => {
     });
     let payload = {
       user: {
+        // name: 'sethu',
+        // email: 'sethu@joshsoftware.com',
         name,
         email,
       },
