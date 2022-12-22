@@ -17,7 +17,11 @@ import { ImageS3Tag } from './ImageTag';
 
 export const TimelineComponent = ({ activities }: any) => {
   return (
-    <Timeline>
+    <Timeline
+      nonce={undefined}
+      onResize={undefined}
+      onResizeCapture={undefined}
+    >
       {activities?.map((item, index) => {
         return (
           <TimelineItem key={item.created_at}>
