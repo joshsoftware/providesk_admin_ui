@@ -16,6 +16,7 @@ import { Users } from 'modules/Users';
 import { lazy, Suspense } from 'react';
 import Loader from 'modules/Auth/components/Loader';
 import { TicketAsTime } from 'modules/Reports';
+import { AnalyticsReportDashBoard } from 'modules/analyticalDashboard';
 
 const Details = lazy(() => import('modules/details'));
 const Ticket = lazy(() => import('modules/Ticket'));
@@ -95,6 +96,11 @@ export const routeConfig = [
       />
     ),
   },
+  {
+    path: '/analysis',
+    element: <AnalyticsReportDashBoard />,
+  },
+
   // {
   //   path: ROUTE.TICKET,
   //   element: (

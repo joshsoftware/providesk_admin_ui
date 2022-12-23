@@ -5,4 +5,5 @@ export const ticketStatusColours = {
   for_approval: '#FAAB78',
   closed: '#BBBBBB',
   rejected: '#EA9085',
+  on_hold: 'red',
 };
