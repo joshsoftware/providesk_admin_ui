@@ -14,6 +14,7 @@ export const Piechart = () => {
     { name: 'on_hold', value: 333 },
   ];
   const [activeIndex, setActiveIndex] = useState(0);
+
   const COLORS = Object.keys(ticketStatusColours)?.map(
     (item) => ticketStatusColours[item]
   );
@@ -23,13 +24,13 @@ export const Piechart = () => {
   return (
     <Box>
       {' '}
-      <PieChart width={800} height={400}>
+      <PieChart width={350} height={300}>
         <Pie
           data={data}
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
-          cx={120}
-          cy={200}
+          cx={150}
+          cy={150}
           innerRadius={60}
           outerRadius={80}
           fill='#8884d8'
@@ -37,22 +38,6 @@ export const Piechart = () => {
           dataKey='value'
           // label={(props) => <Label props={props} data={data} />}
           onMouseEnter={onPieEnter}
-        >
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Pie
-          data={data}
-          cx={420}
-          cy={200}
-          startAngle={180}
-          endAngle={0}
-          innerRadius={60}
-          outerRadius={80}
-          fill='#8884d8'
-          paddingAngle={5}
-          dataKey='name'
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

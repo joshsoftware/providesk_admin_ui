@@ -1,11 +1,15 @@
+import { UserContext } from 'App';
 import API_CONSTANTS from 'hooks/constants';
 import { IFetchComplaintListRequest } from 'modules/dashboard/types';
+import { useContext } from 'react';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
+import { ROLES } from 'routes/roleConstants';
 import { getRequestList } from './dashboard.services';
 
 export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
   let path = '/tickets';
+  const { userAuth } = useContext(UserContext);
 
   let params = {
     type: queryParams?.type !== '' ? queryParams?.type : undefined,
@@ -13,7 +17,11 @@ export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
       queryParams?.category !== '' ? queryParams?.category : undefined,
     status: queryParams?.status !== '' ? queryParams.status : undefined,
     department_id:
-      queryParams?.department !== '' ? queryParams.department : undefined,
+      userAuth.role === ROLES.DEPARTMENT_HEAD
+        ? ''
+        : queryParams?.department !== ''
+        ? queryParams.department
+        : undefined,
     assigned_to_me: queryParams?.assig_to_me === true ? true : undefined,
     created_by_me: queryParams?.created_by_me === true ? true : undefined,
   };

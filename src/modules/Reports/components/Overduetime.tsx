@@ -26,8 +26,8 @@ export const Overdue = () => {
               <CardHeader title='Overdues' />
 
               <CardContent>
-                {overDueList?.Overdue?.length! > 0 ? (
-                  overDueList?.Overdue?.map((item) => (
+                {overDueList?.overdue?.length! > 0 ? (
+                  overDueList?.overdue?.map((item) => (
                     <Ticket ticket={item} overdue={true} />
                   ))
                 ) : (
@@ -47,8 +47,8 @@ export const Overdue = () => {
               <CardHeader title='Overdues in 2 days' />
 
               <CardContent>
-                {overDueList?.Overduein2days?.length! > 0 ? (
-                  overDueList?.Overduein2days?.map((item) => (
+                {overDueList?.overdue_in_two_days?.length! > 0 ? (
+                  overDueList?.overdue_in_two_days?.map((item) => (
                     <Ticket ticket={item} leftTime={true} />
                   ))
                 ) : (
@@ -68,8 +68,8 @@ export const Overdue = () => {
               <CardHeader title='Overdues in some days' />
 
               <CardContent>
-                {overDueList?.Overdueaftertwodays?.length! > 0 ? (
-                  overDueList?.Overdueaftertwodays?.map((item) => (
+                {overDueList?.overdue_after_two_days?.length! > 0 ? (
+                  overDueList?.overdue_after_two_days?.map((item) => (
                     <Ticket ticket={item} leftTime={true} />
                   ))
                 ) : (

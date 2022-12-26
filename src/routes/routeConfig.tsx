@@ -43,7 +43,12 @@ export const routeConfig = [
     element: (
       <PrivateRoute
         Component={withLayout(<Dashboard />)}
-        AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
+        AllowedRoles={[
+          ROLES.ADMIN,
+          ROLES.DEPARTMENT_HEAD,
+          ROLES.EMPLOYEE,
+          ROLES.RESOLVER,
+        ]}
       />
     ),
   },
@@ -56,7 +61,12 @@ export const routeConfig = [
             <Details />
           </Suspense>
         )}
-        AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
+        AllowedRoles={[
+          ROLES.ADMIN,
+          ROLES.DEPARTMENT_HEAD,
+          ROLES.EMPLOYEE,
+          ROLES.RESOLVER,
+        ]}
       />
     ),
   },
@@ -98,7 +108,7 @@ export const routeConfig = [
   },
   {
     path: '/analysis',
-    element: <AnalyticsReportDashBoard />,
+    element: withLayout(<AnalyticsReportDashBoard />),
   },
 
   // {

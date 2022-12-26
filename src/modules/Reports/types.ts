@@ -1,8 +1,10 @@
 export interface OverdueReponce {
   data: {
-    Overdue: Ticket[];
-    Overduein2days: Ticket[];
-    Overdueaftertwodays: Ticket[];
+    data: {
+      overdue: Ticket[];
+      overdue_in_two_days: Ticket[];
+      overdue_after_two_days: Ticket[];
+    };
   };
 }
 export interface Ticket {
