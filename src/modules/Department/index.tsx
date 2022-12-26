@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { useCreateDepartment } from './department.hook';
-import { Button } from 'modules/shared/Button';
-import Loader from 'modules/Auth/components/Loader';
+import { Button } from 'shared/Button';
+import Loader from 'shared/Loader';
 import { useDepartments } from 'modules/Category/category.hook';
 import { UserContext } from 'App';
 import { ROLES } from 'routes/roleConstants';

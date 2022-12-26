@@ -15,16 +15,16 @@ import {
 } from '@mui/material';
 import { CloseRounded } from '@mui/icons-material';
 
-import { Button } from 'modules/shared/Button';
-import Select from 'modules/shared/Select';
+import { Button } from 'shared/Button';
+import Select from 'shared/Select';
 import { ticketTypesList } from './ticket.constants';
 import { UserContext } from 'App';
 import { ICreateTicketData, IEditTicketParams } from './type';
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
 import { useCreateTicket, useEditTicket, useUsers } from './ticket.hook';
-import { UploadBucket } from 'modules/shared/UploadBucket';
+import { UploadBucket } from 'shared/UploadBucket';
 import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
-import Loader from 'modules/Auth/components/Loader';
+import Loader from 'shared/Loader';
 import { toast } from 'react-toastify';
 import { ITicket } from 'modules/details/type';
 

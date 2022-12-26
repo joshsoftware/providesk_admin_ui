@@ -12,17 +12,17 @@ import TablePagination from '@mui/material/TablePagination';
 import { Box, Card, CardContent, Paper } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
-import Select, { CustomSelect } from 'modules/shared/Select';
-import Search from 'modules/shared/Search';
-import ComplaintCard from 'modules/shared/ComplaintCard';
+import Select, { CustomSelect } from 'shared/Select';
+import Search from 'shared/Search';
+import ComplaintCard from 'shared/ComplaintCard';
 import { UserContext } from 'App';
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
 
 import { Checkbox, Typography } from '@mui/material';
 import './dashboard.scss';
 // import { useNavigate } from 'react-router-dom';
-import Loader from 'modules/Auth/components/Loader';
-import { Button } from 'modules/shared/Button';
+import Loader from 'shared/Loader';
+import { Button } from 'shared/Button';
 import { AddRounded, RestartAltRounded } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import ROUTE from 'routes/constants';

@@ -3,8 +3,8 @@ import { useCallback, useContext, useState } from 'react';
 import { categoryValidationRegex, prioritiesList } from './constanst';
 import { useCreateCategory, useDepartments } from './category.hook';
 import CategoryList from './components/CategoryList';
-import { Button } from 'modules/shared/Button';
-import Loader from 'modules/Auth/components/Loader';
+import { Button } from 'shared/Button';
+import Loader from 'shared/Loader';
 import { UserContext } from 'App';
 import { ROLES } from 'routes/roleConstants';
 

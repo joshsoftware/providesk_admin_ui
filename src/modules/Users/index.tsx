@@ -4,8 +4,8 @@ import { useUsers } from 'modules/Ticket/ticket.hook';
 import { UserContext } from 'App';
 import { ROLES } from 'routes/roleConstants';
 import { useDepartments } from 'modules/Category/category.hook';
-import Loader from 'modules/Auth/components/Loader';
-import Search from 'modules/shared/Search';
+import Loader from 'shared/Loader';
+import Search from 'shared/Search';
 
 import {
   Box,

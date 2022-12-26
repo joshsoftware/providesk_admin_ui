@@ -7,8 +7,8 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import Loader from 'modules/Auth/components/Loader';
-import { MaskLoader } from 'modules/shared/MaskLoader';
+import Loader from 'shared/Loader';
+import { MaskLoader } from 'shared/MaskLoader';
 import { useOverDue } from '../reports.hook';
 import { Ticket } from './Ticket';
 

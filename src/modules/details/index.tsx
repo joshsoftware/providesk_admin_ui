@@ -19,12 +19,12 @@ import {
 import { EditRounded } from '@mui/icons-material';
 
 import { useAskForUpdate, useTicketDetails } from './details.hook';
-import Loader from 'modules/Auth/components/Loader';
+import Loader from 'shared/Loader';
 import { TimelineComponent } from './components/Timeline';
 import { UpdateTicketForm } from './components/EditTicketForm';
 import { ticketStatusColours } from './constants';
 import { ImageS3Tag } from './components/ImageTag';
-import { Button } from 'modules/shared/Button';
+import { Button } from 'shared/Button';
 import { STATUS } from 'modules/dashboard/constant';
 import { useQuery } from 'react-query';
 import { EtaButtonShow } from './utils';

@@ -19,7 +19,7 @@ export const Select = ({
   name,
   onBlur,
   sx,
-  disabled
+  disabled,
 }: SelectProps) => {
   const selectOptions: SelectOpt[] = useMemo(
     () =>
@@ -33,8 +33,8 @@ export const Select = ({
   );
 
   return (
-    <Box sx={{ width: "100%", ...sx }}>
-      <FormControl size="small" fullWidth>
+    <Box sx={{ width: '100%', ...sx }}>
+      <FormControl size='small' fullWidth>
         <InputLabel>{label}</InputLabel>
         <MUISelect
           value={value as string}

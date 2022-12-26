@@ -22,12 +22,12 @@ import {
   IReopenTicketPayload,
 } from '../type';
 import { UserContext } from 'App';
-import Select from 'modules/shared/Select';
-import { Button } from 'modules/shared/Button';
+import Select from 'shared/Select';
+import { Button } from 'shared/Button';
 import { editTicketValidationSchema as validationSchema } from '../details.helpers';
 import RadioGroupRating from './Rating';
-import Loader from 'modules/Auth/components/Loader';
-import { UploadBucket } from 'modules/shared/UploadBucket';
+import Loader from 'shared/Loader';
+import { UploadBucket } from 'shared/UploadBucket';
 import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
 
 export const UpdateTicketForm = ({

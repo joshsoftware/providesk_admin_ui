@@ -4,7 +4,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import jwt_decode from 'jwt-decode';
 
-import Loader from './components/Loader';
+import Loader from '../../shared/Loader';
 import { userProfileType } from './auth.types';
 import { useLogin } from './login.hooks';
 import { saveToLocalStorage } from 'shared/localStorageHelpers';

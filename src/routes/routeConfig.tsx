@@ -5,7 +5,7 @@ import { DepartMent } from 'modules/Department';
 import { Category } from 'modules/Category';
 import AuthContainer from 'modules/Auth';
 import Dashboard from 'modules/dashboard';
-import PrivateRoute from 'modules/shared/HOC/privateRoute';
+import PrivateRoute from 'shared/HOC/privateRoute';
 
 // import Details from 'modules/details';
 import UnauthorizedAccess from 'modules/Auth/components/UnauthorizedAccess';
@@ -14,7 +14,7 @@ import { ROLES } from './roleConstants';
 import ROUTE from './constants';
 import { Users } from 'modules/Users';
 import { lazy, Suspense } from 'react';
-import Loader from 'modules/Auth/components/Loader';
+import Loader from 'shared/Loader';
 import { TicketAsTime } from 'modules/Reports';
 import { AnalyticsReportDashBoard } from 'modules/analyticalDashboard';
 

@@ -2,8 +2,8 @@ import React, { useCallback, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { useCreateOrganization, useGetOrganization } from './organization.hook';
-import { Button } from 'modules/shared/Button';
-import Loader from 'modules/Auth/components/Loader';
+import { Button } from 'shared/Button';
+import Loader from 'shared/Loader';
 
 import {
   Box,

@@ -1,7 +1,7 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
 
-import Select from 'modules/shared/Select';
-import Loader from 'modules/Auth/components/Loader';
+import Select from 'shared/Select';
+import Loader from 'shared/Loader';
 import { UserContext } from 'App';
 import { useCategories, useDepartments } from '../category.hook';
 

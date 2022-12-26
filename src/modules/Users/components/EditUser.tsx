@@ -1,9 +1,9 @@
 import { useCallback, useState, useMemo, useContext } from 'react';
 
 import { useDepartments } from 'modules/Category/category.hook';
-import Loader from 'modules/Auth/components/Loader';
-import Select from 'modules/shared/Select';
-import { Button } from 'modules/shared/Button';
+import Loader from 'shared/Loader';
+import Select from 'shared/Select';
+import { Button } from 'shared/Button';
 import { useEditUser } from '../users.hook';
 import { getAllowedRoles } from '../users.helpers';
 import { UserContext } from 'App';
