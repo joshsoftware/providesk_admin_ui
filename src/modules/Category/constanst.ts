@@ -6,5 +6,6 @@ export const prioritiesList: PriorityType[] = [
   { id: 2, value: 'Medium' },
   { id: 3, value: 'Low' },
 ];
+export const slaDurationTypeOptions: string[] = ['Days', 'Hours'];
 
 export const categoryValidationRegex = /^[-()., A-Za-z0-9\n]*$/i;

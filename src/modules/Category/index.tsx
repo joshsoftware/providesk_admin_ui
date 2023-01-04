@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { useCallback, useContext, useState } from 'react';
-import { categoryValidationRegex, prioritiesList } from './constanst';
+import {
+  categoryValidationRegex,
+  prioritiesList,
+  slaDurationTypeOptions,
+} from './constanst';
 import { useCreateCategory, useDepartments } from './category.hook';
 import CategoryList from './components/CategoryList';
 import { Button } from 'modules/shared/Button';
@@ -37,6 +41,8 @@ export const Category = () => {
   );
   const [priority, setPriority] = useState<number>(0);
   const [error, setError] = useState<string>('');
+  const [slaUnit, setSlaUnit] = useState<number>(1);
+  const [slaDurationType, setSlaDurationType] = useState<string>('Days');
 
   const { mutate, isLoading: isCreatingCategory } = useCreateCategory();
   const { data: departmentsList, isLoading: isFetchingDepartment } =
@@ -57,11 +63,13 @@ export const Category = () => {
         name: category.trim(),
         priority: priority,
         department_id: departmentId,
+        sla_unit: slaUnit,
+        sla_duration_type: slaDurationType,
       },
     };
     mutate(payload);
     setOpen(false);
-  }, [category, priority, departmentId]);
+  }, [category, priority, departmentId, slaUnit, slaDurationType, mutate]);
 
   const [open, setOpen] = React.useState(false);
 
@@ -188,6 +196,56 @@ export const Category = () => {
                   ))}
                 </SelectMUI>
               </FormControl>
+              <Box sx={{ display: 'flex' }}>
+                <TextField
+                  sx={{ marginRight: 2 }}
+                  label='Duration for SLA'
+                  value={slaUnit}
+                  type='number'
+                  error={!!error}
+                  required={true}
+                  autoFocus={true}
+                  onChange={(e) => {
+                    setSlaUnit(+e.target.value);
+                    setError('');
+                  }}
+                  InputProps={{ inputProps: { min: 0 } }}
+                  size='small'
+                />
+                {error && (
+                  <Typography
+                    variant='body1'
+                    component='p'
+                    sx={{
+                      color: 'error.main',
+                      p: '0.125rem 0.875rem 0 0.875rem',
+                    }}
+                  >
+                    {error}
+                  </Typography>
+                )}
+                <FormControl size='small'>
+                  <InputLabel id='slaDuration-selector-id'>Type</InputLabel>
+                  <SelectMUI
+                    placeholder='SLA Duration Type'
+                    required={true}
+                    labelId='slaDuration-selector-id'
+                    id='slaDuration-selector-id'
+                    value={slaDurationType}
+                    label='SLA Duration Type'
+                    onChange={(e: SelectChangeEvent) =>
+                      setSlaDurationType(e.target.value)
+                    }
+                    sx={{ width: '100px' }}
+                  >
+                    {slaDurationTypeOptions?.map((item) => (
+                      <MenuItem key={item} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </SelectMUI>
+                </FormControl>
+              </Box>
             </Box>
           </DialogContent>
           <DialogActions>
