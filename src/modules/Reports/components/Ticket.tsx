@@ -8,6 +8,8 @@ import { STATUS } from 'modules/dashboard/constant';
 import { ticketStatusColours } from 'modules/details/constants';
 import { dateDifferenceInDays } from 'apis/utils/date.utils';
 import { Ticket as TicketType } from '../types';
+import ROUTE from 'routes/constants';
+import { useNavigate } from 'react-router-dom';
 
 export const Ticket = ({
   ticket,
@@ -18,9 +20,17 @@ export const Ticket = ({
   overdue?: boolean;
   leftTime?: boolean;
 }) => {
+  const navigate = useNavigate();
+  const onCardClick = (id) => {
+    navigate(`${ROUTE.DASHBOARD}/${id}`);
+  };
   const days = dateDifferenceInDays(ticket?.eta!);
   return (
-    <Paper elevation={3} sx={{ m: 2 }}>
+    <Paper
+      elevation={3}
+      sx={{ m: 2, cursor: 'pointer' }}
+      onClick={() => onCardClick(ticket?.id)}
+    >
       <Box m={2}>
         <Typography variant='h5'>
           #{ticket?.id + ' '} {ticket?.title}
