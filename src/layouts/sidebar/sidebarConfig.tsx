@@ -60,6 +60,7 @@ export const getSidebarConfig = (role: string) => {
     },
     { label: 'Reports', path: ROUTE.REPORTS, icon: <TimelineRoundedIcon /> },
   ];
+  const resolverAccessSidebar = [...employeeAccessSidebar];
 
   switch (role) {
     case ROLES.SUPER_ADMIN:
@@ -70,6 +71,8 @@ export const getSidebarConfig = (role: string) => {
       return departmentHeadAccessSidebar;
     case ROLES.EMPLOYEE:
       return employeeAccessSidebar;
+    case ROLES.RESOLVER:
+      return resolverAccessSidebar;
     default:
       return [];
   }
