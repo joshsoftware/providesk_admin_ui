@@ -18,7 +18,6 @@ export const Ticket = ({
   overdue?: boolean;
   leftTime?: boolean;
 }) => {
-  console.log(ticket, 'ticket');
   const days = dateDifferenceInDays(ticket?.eta!);
   return (
     <Paper elevation={3} sx={{ m: 2 }}>
@@ -29,7 +28,7 @@ export const Ticket = ({
         <Box display={'flex'} sx={{ justifyContent: 'space-between', m: 2 }}>
           <Box display={'flex'} sx={{ alignItems: 'center' }}>
             <SpatialAudioOffRoundedIcon />
-            <Typography>{ticket?.resolver}</Typography>
+            <Typography>{ticket?.requester}</Typography>
           </Box>
           <Box display={'flex'} sx={{ alignItems: 'center' }}>
             <SpatialTrackingRoundedIcon color='primary' />

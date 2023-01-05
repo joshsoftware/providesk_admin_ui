@@ -1,5 +1,6 @@
+import { STATUS } from 'modules/dashboard/constant';
 import { ticketStatusColours } from 'modules/details/constants';
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useMemo } from 'react';
 import {
   BarChart,
   Bar,
@@ -10,6 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import { dataToBarChart } from './util';
 
 const data = [
   {
@@ -134,13 +136,14 @@ const data = [
   },
 ];
 
-export const BarChartComp = () => {
+export const BarChartComp = ({ datat }) => {
+  let dataForGraph = useMemo(() => dataToBarChart(datat), [datat]);
   return (
     <ResponsiveContainer width='100%' height='100%'>
       <BarChart
         width={500}
         height={300}
-        data={data}
+        data={dataForGraph}
         margin={{
           top: 20,
           right: 30,
@@ -154,41 +157,46 @@ export const BarChartComp = () => {
         <Tooltip />
         <Legend />
         <Bar
-          dataKey='assigned'
+          dataKey={STATUS['assigned']}
           stackId='a'
           fill={ticketStatusColours['assigned']}
         />
         <Bar
-          dataKey='for_approval'
+          dataKey={STATUS['for_approval']}
           stackId='a'
           fill={ticketStatusColours['for_approval']}
         />
 
         <Bar
-          dataKey='inprogress'
+          dataKey={STATUS['inprogress']}
           stackId='a'
           fill={ticketStatusColours['inprogress']}
         />
 
         <Bar
-          dataKey='resolved'
+          dataKey={STATUS['resolved']}
           stackId='a'
           fill={ticketStatusColours['resolved']}
         />
         <Bar
-          dataKey='closed'
+          dataKey={STATUS['closed']}
           stackId='a'
           fill={ticketStatusColours['closed']}
         />
         <Bar
-          dataKey='on_hold'
+          dataKey={STATUS['on_hold']}
           stackId='a'
           fill={ticketStatusColours['on_hold']}
         />
         <Bar
-          dataKey='reopen'
+          dataKey={STATUS['reopen']}
           stackId='a'
           fill={ticketStatusColours['reopen']}
+        />
+        <Bar
+          dataKey={STATUS['rejected']}
+          stackId='a'
+          fill={ticketStatusColours['rejected']}
         />
       </BarChart>
     </ResponsiveContainer>

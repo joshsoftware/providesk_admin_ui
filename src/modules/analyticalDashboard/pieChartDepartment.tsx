@@ -57,9 +57,8 @@ export const PieChartDepartment = ({
   data2: ChartData[];
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
-  console.log(data2, 'data');
+
   const onPieEnter = (a, index) => {
-    console.log(a, 'value');
     setDepartmentId(a.id);
     setActiveIndex(index);
   };

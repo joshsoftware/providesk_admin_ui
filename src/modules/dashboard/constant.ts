@@ -6,4 +6,5 @@ export const STATUS = {
   closed: 'Closed',
   resolved: 'Resolved',
   on_hold: 'On Hold',
+  rejected: 'Rejected',
 };

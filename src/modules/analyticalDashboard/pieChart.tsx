@@ -2,17 +2,12 @@ import { Box } from '@mui/system';
 import { ticketStatusColours } from 'modules/details/constants';
 import { useState } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import { dataToPieChartConversion } from './util';
 
-export const Piechart = () => {
-  const data = [
-    { name: 'for_approval', value: 200 },
-    { name: 'reopen', value: 300 },
-    { name: 'assigned', value: 500 },
-    { name: 'inprogress', value: 333 },
-    { name: 'closed', value: 33 },
-    { name: 'resolved', value: 122 },
-    { name: 'on_hold', value: 333 },
-  ];
+export const Piechart = ({ data }) => {
+  const piedata: { name: string; value: number }[] =
+    dataToPieChartConversion(data);
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   const COLORS = Object.keys(ticketStatusColours)?.map(
@@ -26,7 +21,7 @@ export const Piechart = () => {
       {' '}
       <PieChart width={350} height={300}>
         <Pie
-          data={data}
+          data={piedata}
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
           cx={150}
@@ -39,7 +34,7 @@ export const Piechart = () => {
           // label={(props) => <Label props={props} data={data} />}
           onMouseEnter={onPieEnter}
         >
-          {data.map((entry, index) => (
+          {piedata.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
@@ -50,7 +45,7 @@ export const Piechart = () => {
 
 const Label = ({ props, data }) => {
   const { cx, cy, midAngle, innerRadius, outerRadius, value, index } = props;
-  console.log('handling label?', midAngle, innerRadius, outerRadius);
+
   const RADIAN = Math.PI / 180;
   // eslint-disable-next-line
   const radius = 25 + innerRadius + (outerRadius - innerRadius);

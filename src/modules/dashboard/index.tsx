@@ -271,7 +271,7 @@ const Dashboard = () => {
                       />
                     )}
                     <Select
-                      label={'Resolver Employee'}
+                      label={'Resolver'}
                       options={userResolverList}
                       value={resolverEmpId + ''}
                       onChange={(e) => {
