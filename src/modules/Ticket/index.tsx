@@ -52,7 +52,9 @@ function Ticket({
   const [organizationId, setOrganizationId] = useState<number | ''>(
     userAuth?.organizations?.[0]?.id || ''
   );
-  const [departmentId, setDepartmentId] = useState<number | ''>(1);
+  const [departmentId, setDepartmentId] = useState<number | string | ''>(
+    data?.department_id || 1
+  );
 
   const { data: departmentsList, isLoading: isFetchingDepartments } =
     useDepartments(organizationId);
