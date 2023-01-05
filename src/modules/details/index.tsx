@@ -87,8 +87,7 @@ function Details() {
                 Edit Ticket
               </Button>
             )}
-          {
-            // userProfile?.email !== ticket?.requester_email &&
+          {userProfile?.email !== ticket?.requester_email && (
             <Button
               variant='text'
               startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
@@ -97,7 +96,7 @@ function Details() {
             >
               Update Ticket
             </Button>
-          }
+          )}
         </Box>
       </Box>
       <Box display={'flex'} flexDirection={{ sm: 'row', xs: 'column' }} gap={3}>
