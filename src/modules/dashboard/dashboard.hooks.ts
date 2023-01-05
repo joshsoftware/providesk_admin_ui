@@ -18,7 +18,7 @@ export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
     status: queryParams?.status !== '' ? queryParams.status : undefined,
     department_id:
       userAuth.role === ROLES.DEPARTMENT_HEAD
-        ? ''
+        ? userAuth?.organizations[0]?.department_id
         : queryParams?.department !== ''
         ? queryParams.department
         : undefined,
