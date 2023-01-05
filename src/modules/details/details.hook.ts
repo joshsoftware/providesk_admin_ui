@@ -66,7 +66,7 @@ export const useTicketDetails = (id: number) => {
   );
   return {
     ticket: data?.data?.data?.ticket,
-    activities: data?.data?.data?.activites,
+    activities: data?.data?.data?.activities,
     isLoading,
   };
 };
