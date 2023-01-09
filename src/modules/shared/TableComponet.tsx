@@ -21,7 +21,7 @@ interface Props {
   details: IComplaintDetails;
 }
 
-const ComplaintCard: React.FC<Props> = (props) => {
+const TicketRowCard: React.FC<Props> = (props) => {
   const { details } = props;
   const {
     id,
@@ -35,7 +35,6 @@ const ComplaintCard: React.FC<Props> = (props) => {
     requester,
     reason_for_update,
     eta,
-    ticket_number,
   } = details;
 
   const navigate = useNavigate();
@@ -63,7 +62,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
       value: DateFormate(created_at),
     },
     {
-      label: 'Resolver',
+      label: 'Assigned To',
       value: resolver,
     },
     {
@@ -89,9 +88,6 @@ const ComplaintCard: React.FC<Props> = (props) => {
     >
       <CardContent sx={{ pb: '0.5rem !important' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Typography variant='subtitle1' flex={1} textTransform='capitalize'>
-            {ticket_number}
-          </Typography>
           <Typography variant='subtitle1' flex={1} textTransform='capitalize'>
             {title}
           </Typography>
@@ -152,4 +148,4 @@ const ComplaintCard: React.FC<Props> = (props) => {
   );
 };
 
-export default React.memo(ComplaintCard);
+export default React.memo(TicketRowCard);

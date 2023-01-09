@@ -6,10 +6,17 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 
 import TablePagination from '@mui/material/TablePagination';
-import { Box, Card, CardContent, Paper } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  FormControlLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+} from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
 import Select, { CustomSelect } from 'modules/shared/Select';
@@ -28,6 +35,11 @@ import { useNavigate } from 'react-router-dom';
 import ROUTE from 'routes/constants';
 import { ROLES } from 'routes/roleConstants';
 import { useUsers } from 'modules/Ticket/ticket.hook';
+import { STATUS } from './constant';
+import { ticketStatusColours } from 'modules/details/constants';
+import { DateFormate } from 'apis/utils/date.utils';
+import moment from 'moment';
+import { CardsView } from './CardsView';
 const Ticket = lazy(() => import('modules/Ticket'));
 
 const statusOptions = [
@@ -183,24 +195,58 @@ const Dashboard = () => {
     return [{ label: 'None', value: '' }, ...list];
   }, [usersList]);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [tableView, setTableView] = useState<boolean>(false);
 
   return (
     <Box display='flex' flexDirection='column' flex='1' gap={3} p={3}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <Typography variant='h5'>Dashboard</Typography>
-        <Button
-          variant='text'
-          onClick={() => setOpen(true)}
-          size='small'
-          startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
-          sx={{ color: 'grey.900', ml: 'auto' }}
-        >
-          Create Ticket
-        </Button>
-        <Suspense fallback={<Loader isLoading={true} />}>
-          <Ticket open={open} setOpen={setOpen} isEdit={false} />
-        </Suspense>
+        <Box display={'flex'}>
+          <RadioGroup row onChange={(e) => setTableView((p) => !p)}>
+            <FormControlLabel
+              value={true}
+              control={
+                <Radio
+                  size='small'
+                  sx={{ px: 1, py: 0.5 }}
+                  checked={true == tableView}
+                />
+              }
+              label='Tableview'
+            />
+            <FormControlLabel
+              value={false}
+              control={
+                <Radio
+                  size='small'
+                  sx={{ px: 1, py: 0.5 }}
+                  checked={false == tableView}
+                />
+              }
+              label='Layoutview'
+            />
+          </RadioGroup>
+
+          <Button
+            variant='text'
+            onClick={() => setOpen(true)}
+            size='small'
+            startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
+            sx={{ color: 'grey.900', ml: 'auto' }}
+          >
+            Create Ticket
+          </Button>
+          <Suspense fallback={<Loader isLoading={true} />}>
+            <Ticket open={open} setOpen={setOpen} isEdit={false} />
+          </Suspense>
+        </Box>
       </Box>
       <Card sx={{ display: 'flex', flex: 1 }}>
         <CardContent
@@ -356,14 +402,7 @@ const Dashboard = () => {
                   No Data
                 </Typography>
               ) : (
-                <Box
-                  sx={{ display: 'grid', gap: '1rem' }}
-                  className='complaint-card-grid'
-                >
-                  {updatedDataFinalList?.map((complaint) => (
-                    <ComplaintCard details={complaint} />
-                  ))}
-                </Box>
+                <CardsView data={updatedDataFinalList} tableview={tableView} />
               )}
               <TablePagination
                 component='div'
