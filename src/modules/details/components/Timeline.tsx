@@ -83,6 +83,10 @@ const TimeLineDescription = ({ activity }: { activity: ITicketActivity }) => {
           sx={{
             backgroundColor:
               ticketStatusColours[activity?.current_ticket_status],
+            color:
+              STATUS[activity?.current_ticket_status] === 'Rejected'
+                ? '#FFF'
+                : 'inherit',
           }}
         />
       </Box>

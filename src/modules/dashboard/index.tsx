@@ -12,16 +12,15 @@ import {
   Box,
   Card,
   CardContent,
-  FormControlLabel,
+  IconButton,
   Paper,
-  Radio,
-  RadioGroup,
+  // Radio,
+  // RadioGroup,
 } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
 import Select, { CustomSelect } from 'modules/shared/Select';
 import Search from 'modules/shared/Search';
-import ComplaintCard from 'modules/shared/ComplaintCard';
 import { UserContext } from 'App';
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
 
@@ -30,15 +29,15 @@ import './dashboard.scss';
 // import { useNavigate } from 'react-router-dom';
 import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
-import { AddRounded, RestartAltRounded } from '@mui/icons-material';
+import {
+  AddRounded,
+  GridOffTwoTone,
+  GridOnTwoTone,
+  RestartAltRounded,
+} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import ROUTE from 'routes/constants';
 import { ROLES } from 'routes/roleConstants';
 import { useUsers } from 'modules/Ticket/ticket.hook';
-import { STATUS } from './constant';
-import { ticketStatusColours } from 'modules/details/constants';
-import { DateFormate } from 'apis/utils/date.utils';
-import moment from 'moment';
 import { CardsView } from './CardsView';
 const Ticket = lazy(() => import('modules/Ticket'));
 
@@ -209,7 +208,7 @@ const Dashboard = () => {
       >
         <Typography variant='h5'>Dashboard</Typography>
         <Box display={'flex'}>
-          <RadioGroup row onChange={(e) => setTableView((p) => !p)}>
+          {/* <RadioGroup row onChange={(e) => setTableView((p) => !p)}>
             <FormControlLabel
               value={true}
               control={
@@ -232,7 +231,7 @@ const Dashboard = () => {
               }
               label='Layoutview'
             />
-          </RadioGroup>
+          </RadioGroup> */}
 
           <Button
             variant='text'
@@ -243,6 +242,23 @@ const Dashboard = () => {
           >
             Create Ticket
           </Button>
+          {tableView === true ? (
+            <IconButton
+              aria-label='grid'
+              onClick={() => setTableView(false)}
+              sx={{ ml: 3 }}
+            >
+              <GridOffTwoTone color='primary' fontSize='small' />
+            </IconButton>
+          ) : (
+            <IconButton
+              aria-label='table'
+              onClick={() => setTableView(true)}
+              sx={{ ml: 3 }}
+            >
+              <GridOnTwoTone color='primary' fontSize='small' />
+            </IconButton>
+          )}
           <Suspense fallback={<Loader isLoading={true} />}>
             <Ticket open={open} setOpen={setOpen} isEdit={false} />
           </Suspense>

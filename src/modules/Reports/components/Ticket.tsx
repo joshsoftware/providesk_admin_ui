@@ -76,6 +76,7 @@ export const Ticket = ({
             label={STATUS[ticket?.status]}
             sx={{
               backgroundColor: ticketStatusColours[ticket?.status],
+              color: STATUS[ticket?.status] === 'Rejected' ? '#FFF' : 'inherit',
             }}
           />
         </Box>
