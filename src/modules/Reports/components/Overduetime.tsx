@@ -2,6 +2,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Divider,
   Grid,
   Paper,
   Typography,
@@ -16,68 +17,59 @@ export const Overdue = () => {
   const { isLoading: isLoadingOverdueList, data: overDueList } = useOverDue();
 
   return (
-    <Box sx={{}}>
+    <Box display='flex' flexDirection='column' flex='1' gap={3} p={3}>
       {isLoadingOverdueList ? (
         <Loader isLoading={isLoadingOverdueList} />
       ) : (
-        <Grid container spacing={2}>
-          <Grid item xs={4} sx={{ my: 2 }}>
-            <Card>
-              <CardHeader title='Overdues' />
-
-              <CardContent>
+        <Grid container spacing={3}>
+          <Grid item xs={4} display='flex' flexDirection='column' gap={3}>
+            <Typography variant='h5'>Overdues</Typography>
+            <Card variant='outlined'>
+              <CardContent
+                sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
+              >
                 {overDueList?.overdue?.length! > 0 ? (
                   overDueList?.overdue?.map((item) => (
                     <Ticket ticket={item} overdue={true} />
                   ))
                 ) : (
-                  <Typography
-                    sx={{ justifyItems: 'center', textAlign: 'center', my: 4 }}
-                    variant='h5'
-                  >
-                    {' '}
+                  <Typography sx={{ textAlign: 'center', my: 4 }}>
                     No data
                   </Typography>
                 )}
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={4} sx={{ my: 2 }}>
-            <Card>
-              <CardHeader title='Overdues in 2 days' />
-
-              <CardContent>
+          <Grid item xs={4} display='flex' flexDirection='column' gap={3}>
+            <Typography variant='h5'>Overdues in 2 days</Typography>
+            <Card variant='outlined'>
+              <CardContent
+                sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
+              >
                 {overDueList?.overdue_in_two_days?.length! > 0 ? (
                   overDueList?.overdue_in_two_days?.map((item) => (
                     <Ticket ticket={item} leftTime={true} />
                   ))
                 ) : (
-                  <Typography
-                    sx={{ justifyItems: 'center', textAlign: 'center', my: 4 }}
-                    variant='h5'
-                  >
-                    {' '}
+                  <Typography sx={{ textAlign: 'center', my: 4 }}>
                     No data
                   </Typography>
                 )}
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={4} sx={{ my: 2 }}>
-            <Card>
-              <CardHeader title='Overdues in some days' />
-
-              <CardContent>
+          <Grid item xs={4} display='flex' flexDirection='column' gap={3}>
+            <Typography variant='h5'>Overdues in some days</Typography>
+            <Card variant='outlined'>
+              <CardContent
+                sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
+              >
                 {overDueList?.overdue_after_two_days?.length! > 0 ? (
                   overDueList?.overdue_after_two_days?.map((item) => (
                     <Ticket ticket={item} leftTime={true} />
                   ))
                 ) : (
-                  <Typography
-                    sx={{ justifyItems: 'center', textAlign: 'center', my: 4 }}
-                    variant='h5'
-                  >
-                    {' '}
+                  <Typography sx={{ textAlign: 'center', my: 4 }}>
                     No data
                   </Typography>
                 )}

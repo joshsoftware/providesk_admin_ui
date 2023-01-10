@@ -1,4 +1,15 @@
-import { Chip, Paper, Typography } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Chip,
+  Divider,
+  Paper,
+  Step,
+  StepContent,
+  StepLabel,
+  Stepper,
+  Typography,
+} from '@mui/material';
 import { Box } from '@mui/system';
 import HourglassBottomRoundedIcon from '@mui/icons-material/HourglassBottomRounded';
 import SpatialAudioOffRoundedIcon from '@mui/icons-material/SpatialAudioOffRounded';
@@ -26,61 +37,74 @@ export const Ticket = ({
   };
   const days = dateDifferenceInDays(ticket?.eta!);
   return (
-    <Paper
-      elevation={3}
-      sx={{ m: 2, cursor: 'pointer' }}
+    <Card
+      variant='outlined'
+      sx={{ cursor: 'pointer' }}
       onClick={() => onCardClick(ticket?.id)}
     >
-      <Box m={2}>
-        <Typography variant='h5'>
-          #{ticket?.id + ' '} {ticket?.title}
-        </Typography>
-        <Box display={'flex'} sx={{ justifyContent: 'space-between', m: 2 }}>
-          <Box display={'flex'} sx={{ alignItems: 'center' }}>
-            <SpatialAudioOffRoundedIcon />
-            <Typography>{ticket?.requester}</Typography>
-          </Box>
-          <Box display={'flex'} sx={{ alignItems: 'center' }}>
-            <SpatialTrackingRoundedIcon color='primary' />
-            <Typography>{ticket?.resolver}</Typography>
-          </Box>
-        </Box>
-        <Box
-          display={'flex'}
-          sx={{
-            justifyContent: 'space-between',
-          }}
-        >
-          <Box display={'flex'} sx={{ my: 1 }}>
-            {days > 0 && (
-              <>
-                {' '}
-                <HourglassBottomRoundedIcon fontSize='small' color='error' />
-                <Typography>late by {days}</Typography>
-              </>
-            )}
-            {days == 0 && (
-              <>
-                <HourglassBottomRoundedIcon fontSize='small' color='primary' />
-                <Typography>last day</Typography>
-              </>
-            )}
-            {days < 0 && (
-              <>
-                <AccessTimeIcon fontSize='small' color='success' />
-                <Typography>{-1 * days} days left</Typography>
-              </>
-            )}
-          </Box>
+      <CardContent
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+        }}
+      >
+        <Box display={'flex'} alignItems={'center'} gap={3}>
+          <Typography variant='h6' mb={0}>
+            #{ticket?.id + ' '} {ticket?.title}
+          </Typography>
           <Chip
             label={STATUS[ticket?.status]}
             sx={{
               backgroundColor: ticketStatusColours[ticket?.status],
               color: STATUS[ticket?.status] === 'Rejected' ? '#FFF' : 'inherit',
+              ml: 'auto',
             }}
           />
         </Box>
-      </Box>
-    </Paper>
+        <Stepper>
+          <Step active>
+            <StepLabel StepIconComponent={SpatialAudioOffRoundedIcon}>
+              <Typography color={'secondary'}>{ticket?.requester}</Typography>
+            </StepLabel>
+          </Step>
+          <Step active>
+            <StepLabel StepIconComponent={SpatialTrackingRoundedIcon}>
+              <Typography color={'primary'}>{ticket?.resolver}</Typography>
+            </StepLabel>
+          </Step>
+        </Stepper>
+        {/* <Box display={'flex'} alignItems={'center'} gap={2}>
+          <SpatialAudioOffRoundedIcon fontSize='small' />
+          <Typography>{ticket?.requester}</Typography>
+        </Box>
+        <Typography>|</Typography>
+        <Box display={'flex'} alignItems={'center'} gap={2}>
+          <SpatialTrackingRoundedIcon fontSize='small' color='primary' />
+          <Typography>{ticket?.resolver}</Typography>
+        </Box> */}
+        <Divider />
+        <Box display={'flex'} alignItems={'center'} gap={1}>
+          {days > 0 && (
+            <>
+              <HourglassBottomRoundedIcon fontSize='small' color='error' />
+              <Typography>late by {days}</Typography>
+            </>
+          )}
+          {days == 0 && (
+            <>
+              <HourglassBottomRoundedIcon fontSize='small' color='primary' />
+              <Typography>last day</Typography>
+            </>
+          )}
+          {days < 0 && (
+            <>
+              <AccessTimeIcon fontSize='small' color='success' />
+              <Typography>{-1 * days} days left</Typography>
+            </>
+          )}
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
