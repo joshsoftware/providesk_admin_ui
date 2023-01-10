@@ -1,5 +1,4 @@
-import { Height } from '@mui/icons-material';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAnalyticalReports } from './analyticalDashBoard.hook';
 import { BarChartComp } from './barchart';
@@ -20,7 +19,6 @@ export const AnalyticsReportDashBoard = () => {
         {' '}
         {data && (
           <>
-            {' '}
             <Card>
               <Piechart data={data?.status_wise_organization_tickets} />
             </Card>

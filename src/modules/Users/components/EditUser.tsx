@@ -50,8 +50,8 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
   const handleUpdateUser = useCallback(() => {
     const payload: IEditUserPayload = {
       role,
-      department_id: departmentId as number,
-      category_id: categoryListSelected,
+      department_id: role == 'employee' ? undefined : (departmentId as number),
+      category_id: role == 'employee' ? undefined : categoriesList,
     };
     updateUser({ id: user?.id, payload, setOpenEdit });
   }, [role, departmentId]);
@@ -107,24 +107,28 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
             ))}
           </SelectMUI>
         </FormControl>
-        <Select
-          name='department'
-          required={true}
-          label={'Department'}
-          value={departmentId}
-          options={deptOptions}
-          onChange={(e) => setDepartmentId(parseInt(e.target.value))}
-        />
+        {role.toLowerCase() !== 'employee' && (
+          <>
+            <Select
+              name='department'
+              required={true}
+              label={'Department'}
+              value={departmentId}
+              options={deptOptions}
+              onChange={(e) => setDepartmentId(parseInt(e.target.value))}
+            />
 
-        <MultiSelect
-          options={categoryOptions}
-          value={categoryListSelected}
-          name={'category'}
-          label={'Category'}
-          onChange={(li) => {
-            setCategoryList(li);
-          }}
-        />
+            <MultiSelect
+              options={categoryOptions}
+              value={categoryListSelected}
+              name={'category'}
+              label={'Category'}
+              onChange={(li) => {
+                setCategoryList(li);
+              }}
+            />
+          </>
+        )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2 }}>
         <Button variant='text' onClick={() => setOpenEdit(false)}>

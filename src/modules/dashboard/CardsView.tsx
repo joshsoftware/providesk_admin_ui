@@ -86,8 +86,8 @@ export const CardsView = ({ data, tableview }) => {
     },
     {
       label: 'Last Updated Time',
-      key: 'updated_by',
-      Component: (value) => DateFormate(value) || '_',
+      key: 'updated_at',
+      Component: (value) => DateFormate(value),
     },
   ];
   return (

@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense, useContext } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import moment from 'moment';
 import {
@@ -14,7 +14,6 @@ import {
   TableCell,
   Paper,
   IconButton,
-  Tooltip,
 } from '@mui/material';
 import { EditRounded } from '@mui/icons-material';
 
@@ -26,10 +25,9 @@ import { ticketStatusColours } from './constants';
 import { ImageS3Tag } from './components/ImageTag';
 import { Button } from 'modules/shared/Button';
 import { STATUS } from 'modules/dashboard/constant';
-import { useQuery } from 'react-query';
+
 import { EtaButtonShow } from './utils';
 import { UserContext } from 'App';
-import { display } from '@mui/system';
 
 const Ticket = lazy(() => import('modules/Ticket'));
 
@@ -87,7 +85,8 @@ function Details() {
                 Edit Ticket
               </Button>
             )}
-          {userProfile?.email !== ticket?.requester_email && (
+          {(userProfile?.email !== ticket?.requester_email ||
+            ticket?.status == 'resolved') && (
             <Button
               variant='text'
               startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
