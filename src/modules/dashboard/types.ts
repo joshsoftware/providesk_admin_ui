@@ -36,3 +36,13 @@ export interface IFetchComplaintListRequest {
   assig_to_me?: boolean;
   created_by_me?: boolean;
 }
+
+export interface BulkUpdatePayload {
+  ticket: {
+    ticket_ids: number[];
+    status: string;
+    department_id: string;
+    category_id: string;
+    resolver_id: string;
+  };
+}

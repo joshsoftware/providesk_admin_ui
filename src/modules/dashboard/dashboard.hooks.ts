@@ -2,10 +2,10 @@ import { UserContext } from 'App';
 import API_CONSTANTS from 'hooks/constants';
 import { IFetchComplaintListRequest } from 'modules/dashboard/types';
 import { useContext } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { ROLES } from 'routes/roleConstants';
-import { getRequestList } from './dashboard.services';
+import { getRequestList, postBulkUpdate } from './dashboard.services';
 
 export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
   let path = '/tickets';
@@ -38,4 +38,16 @@ export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
     data: data?.data?.data,
     isLoading: isLoading || isFetching,
   };
+};
+
+export const usePostBulkUpdate = (payload) => {
+  const queryClient = useQueryClient();
+  return useMutation(() => postBulkUpdate(payload), {
+    onSuccess: () => {
+      queryClient.invalidateQueries([API_CONSTANTS.COMPLAINT_LIST]);
+    },
+    onError: () => {
+      toast.error('Failed to update Tickets');
+    },
+  });
 };

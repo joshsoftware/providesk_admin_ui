@@ -197,6 +197,7 @@ const Dashboard = () => {
 
   const [open, setOpen] = useState(false);
   const [tableView, setTableView] = useState<boolean>(false);
+  const [selected];
 
   return (
     <Box display='flex' flexDirection='column' flex='1' gap={3} p={3}>
