@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { PieChartDepartment } from './pieChartDepartment';
 import { ChartData } from './type';
 
+//todo dummy data
 const data1 = [
   { name: 'Admin', value: 400, id: 1 },
   { name: 'Finance', value: 300, id: 2 },

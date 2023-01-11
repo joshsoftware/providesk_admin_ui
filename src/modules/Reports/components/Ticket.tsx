@@ -74,15 +74,7 @@ export const Ticket = ({
             </StepLabel>
           </Step>
         </Stepper>
-        {/* <Box display={'flex'} alignItems={'center'} gap={2}>
-          <SpatialAudioOffRoundedIcon fontSize='small' />
-          <Typography>{ticket?.requester}</Typography>
-        </Box>
-        <Typography>|</Typography>
-        <Box display={'flex'} alignItems={'center'} gap={2}>
-          <SpatialTrackingRoundedIcon fontSize='small' color='primary' />
-          <Typography>{ticket?.resolver}</Typography>
-        </Box> */}
+
         <Divider />
         <Box display={'flex'} alignItems={'center'} gap={1}>
           {days > 0 && (

@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import { dataToBarChart } from './util';
 
+//dumy data Todo
 const data = [
   {
     name: 'January',

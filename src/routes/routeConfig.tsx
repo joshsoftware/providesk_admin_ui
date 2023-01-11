@@ -19,7 +19,6 @@ import { TicketAsTime } from 'modules/Reports';
 import { AnalyticsReportDashBoard } from 'modules/analyticalDashboard';
 
 const Details = lazy(() => import('modules/details'));
-const Ticket = lazy(() => import('modules/Ticket'));
 
 export const routeConfig = [
   {
@@ -107,21 +106,12 @@ export const routeConfig = [
     ),
   },
   {
-    path: '/analysis',
-    element: withLayout(<AnalyticsReportDashBoard />),
+    path: ROUTE.ANALYSIS,
+    element: (
+      <PrivateRoute
+        Component={withLayout(<AnalyticsReportDashBoard />)}
+        AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD]}
+      />
+    ),
   },
-
-  // {
-  //   path: ROUTE.TICKET,
-  //   element: (
-  //     <PrivateRoute
-  //       Component={withLayout(
-  //         <Suspense fallback={<Loader isLoading={true} />}>
-  //           <Ticket />
-  //         </Suspense>
-  //       )}
-  //       AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
-  //     />
-  //   ),
-  // },
 ];

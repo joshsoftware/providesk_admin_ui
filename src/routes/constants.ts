@@ -11,6 +11,7 @@ const ROUTE = {
   HOME: '/',
   UNAUTHORIZED: '/unauthorized',
   REPORTS: '/reports',
+  ANALYSIS: '/analysis/',
 };
 
 export default ROUTE;
