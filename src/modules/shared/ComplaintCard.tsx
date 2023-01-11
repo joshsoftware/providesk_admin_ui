@@ -136,6 +136,7 @@ const ComplaintCard: React.FC<Props> = ({
             className='text-truncate'
             sx={{
               backgroundColor: ticketStatusColours[status],
+              color: STATUS[status] === 'Rejected' ? '#FFF' : 'inherit',
             }}
           />
         </Box>

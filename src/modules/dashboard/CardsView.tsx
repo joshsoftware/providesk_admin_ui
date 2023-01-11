@@ -47,7 +47,6 @@ export const CardsView = ({
       key: 'all',
       Component: (ticket) => {
         const { id, permited_transitions, requester_email, status } = ticket;
-        console.log(selectedTicketForBulkUpdate, id);
 
         return (
           <>
@@ -82,6 +81,7 @@ export const CardsView = ({
           className='text-truncate'
           sx={{
             backgroundColor: ticketStatusColours[value],
+            color: STATUS[value] === 'Rejected' ? '#FFF' : 'inherit',
           }}
         />
       ),
@@ -90,7 +90,7 @@ export const CardsView = ({
       label: 'Ticket ID',
       key: 'ticket_number',
       Component: (value) => (
-        <Typography variant='subtitle1' flex={1} textTransform='capitalize'>
+        <Typography variant='body2' flex={1} sx={{ fontWeight: '700' }}>
           {value}
         </Typography>
       ),

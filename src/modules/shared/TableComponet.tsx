@@ -96,6 +96,7 @@ const TicketRowCard: React.FC<Props> = (props) => {
             className='text-truncate'
             sx={{
               backgroundColor: ticketStatusColours[status],
+              color: STATUS[status] === 'Rejected' ? '#FFF' : 'inherit',
             }}
           />
         </Box>
