@@ -1,5 +1,6 @@
 import {
   Box,
+  Checkbox,
   Chip,
   Paper,
   Table,
@@ -11,16 +12,26 @@ import {
   Typography,
 } from '@mui/material';
 import { DateFormate } from 'apis/utils/date.utils';
+import { UserContext } from 'App';
 import { ticketStatusColours } from 'modules/details/constants';
 import ComplaintCard from 'modules/shared/ComplaintCard';
 import moment from 'moment';
-import { ReactElement } from 'react';
+import { Component, ReactElement, useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import ROUTE from 'routes/constants';
 import { STATUS } from './constant';
 
-export const CardsView = ({ data, tableview }) => {
+export const CardsView = ({
+  data,
+  tableview,
+  setSeletedTicketForBulkUpdate,
+  selectedTicketForBulkUpdate,
+}) => {
   const navigate = useNavigate();
+  const userContext = useContext(UserContext);
+  const role = userContext?.userAuth?.role;
+  const email = userContext?.userProfile?.email;
 
   // navigate to the details page of specific complaint
   const onCardClick = (id) => {
@@ -31,6 +42,37 @@ export const CardsView = ({ data, tableview }) => {
     key: string;
     Component?: (a: any) => ReactElement | string;
   }[] = [
+    {
+      label: '',
+      key: 'all',
+      Component: (ticket) => {
+        const { id, permited_transitions, requester_email, status } = ticket;
+        console.log(selectedTicketForBulkUpdate, id);
+
+        return (
+          <>
+            {' '}
+            {role !== 'employee' && (
+              <Checkbox
+                checked={selectedTicketForBulkUpdate.id.indexOf(id) !== -1}
+                onChange={(e) => {
+                  if (requester_email === email) {
+                    toast.error('You can not update own ticket status');
+                    return;
+                  }
+                  handleChecked({
+                    checked: e.target.checked,
+                    id,
+                    status,
+                    permited_transitions,
+                  });
+                }}
+              />
+            )}
+          </>
+        );
+      },
+    },
     {
       label: 'Status',
       key: 'status',
@@ -90,6 +132,45 @@ export const CardsView = ({ data, tableview }) => {
       Component: (value) => DateFormate(value),
     },
   ];
+  const handleChecked = useCallback(
+    (obj: {
+      checked: boolean;
+      id: number;
+      status: string;
+      permited_transitions: string[];
+    }) => {
+      const { checked, id, status, permited_transitions } = obj;
+      if (
+        ((selectedTicketForBulkUpdate.status &&
+          selectedTicketForBulkUpdate.status === status) ||
+          selectedTicketForBulkUpdate.status === '') &&
+        checked === true
+      ) {
+        setSeletedTicketForBulkUpdate((st) => ({
+          ...st,
+          id: [...st.id, id],
+          status,
+          permited_transitions,
+        }));
+        return;
+      } else if (checked === true)
+        toast.error('Group update all tickets should be in same status!!');
+      else if (selectedTicketForBulkUpdate.id.length === 1) {
+        setSeletedTicketForBulkUpdate((st) => ({
+          id: [],
+          status: '',
+          permited_transitions: [],
+        }));
+        return;
+      }
+      setSeletedTicketForBulkUpdate((st) => ({
+        ...st,
+        id: st.id.filter((item) => item != id),
+      }));
+    },
+    [selectedTicketForBulkUpdate, setSeletedTicketForBulkUpdate]
+  );
+
   return (
     <>
       {!tableview ? (
@@ -98,7 +179,14 @@ export const CardsView = ({ data, tableview }) => {
           className='complaint-card-grid'
         >
           {data?.map((complaint) => (
-            <ComplaintCard details={complaint} />
+            <ComplaintCard
+              details={complaint}
+              role={role}
+              setSeletedTicketForBulkUpdate={setSeletedTicketForBulkUpdate!}
+              selectedTicketForBulkUpdate={selectedTicketForBulkUpdate}
+              handleChecked={handleChecked}
+              email={email}
+            />
           ))}
         </Box>
       ) : (
@@ -117,13 +205,15 @@ export const CardsView = ({ data, tableview }) => {
                   <TableRow
                     key={itemData?.id}
                     hover
-                    onClick={() => onCardClick(itemData?.id)}
+                    // onClick={() => onCardClick(itemData?.id)}
                     sx={{ cursor: 'pointer' }}
                   >
                     {TableColumn?.map((item) => (
                       <TableCell key={item.key}>
                         {item.Component
-                          ? item.Component(itemData[item.key])
+                          ? item.Component(
+                              item.key === 'all' ? itemData : itemData[item.key]
+                            )
                           : itemData[item.key]}
                       </TableCell>
                     ))}

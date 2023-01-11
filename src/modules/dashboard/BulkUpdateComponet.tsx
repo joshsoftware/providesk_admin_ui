@@ -1,20 +1,37 @@
 import { EditRounded } from '@mui/icons-material';
-import { Button } from '@mui/material';
+
 import { Box } from '@mui/system';
 import { UserContext } from 'App';
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
+import { Button } from 'modules/shared/Button';
 import Select, { CustomSelect } from 'modules/shared/Select';
 import { useUsers } from 'modules/Ticket/ticket.hook';
 import { useCallback, useContext, useMemo, useState } from 'react';
+import { STATUS } from './constant';
+import { usePostBulkUpdate } from './dashboard.hooks';
+import { BulkUpload, PayloadBulkUpload } from './types';
 
-export const BulkUpdateComponent = ({ statuslist, selectedTicket }) => {
-  const [payload, setpayloadload] = useState<PayLoadBulkUpload>();
+export const BulkUpdateComponent = ({ selectedTicketForBulkUpdate }) => {
+  const [payload, setpayloadload] = useState<BulkUpload>({
+    department_id: '',
+    category_id: '',
+    resolver_id: '',
+    status: '',
+  });
+  const statusOptions = useMemo(
+    () =>
+      selectedTicketForBulkUpdate.permited_transitions?.map((item) => ({
+        label: STATUS[item],
+        value: item,
+      })),
+    [selectedTicketForBulkUpdate]
+  );
   const handleChange = useCallback(
     (
       name: 'department_id' | 'category_id' | 'resolver_id' | 'status',
       value: string
     ) => {
-      setpayloadload((p) => ({ ...p, [name]: value }));
+      setpayloadload((p: BulkUpload) => ({ ...p, [name]: value }));
     },
     [setpayloadload]
   );
@@ -58,6 +75,21 @@ export const BulkUpdateComponent = ({ statuslist, selectedTicket }) => {
       }) || [];
     return [{ label: 'None', value: '' }, ...list];
   }, [usersList]);
+  const { isLoading, mutate } = usePostBulkUpdate();
+
+  const updateAllStatus = useCallback(() => {
+    const payLoad: PayloadBulkUpload = {
+      ticket: {
+        ticket_ids: selectedTicketForBulkUpdate.id,
+        department_id: selectedTicketForBulkUpdate.department_id as string,
+        resolver_id: payload.resolver_id,
+        category_id: payload.category_id,
+        status: payload.status,
+      },
+    };
+    console.log(payLoad);
+    // mutate(payLoad);
+  }, [mutate, selectedTicketForBulkUpdate]);
 
   return (
     <Box display={'flex'}>
@@ -79,38 +111,40 @@ export const BulkUpdateComponent = ({ statuslist, selectedTicket }) => {
         }}
         name='department_id'
       />
-      <CustomSelect
-        label={'Category'}
-        options={categoryOptions}
-        value={payload?.category_id!}
-        onChange={(e) => handleChange('category_id', e.target.value)}
-        name='category_id'
-      />
-      <Select
-        label={'Resolver'}
-        options={userResolverList}
-        value={payload?.resolver_id + ''}
-        onChange={(e) => {
-          handleChange('resolver_id', e.target.value);
-        }}
-        name='resolver_id'
-        disabled={payload?.department_id == ''}
-      />
+      (
+      <>
+        {' '}
+        <CustomSelect
+          label={'Category'}
+          options={categoryOptions}
+          value={payload?.category_id!}
+          onChange={(e) => handleChange('category_id', e.target.value)}
+          name='category_id'
+          disabled={payload?.department_id == ''}
+        />
+        <Select
+          label={'Resolver'}
+          options={userResolverList}
+          value={payload?.resolver_id + ''}
+          onChange={(e) => {
+            handleChange('resolver_id', e.target.value);
+          }}
+          name='resolver_id'
+          disabled={payload?.department_id == ''}
+        />
+      </>
+      )
       <Button
         variant='text'
         startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
         sx={{ color: 'grey.900' }}
-        onClick={() => {}}
+        onClick={() => {
+          updateAllStatus();
+        }}
+        isLoading={isLoading}
       >
         Update
       </Button>
     </Box>
   );
 };
-
-interface PayLoadBulkUpload {
-  department_id: string;
-  category_id: string;
-  resolver_id: string;
-  status: string;
-}

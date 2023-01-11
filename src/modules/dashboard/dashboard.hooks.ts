@@ -1,10 +1,14 @@
 import { UserContext } from 'App';
 import API_CONSTANTS from 'hooks/constants';
-import { IFetchComplaintListRequest } from 'modules/dashboard/types';
+import {
+  IFetchComplaintListRequest,
+  PayloadBulkUpload,
+} from 'modules/dashboard/types';
 import { useContext } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { ROLES } from 'routes/roleConstants';
+
 import { getRequestList, postBulkUpdate } from './dashboard.services';
 
 export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
@@ -18,7 +22,7 @@ export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
     status: queryParams?.status !== '' ? queryParams.status : undefined,
     department_id:
       userAuth.role === ROLES.DEPARTMENT_HEAD
-        ? ''
+        ? undefined
         : queryParams?.department !== ''
         ? queryParams.department
         : undefined,
@@ -40,9 +44,9 @@ export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
   };
 };
 
-export const usePostBulkUpdate = (payload) => {
+export const usePostBulkUpdate = () => {
   const queryClient = useQueryClient();
-  return useMutation(() => postBulkUpdate(payload), {
+  return useMutation((payload: PayloadBulkUpload) => postBulkUpdate(payload), {
     onSuccess: () => {
       queryClient.invalidateQueries([API_CONSTANTS.COMPLAINT_LIST]);
     },

@@ -4,6 +4,7 @@ import {
   GetRequestsListResponse,
   IComplaintDetails,
   BulkUpdatePayload,
+  PayloadBulkUpload,
 } from 'modules/dashboard/types';
 
 export const getRequestList = (
@@ -13,7 +14,7 @@ export const getRequestList = (
   return get({ path, queryParams: params });
 };
 
-export const postBulkUpdate = (payload: BulkUpdatePayload) => {
+export const postBulkUpdate = (payload: PayloadBulkUpload) => {
   return post({
     path: '/tickets/bulk_update_ticket_progress',
     requestParams: payload,

@@ -18,6 +18,8 @@ export interface IComplaintDetails {
   permited_events: string[];
   reason_for_update: string;
   eta?: string;
+  permited_transitions: string[];
+  requester_email: string;
 }
 
 export interface GetRequestsListResponse {
@@ -44,5 +46,20 @@ export interface BulkUpdatePayload {
     department_id: string;
     category_id: string;
     resolver_id: string;
+  };
+}
+export interface BulkUpload {
+  department_id: string;
+  category_id: string;
+  resolver_id: string;
+  status: string;
+}
+export interface PayloadBulkUpload {
+  ticket: {
+    ticket_ids: number[];
+    status: string;
+    department_id: number | string;
+    category_id: number | string;
+    resolver_id: number | string;
   };
 }

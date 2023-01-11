@@ -225,6 +225,7 @@ interface ISelectProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   options: SelectOption[];
   name: string;
+  disabled?: boolean;
 }
 
 export const CustomSelect = ({
@@ -233,6 +234,7 @@ export const CustomSelect = ({
   onChange,
   options,
   name,
+  disabled,
 }: ISelectProps) => {
   return (
     <TextField
@@ -244,6 +246,7 @@ export const CustomSelect = ({
       name={name}
       size='small'
       fullWidth
+      disabled={disabled}
     >
       {options.map((option: SelectOption) => (
         <MenuItem key={option.value} value={option.value}>

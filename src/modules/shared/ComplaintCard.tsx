@@ -6,6 +6,7 @@ import {
   Chip,
   List,
   ListItem,
+  Checkbox,
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
@@ -17,12 +18,29 @@ import { ticketStatusColours } from 'modules/details/constants';
 import { DateFormate } from 'apis/utils/date.utils';
 import { STATUS } from 'modules/dashboard/constant';
 import moment from 'moment';
+import { toast } from 'react-toastify';
+
 interface Props {
   details: IComplaintDetails;
+  selectedTicketForBulkUpdate: {
+    id: number[];
+    status: string;
+    permited_transitions: string[];
+  };
+  email: string;
+  handleChecked: (a: any) => void;
+  setSeletedTicketForBulkUpdate: (a: any) => void;
+  role: string;
 }
 
-const ComplaintCard: React.FC<Props> = (props) => {
-  const { details } = props;
+const ComplaintCard: React.FC<Props> = ({
+  details,
+  setSeletedTicketForBulkUpdate,
+  selectedTicketForBulkUpdate,
+  handleChecked,
+  email,
+  role,
+}) => {
   const {
     id,
     title,
@@ -36,6 +54,8 @@ const ComplaintCard: React.FC<Props> = (props) => {
     reason_for_update,
     eta,
     ticket_number,
+    permited_transitions,
+    requester_email,
   } = details;
 
   const navigate = useNavigate();
@@ -83,12 +103,28 @@ const ComplaintCard: React.FC<Props> = (props) => {
   return (
     <Card
       variant='outlined'
-      onClick={onCardClick}
       className='complaint-card'
       sx={{ '&:hover': { borderColor: 'primary.main' } }}
     >
       <CardContent sx={{ pb: '0.5rem !important' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {role !== 'employee' && (
+            <Checkbox
+              checked={selectedTicketForBulkUpdate.id.indexOf(id) !== -1}
+              onChange={(e) => {
+                if (requester_email === email) {
+                  toast.error('You can not update own ticket status');
+                  return;
+                }
+                handleChecked({
+                  checked: e.target.checked,
+                  id,
+                  status,
+                  permited_transitions,
+                });
+              }}
+            />
+          )}
           <Typography variant='subtitle1' flex={1} textTransform='capitalize'>
             {ticket_number}
           </Typography>
@@ -131,6 +167,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
             gap: '0.25rem',
             backgroundColor: 'primary.main',
           }}
+          onClick={onCardClick}
         >
           <Typography
             sx={{

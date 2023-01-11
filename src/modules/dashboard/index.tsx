@@ -40,6 +40,7 @@ import { ticketStatusColours } from 'modules/details/constants';
 import { DateFormate } from 'apis/utils/date.utils';
 import moment from 'moment';
 import { CardsView } from './CardsView';
+import { BulkUpdateComponent } from './BulkUpdateComponet';
 const Ticket = lazy(() => import('modules/Ticket'));
 
 const statusOptions = [
@@ -114,6 +115,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (userAuth.role === ROLES.DEPARTMENT_HEAD) {
+      console.log(userAuth?.organizations?.[0]?.department_id, 'role');
       setFilters((p) => ({
         ...p,
         department: userAuth?.organizations?.[0]?.department_id + '',
@@ -197,7 +199,12 @@ const Dashboard = () => {
 
   const [open, setOpen] = useState(false);
   const [tableView, setTableView] = useState<boolean>(false);
-  const [selected];
+  const [selectedTicketForBulkUpdate, setSeletedTicketForBulkUpdate] =
+    useState<{
+      id: number[];
+      status: string;
+      permited_transitions: string[];
+    }>({ id: [], status: '', permited_transitions: [] });
 
   return (
     <Box display='flex' flexDirection='column' flex='1' gap={3} p={3}>
@@ -210,6 +217,11 @@ const Dashboard = () => {
       >
         <Typography variant='h5'>Dashboard</Typography>
         <Box display={'flex'}>
+          {selectedTicketForBulkUpdate.status !== '' && (
+            <BulkUpdateComponent
+              selectedTicketForBulkUpdate={selectedTicketForBulkUpdate}
+            />
+          )}
           <RadioGroup row onChange={(e) => setTableView((p) => !p)}>
             <FormControlLabel
               value={true}
@@ -403,7 +415,12 @@ const Dashboard = () => {
                   No Data
                 </Typography>
               ) : (
-                <CardsView data={updatedDataFinalList} tableview={tableView} />
+                <CardsView
+                  data={updatedDataFinalList}
+                  tableview={tableView}
+                  setSeletedTicketForBulkUpdate={setSeletedTicketForBulkUpdate}
+                  selectedTicketForBulkUpdate={selectedTicketForBulkUpdate}
+                />
               )}
               <TablePagination
                 component='div'
