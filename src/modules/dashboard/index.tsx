@@ -13,6 +13,8 @@ import {
   Card,
   CardContent,
   IconButton,
+  Menu,
+  MenuItem,
   Paper,
   // Radio,
   // RadioGroup,
@@ -31,6 +33,8 @@ import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
 import {
   AddRounded,
+  FilterAltOffRounded,
+  FilterAltRounded,
   GridOffTwoTone,
   GridOnTwoTone,
   RestartAltRounded,
@@ -205,6 +209,15 @@ const Dashboard = () => {
       permited_transitions: string[];
     }>({ id: [], status: '', permited_transitions: [] });
 
+  const [filterMenu, setFilterMenu] = React.useState(null);
+  const openFilterMenu = Boolean(filterMenu);
+  const handleFilterMenu = (event) => {
+    setFilterMenu(event.currentTarget);
+  };
+  const handleCloseFilterMenu = () => {
+    setFilterMenu(null);
+  };
+
   return (
     <Box display='flex' flexDirection='column' flex='1' gap={3} p={3}>
       <Box
@@ -216,12 +229,6 @@ const Dashboard = () => {
       >
         <Typography variant='h5'>Dashboard</Typography>
         <Box display={'flex'}>
-          {selectedTicketForBulkUpdate.status !== '' && (
-            <BulkUpdateComponent
-              selectedTicketForBulkUpdate={selectedTicketForBulkUpdate}
-            />
-          )}
-
           <Button
             variant='text'
             onClick={() => setOpen(true)}
@@ -233,21 +240,48 @@ const Dashboard = () => {
           </Button>
           {tableView === true ? (
             <IconButton
+              color='primary'
               aria-label='grid'
               onClick={() => setTableView(false)}
               sx={{ ml: 3 }}
             >
-              <GridOffTwoTone color='primary' fontSize='small' />
+              <GridOffTwoTone fontSize='small' />
             </IconButton>
           ) : (
             <IconButton
+              color='primary'
               aria-label='table'
               onClick={() => setTableView(true)}
               sx={{ ml: 3 }}
             >
-              <GridOnTwoTone color='primary' fontSize='small' />
+              <GridOnTwoTone fontSize='small' />
             </IconButton>
           )}
+          <IconButton
+            color='primary'
+            disabled={selectedTicketForBulkUpdate.status !== '' ? false : true}
+            onClick={handleFilterMenu}
+          >
+            <FilterAltRounded />
+          </IconButton>
+          <Menu
+            id='basic-menu'
+            anchorEl={filterMenu}
+            open={openFilterMenu}
+            onClose={handleCloseFilterMenu}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+            PaperProps={{
+              sx: { width: 240, maxWidth: '100%' },
+            }}
+          >
+            {selectedTicketForBulkUpdate.status !== '' && (
+              <BulkUpdateComponent
+                selectedTicketForBulkUpdate={selectedTicketForBulkUpdate}
+              />
+            )}
+          </Menu>
           <Suspense fallback={<Loader isLoading={true} />}>
             <Ticket open={open} setOpen={setOpen} isEdit={false} />
           </Suspense>

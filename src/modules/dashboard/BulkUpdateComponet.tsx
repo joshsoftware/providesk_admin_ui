@@ -1,4 +1,5 @@
 import { EditRounded } from '@mui/icons-material';
+import { MenuItem } from '@mui/material';
 
 import { Box } from '@mui/system';
 import { UserContext } from 'App';
@@ -93,28 +94,30 @@ export const BulkUpdateComponent = ({ selectedTicketForBulkUpdate }) => {
   }, [mutate, selectedTicketForBulkUpdate, payload]);
 
   return (
-    <Box display={'flex'}>
-      <CustomSelect
-        label={'Status'}
-        options={statusOptions}
-        value={payload?.status!}
-        onChange={(e) => handleChange('status', e.target.value)}
-        name='status'
-      />
-      <CustomSelect
-        label={'Departments'}
-        options={deptOptions}
-        value={payload?.department_id!}
-        onChange={(e) => {
-          handleChange('department_id', e.target.value);
-          handleChange('resolver_id', '');
-          handleChange('category_id', '');
-        }}
-        name='department_id'
-      />
-      (
-      <>
-        {' '}
+    <>
+      <MenuItem>
+        <CustomSelect
+          label={'Status'}
+          options={statusOptions}
+          value={payload?.status!}
+          onChange={(e) => handleChange('status', e.target.value)}
+          name='status'
+        />
+      </MenuItem>
+      <MenuItem>
+        <CustomSelect
+          label={'Departments'}
+          options={deptOptions}
+          value={payload?.department_id!}
+          onChange={(e) => {
+            handleChange('department_id', e.target.value);
+            handleChange('resolver_id', '');
+            handleChange('category_id', '');
+          }}
+          name='department_id'
+        />
+      </MenuItem>
+      <MenuItem>
         <CustomSelect
           label={'Category'}
           options={categoryOptions}
@@ -123,6 +126,8 @@ export const BulkUpdateComponent = ({ selectedTicketForBulkUpdate }) => {
           name='category_id'
           disabled={payload?.department_id == ''}
         />
+      </MenuItem>
+      <MenuItem>
         <Select
           label={'Resolver'}
           options={userResolverList}
@@ -133,19 +138,17 @@ export const BulkUpdateComponent = ({ selectedTicketForBulkUpdate }) => {
           name='resolver_id'
           disabled={payload?.department_id == ''}
         />
-      </>
-      )
-      <Button
-        variant='text'
-        startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
-        sx={{ color: 'grey.900' }}
-        onClick={() => {
-          updateAllStatus();
-        }}
-        isLoading={isLoading}
-      >
-        Update
-      </Button>
-    </Box>
+      </MenuItem>
+      <MenuItem sx={{ justifyContent: 'end' }}>
+        <Button
+          onClick={() => {
+            updateAllStatus();
+          }}
+          isLoading={isLoading}
+        >
+          Update
+        </Button>
+      </MenuItem>
+    </>
   );
 };
