@@ -14,7 +14,6 @@ import {
   CardContent,
   IconButton,
   Menu,
-  MenuItem,
   Paper,
   // Radio,
   // RadioGroup,
@@ -33,13 +32,12 @@ import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
 import {
   AddRounded,
-  FilterAltOffRounded,
   FilterAltRounded,
   GridOffTwoTone,
   GridOnTwoTone,
   RestartAltRounded,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+
 import { ROLES } from 'routes/roleConstants';
 import { useUsers } from 'modules/Ticket/ticket.hook';
 import { CardsView } from './CardsView';
@@ -77,11 +75,6 @@ const statusOptions = [
   },
 ];
 
-const typeOption = [
-  { value: 'complaint', label: 'Complaint' },
-  { value: 'request', label: 'Request' },
-];
-
 const DEFAULT_FILTERS = {
   status: '',
   type: '',
@@ -95,7 +88,6 @@ const DEFAULT_FILTERS = {
 };
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const { data, isLoading } = useGetRequestsList(filters);
   const { userAuth } = useContext(UserContext);
@@ -141,8 +133,7 @@ const Dashboard = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const { data: categoriesList, isLoading: listFetching } =
-    useCategories(departmentId);
+  const { data: categoriesList } = useCategories(departmentId);
   const categoryOptions = useMemo(() => {
     return (
       categoriesList?.map((cate) => ({
@@ -152,8 +143,7 @@ const Dashboard = () => {
     );
   }, [categoriesList]);
 
-  const { data: departmentsList, isLoading: departmentsFetching } =
-    useDepartments(organizationId);
+  const { data: departmentsList } = useDepartments(organizationId);
 
   const deptOptions = useMemo(() => {
     return (
@@ -177,7 +167,7 @@ const Dashboard = () => {
   const updatedListResolverEmployeeFilter = useMemo(() => {
     if (resolverEmpId)
       return updatedListdataSearchfilter?.filter(
-        (item) => item.resolver_id == resolverEmpId
+        (item) => item.resolver_id + '' === resolverEmpId
       );
     return updatedListdataSearchfilter;
   }, [updatedListdataSearchfilter, resolverEmpId]);

@@ -1,7 +1,5 @@
-import { EditRounded } from '@mui/icons-material';
 import { MenuItem } from '@mui/material';
 
-import { Box } from '@mui/system';
 import { UserContext } from 'App';
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
 import { Button } from 'modules/shared/Button';
