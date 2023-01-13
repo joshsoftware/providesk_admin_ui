@@ -77,7 +77,6 @@ export const BulkUpdateComponent = ({ selectedTicketForBulkUpdate }) => {
   const { isLoading, mutate } = usePostBulkUpdate();
 
   const updateAllStatus = useCallback(() => {
-    console.log(payload, 'payload');
     const payLoad: PayloadBulkUpload = {
       ticket: {
         ticket_ids: selectedTicketForBulkUpdate.id,
