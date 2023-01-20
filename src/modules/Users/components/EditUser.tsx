@@ -51,10 +51,11 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
     const payload: IEditUserPayload = {
       role,
       department_id: role == 'employee' ? undefined : (departmentId as number),
-      category_id: role == 'employee' ? undefined : categoriesList,
+      category_id: categoryListSelected,
     };
+
     updateUser({ id: user?.id, payload, setOpenEdit });
-  }, [role, departmentId]);
+  }, [role, departmentId, categoryListSelected]);
 
   const deptOptions = useMemo(() => {
     if (userAuth?.role === ROLES.DEPARTMENT_HEAD)
