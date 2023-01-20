@@ -46,7 +46,7 @@ export const useReopenTicket = () => {
       },
       onError: (err: AxiosError) => {
         let error = err?.response?.data as ICreateTicketError;
-        console.log(err);
+        // console.log(err);
         toast.error(error?.errors || 'Failed to reopen ticket.');
       },
     }
@@ -83,7 +83,7 @@ export const useAskForUpdate = (id: number, pathTicket: string) => {
       },
       onError: (e) => {
         toast.error('unable to send Email');
-        console.log(e);
+        // console.log(e);
       },
       enabled: false,
     }

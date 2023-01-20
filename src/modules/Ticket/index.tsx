@@ -190,7 +190,7 @@ function Ticket({
         })
         .catch((e) => {
           setIsLoading(false);
-          console.log(e, 'error');
+          // console.log(e, 'error');
           toast.error('unable to upload image');
         });
     },

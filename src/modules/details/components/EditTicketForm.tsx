@@ -181,7 +181,7 @@ export const UpdateTicketForm = ({
         .catch((e) => {
           toast.error('failed to upload image');
           setIsLoading(false);
-          console.log(e, 'error');
+          // console.log(e, 'error');
         });
     },
   });

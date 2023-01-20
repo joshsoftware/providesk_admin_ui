@@ -209,7 +209,12 @@ export const CardsView = ({
                     sx={{ cursor: 'pointer' }}
                   >
                     {TableColumn?.map((item) => (
-                      <TableCell key={item.key}>
+                      <TableCell
+                        key={item.key}
+                        onClick={() => {
+                          item.key !== 'all' && onCardClick(itemData?.id);
+                        }}
+                      >
                         {item.Component
                           ? item.Component(
                               item.key === 'all' ? itemData : itemData[item.key]

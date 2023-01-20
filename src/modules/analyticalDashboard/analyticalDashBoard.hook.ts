@@ -12,7 +12,7 @@ export const useAnalyticalReports = () => {
       onError: (err: AxiosError) => {
         let error = err?.response?.data;
         toast.error('Failed to fetch reports.');
-        console.log(err);
+        // console.log(err);
       },
     }
   );

@@ -81,7 +81,7 @@ export const BulkUpdateComponent = ({ selectedTicketForBulkUpdate }) => {
       ticket: {
         ticket_ids: selectedTicketForBulkUpdate.id,
         department_id: payload.department_id as string,
-        resolver_id: payload.resolver_id,
+        resolver_id: +payload.resolver_id,
         category_id: payload.category_id,
         status: payload.status,
       },

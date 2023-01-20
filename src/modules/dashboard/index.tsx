@@ -110,7 +110,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (userAuth.role === ROLES.DEPARTMENT_HEAD) {
-      console.log(userAuth?.organizations?.[0]?.department_id, 'role');
       setFilters((p) => ({
         ...p,
         department: userAuth?.organizations?.[0]?.department_id + '',
@@ -191,7 +190,7 @@ const Dashboard = () => {
   }, [usersList]);
 
   const [open, setOpen] = useState(false);
-  const [tableView, setTableView] = useState<boolean>(false);
+  const [tableView, setTableView] = useState<boolean>(true);
   const [selectedTicketForBulkUpdate, setSeletedTicketForBulkUpdate] =
     useState<{
       id: number[];
