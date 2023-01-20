@@ -51,7 +51,7 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
     const payload: IEditUserPayload = {
       role,
       department_id: role == 'employee' ? undefined : (departmentId as number),
-      category_id: categoryListSelected,
+      category_id: role == 'employee' ? undefined : categoryListSelected,
     };
 
     updateUser({ id: user?.id, payload, setOpenEdit });
