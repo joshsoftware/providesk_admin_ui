@@ -1,8 +1,10 @@
 import { UserContext } from 'App';
 import API_CONSTANTS from 'hooks/constants';
 import {
+  BulkUpload,
   IFetchComplaintListRequest,
   PayloadBulkUpload,
+  SelectedTicket,
 } from 'modules/dashboard/types';
 import { useContext } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -44,11 +46,27 @@ export const useGetRequestsList = (queryParams: IFetchComplaintListRequest) => {
   };
 };
 
-export const usePostBulkUpdate = () => {
+export const usePostBulkUpdate = (
+  setpayloadload: (a: BulkUpload) => void,
+  setSeletedTicketForBulkUpdate: (a: SelectedTicket) => void,
+  setFilterMenu: (a: any) => void
+) => {
   const queryClient = useQueryClient();
   return useMutation((payload: PayloadBulkUpload) => postBulkUpdate(payload), {
     onSuccess: () => {
       queryClient.invalidateQueries([API_CONSTANTS.COMPLAINT_LIST]);
+      setpayloadload({
+        department_id: '',
+        category_id: '',
+        resolver_id: '',
+        status: '',
+      });
+      setSeletedTicketForBulkUpdate({
+        id: [],
+        status: '',
+        permited_transitions: [],
+      });
+      setFilterMenu(null);
     },
     onError: () => {
       toast.error('Failed to update Tickets');

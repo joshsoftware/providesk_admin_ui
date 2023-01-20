@@ -63,3 +63,9 @@ export interface PayloadBulkUpload {
     resolver_id: number | string;
   };
 }
+
+export interface SelectedTicket {
+  id: number[];
+  status: string;
+  permited_transitions: string[];
+}

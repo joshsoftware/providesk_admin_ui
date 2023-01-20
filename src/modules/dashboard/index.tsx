@@ -42,6 +42,7 @@ import { ROLES } from 'routes/roleConstants';
 import { useUsers } from 'modules/Ticket/ticket.hook';
 import { CardsView } from './CardsView';
 import { BulkUpdateComponent } from './BulkUpdateComponet';
+import { SelectedTicket } from './types';
 const Ticket = lazy(() => import('modules/Ticket'));
 
 const statusOptions = [
@@ -192,11 +193,7 @@ const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [tableView, setTableView] = useState<boolean>(true);
   const [selectedTicketForBulkUpdate, setSeletedTicketForBulkUpdate] =
-    useState<{
-      id: number[];
-      status: string;
-      permited_transitions: string[];
-    }>({ id: [], status: '', permited_transitions: [] });
+    useState<SelectedTicket>({ id: [], status: '', permited_transitions: [] });
 
   const [filterMenu, setFilterMenu] = React.useState(null);
   const openFilterMenu = Boolean(filterMenu);
@@ -268,6 +265,8 @@ const Dashboard = () => {
             {selectedTicketForBulkUpdate.status !== '' && (
               <BulkUpdateComponent
                 selectedTicketForBulkUpdate={selectedTicketForBulkUpdate}
+                setSeletedTicketForBulkUpdate={setSeletedTicketForBulkUpdate}
+                setFilterMenu={setFilterMenu}
               />
             )}
           </Menu>

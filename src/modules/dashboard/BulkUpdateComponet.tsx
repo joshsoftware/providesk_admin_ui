@@ -8,9 +8,17 @@ import { useUsers } from 'modules/Ticket/ticket.hook';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { STATUS } from './constant';
 import { usePostBulkUpdate } from './dashboard.hooks';
-import { BulkUpload, PayloadBulkUpload } from './types';
+import { BulkUpload, PayloadBulkUpload, SelectedTicket } from './types';
 
-export const BulkUpdateComponent = ({ selectedTicketForBulkUpdate }) => {
+export const BulkUpdateComponent = ({
+  selectedTicketForBulkUpdate,
+  setSeletedTicketForBulkUpdate,
+  setFilterMenu,
+}: {
+  selectedTicketForBulkUpdate: SelectedTicket;
+  setSeletedTicketForBulkUpdate: (a: SelectedTicket) => void;
+  setFilterMenu: (a: any) => void;
+}) => {
   const [payload, setpayloadload] = useState<BulkUpload>({
     department_id: '',
     category_id: '',
@@ -74,7 +82,11 @@ export const BulkUpdateComponent = ({ selectedTicketForBulkUpdate }) => {
       }) || [];
     return [{ label: 'None', value: '' }, ...list];
   }, [usersList]);
-  const { isLoading, mutate } = usePostBulkUpdate();
+  const { isLoading, mutate } = usePostBulkUpdate(
+    setpayloadload,
+    setSeletedTicketForBulkUpdate,
+    setFilterMenu
+  );
 
   const updateAllStatus = useCallback(() => {
     const payLoad: PayloadBulkUpload = {
