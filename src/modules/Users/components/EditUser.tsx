@@ -126,33 +126,33 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
             ))}
           </SelectMUI>
         </FormControl>
-        {role.toLowerCase() !== 'employee' &&
-          role.toLowerCase() !== 'admin' && (
-            <>
-              <Select
-                name='department'
-                required={true}
-                label={'Department'}
-                value={departmentId}
-                options={deptOptions}
-                error={errorDepartment && 'required Field'}
-                onChange={(e) => {
-                  setDepartmentId(parseInt(e.target.value));
-                  setErrorDepartment(false);
-                }}
-              />
+        {(role.toLowerCase() === 'resolver' ||
+          role.toLowerCase() === 'department_head') && (
+          <>
+            <Select
+              name='department'
+              required={true}
+              label={'Department'}
+              value={departmentId}
+              options={deptOptions}
+              error={errorDepartment && 'required Field'}
+              onChange={(e) => {
+                setDepartmentId(parseInt(e.target.value));
+                setErrorDepartment(false);
+              }}
+            />
 
-              <MultiSelect
-                options={categoryOptions}
-                value={categoryListSelected}
-                name={'category'}
-                label={'Category'}
-                onChange={(li) => {
-                  setCategoryList(li);
-                }}
-              />
-            </>
-          )}
+            <MultiSelect
+              options={categoryOptions}
+              value={categoryListSelected}
+              name={'category'}
+              label={'Category'}
+              onChange={(li) => {
+                setCategoryList(li);
+              }}
+            />
+          </>
+        )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2 }}>
         <Button variant='text' onClick={() => setOpenEdit(false)}>
