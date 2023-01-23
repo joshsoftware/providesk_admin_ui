@@ -20,6 +20,7 @@ import {
   Select as SelectMUI,
   Typography,
 } from '@mui/material';
+import { toast } from 'react-toastify';
 
 const EditUser = ({ user, organizationId, setOpenEdit }) => {
   const { userAuth } = useContext(UserContext);
@@ -27,8 +28,9 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
   const { data: departmentsList, isLoading: isFetchingDepartments } =
     useDepartments(organizationId);
   const [departmentId, setDepartmentId] = useState<number | ''>(
-    user?.department_id || ''
+    user?.department_id
   );
+  const [errorDepartment, setErrorDepartment] = useState<boolean>(false);
   const { data: categoriesList, isLoading: listFetching } =
     useCategories(departmentId);
   const categoryOptions = useMemo(() => {
@@ -46,12 +48,28 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
   const allowedRoles = getAllowedRoles(userAuth?.role);
   const { mutate: updateUser, isLoading: isUpdatingUser } = useEditUser();
 
-  const handleRoleChange = useCallback((e) => setRole(e.target.value), []);
+  const handleRoleChange = useCallback((e) => {
+    setRole(e.target.value);
+    setDepartmentId('');
+  }, []);
   const handleUpdateUser = useCallback(() => {
+    console.log(role);
+    if (role === 'resolver' || role === 'department_head') {
+      if (departmentId === '') {
+        setErrorDepartment(true);
+        return;
+      }
+    }
     const payload: IEditUserPayload = {
       role,
-      department_id: role == 'employee' ? undefined : (departmentId as number),
-      category_ids: role == 'employee' ? undefined : categoryListSelected,
+      department_id:
+        role == 'employee' || role == 'admin'
+          ? undefined
+          : (departmentId as number),
+      category_ids:
+        role == 'employee' || role == 'admin'
+          ? undefined
+          : categoryListSelected,
     };
 
     updateUser({ id: user?.id, payload, setOpenEdit });
@@ -108,28 +126,33 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
             ))}
           </SelectMUI>
         </FormControl>
-        {role.toLowerCase() !== 'employee' && (
-          <>
-            <Select
-              name='department'
-              required={true}
-              label={'Department'}
-              value={departmentId}
-              options={deptOptions}
-              onChange={(e) => setDepartmentId(parseInt(e.target.value))}
-            />
+        {role.toLowerCase() !== 'employee' &&
+          role.toLowerCase() !== 'admin' && (
+            <>
+              <Select
+                name='department'
+                required={true}
+                label={'Department'}
+                value={departmentId}
+                options={deptOptions}
+                error={errorDepartment && 'required Field'}
+                onChange={(e) => {
+                  setDepartmentId(parseInt(e.target.value));
+                  setErrorDepartment(false);
+                }}
+              />
 
-            <MultiSelect
-              options={categoryOptions}
-              value={categoryListSelected}
-              name={'category'}
-              label={'Category'}
-              onChange={(li) => {
-                setCategoryList(li);
-              }}
-            />
-          </>
-        )}
+              <MultiSelect
+                options={categoryOptions}
+                value={categoryListSelected}
+                name={'category'}
+                label={'Category'}
+                onChange={(li) => {
+                  setCategoryList(li);
+                }}
+              />
+            </>
+          )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2 }}>
         <Button variant='text' onClick={() => setOpenEdit(false)}>
