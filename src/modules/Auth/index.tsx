@@ -32,8 +32,6 @@ const AuthContainer = () => {
     });
     let payload = {
       user: {
-        // name: 'sethu',
-        // email: 'sethu@joshsoftware.com',
         name,
         email,
       },
@@ -66,13 +64,11 @@ const AuthContainer = () => {
 
   const Heading = () => {
     return (
-      <Box textAlign={'center'}>
+      <Box display={'grid'} gap={1} textAlign={'center'}>
         <Typography m={0} fontSize={20}>
           Welcome to
         </Typography>
-        <Typography variant='h2' m={0}>
-          Providesk!
-        </Typography>
+        <img src='/images/providesk-logo.svg' alt='ProviDesk' height={28} />
       </Box>
     );
   };
