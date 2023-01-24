@@ -1,6 +1,5 @@
 import { useState, useEffect, lazy, Suspense, useContext } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import moment from 'moment';
 import {
   Box,
@@ -13,9 +12,8 @@ import {
   TableRow,
   TableCell,
   Paper,
-  IconButton,
 } from '@mui/material';
-import { EditRounded } from '@mui/icons-material';
+import { EditRounded, UpdateRounded } from '@mui/icons-material';
 
 import { useAskForUpdate, useTicketDetails } from './details.hook';
 import Loader from 'modules/Auth/components/Loader';
@@ -141,7 +139,28 @@ function Details() {
                 <TableRow>
                   <TableCell>ETA</TableCell>
                   <TableCell>
-                    {ticket?.eta ? moment(ticket?.eta).format('ll') : '_'}
+                    <Box display={'flex'} alignItems={'center'} gap={2}>
+                      <span>
+                        {ticket?.eta ? moment(ticket?.eta).format('ll') : '_'}
+                      </span>
+                      {EtaButtonShow({
+                        eta: ticket?.eta,
+                        createDate: activities?.[0]?.created_at,
+                      }) &&
+                        userProfile?.email === ticket?.requester_email && (
+                          <Button
+                            variant='text'
+                            startIcon={
+                              <UpdateRounded sx={{ color: 'primary.main' }} />
+                            }
+                            sx={{ color: 'grey.900' }}
+                            onClick={() => refetchAskForUpdate()}
+                            disabled={!ticket?.ask_for_update}
+                          >
+                            Ask to Update
+                          </Button>
+                        )}
+                    </Box>
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -190,22 +209,6 @@ function Details() {
           <TimelineComponent activities={activities} />
         </Box>
       </Box>
-      {EtaButtonShow({
-        eta: ticket?.eta,
-        createDate: activities?.[0]?.created_at,
-      }) &&
-        userProfile?.email === ticket?.requester_email && (
-          <Box sx={{ marginLeft: '12px' }}>
-            <IconButton
-              onClick={() => refetchAskForUpdate()}
-              disabled={!ticket?.ask_for_update}
-            >
-              <LiveHelpIcon
-                color={ticket?.ask_for_update ? 'secondary' : 'disabled'}
-              />
-            </IconButton>
-          </Box>
-        )}
     </Box>
   );
 }
