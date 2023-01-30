@@ -105,7 +105,7 @@ export const MultiSelect = ({
   };
 
   const renderValue = (selected: string[]) => (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
       {selected.length > 0 &&
         selected.map((value) => {
           return (
@@ -131,8 +131,8 @@ export const MultiSelect = ({
         <FormControl size='small' fullWidth>
           <InputLabel>{label}</InputLabel>
           <MUISelect
-            fullWidth
             value={value as string[]}
+            label={label}
             name={name}
             onChange={(e) => {
               onChange(e.target.value as string[]);

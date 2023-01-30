@@ -107,7 +107,7 @@ const ComplaintCard: React.FC<Props> = ({
       sx={{ '&:hover': { borderColor: 'primary.main' } }}
     >
       <CardContent sx={{ pb: '0.5rem !important' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <Box sx={{ display: 'flex', alignItems: 'start', gap: '0.5rem' }}>
           {role !== 'employee' && (
             <Checkbox
               checked={selectedTicketForBulkUpdate.id.indexOf(id) !== -1}
@@ -123,14 +123,36 @@ const ComplaintCard: React.FC<Props> = ({
                   permited_transitions,
                 });
               }}
+              sx={{ padding: '0' }}
             />
           )}
-          <Typography variant='subtitle1' flex={1} textTransform='capitalize'>
-            {ticket_number}
-          </Typography>
-          <Typography variant='subtitle1' flex={1} textTransform='capitalize'>
-            {title}
-          </Typography>
+          <Box
+            flex={1}
+            display={'flex'}
+            flexDirection={'column'}
+            overflow={'hidden'}
+          >
+            <Typography
+              variant='subtitle1'
+              flex={1}
+              textTransform='capitalize'
+              overflow={'hidden'}
+              textOverflow={'ellipsis'}
+              whiteSpace={'nowrap'}
+            >
+              {ticket_number}
+            </Typography>
+            <Typography
+              variant='body2'
+              flex={1}
+              textTransform='capitalize'
+              overflow={'hidden'}
+              textOverflow={'ellipsis'}
+              whiteSpace={'nowrap'}
+            >
+              {title}
+            </Typography>
+          </Box>
           <Chip
             label={STATUS[status]}
             className='text-truncate'
