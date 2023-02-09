@@ -40,6 +40,27 @@ export const theme = createTheme({
         },
       },
     },
+    MuiChip: {
+      defaultProps: {
+        size: 'small',
+      },
+      styleOverrides: {
+        root: {
+          fontSize: 12,
+          borderRadius: 4,
+          textTransform: 'capitalize',
+        },
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          ':last-child': {
+            paddingBottom: '1rem',
+          },
+        },
+      },
+    },
   },
   palette,
   spacing: [0, 4, 8, 16, 24, 32, 40, 48],

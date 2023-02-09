@@ -28,6 +28,7 @@
     "react-router-dom": "^6.4.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.8",
+    "recharts": "^2.2.0",
     "sass": "^1.56.1",
     "typescript": "^4.8.3",
     "uuid": "^9.0.0",
@@ -38,7 +39,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy" : " yarn build && scp -r build ubuntu@providesk.joshsoftware.com:/www/providesk-frontend"
   },
   "eslintConfig": {
     "extends": [

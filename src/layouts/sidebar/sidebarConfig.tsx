@@ -6,6 +6,7 @@ import DomainIcon from '@mui/icons-material/Domain';
 import CategoryIcon from '@mui/icons-material/Category';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import TimelineRoundedIcon from '@mui/icons-material/TimelineRounded';
 import GroupIcon from '@mui/icons-material/Group';
 
 export const getSidebarConfig = (role: string) => {
@@ -14,11 +15,6 @@ export const getSidebarConfig = (role: string) => {
       label: 'Dashboard',
       icon: <DashboardIcon fontSize='small' />,
       path: ROUTE.DASHBOARD,
-    },
-    {
-      label: 'Ticket',
-      icon: <ConfirmationNumberIcon fontSize='small' />,
-      path: ROUTE.TICKET,
     },
   ];
 
@@ -39,6 +35,7 @@ export const getSidebarConfig = (role: string) => {
       icon: <GroupIcon fontSize='small' />,
       path: ROUTE.USERS,
     },
+    { label: 'Reports', path: ROUTE.REPORTS, icon: <TimelineRoundedIcon /> },
   ];
 
   const superAdminAccessSidebar = [
@@ -61,6 +58,11 @@ export const getSidebarConfig = (role: string) => {
       icon: <GroupIcon fontSize='small' />,
       path: ROUTE.USERS,
     },
+    { label: 'Reports', path: ROUTE.REPORTS, icon: <TimelineRoundedIcon /> },
+  ];
+  const resolverAccessSidebar = [
+    ...employeeAccessSidebar,
+    { label: 'Reports', path: ROUTE.REPORTS, icon: <TimelineRoundedIcon /> },
   ];
 
   switch (role) {
@@ -72,6 +74,8 @@ export const getSidebarConfig = (role: string) => {
       return departmentHeadAccessSidebar;
     case ROLES.EMPLOYEE:
       return employeeAccessSidebar;
+    case ROLES.RESOLVER:
+      return resolverAccessSidebar;
     default:
       return [];
   }

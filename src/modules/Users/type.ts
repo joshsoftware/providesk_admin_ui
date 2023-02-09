@@ -1,6 +1,7 @@
 export interface IEditUserPayload {
   role: string;
-  department_id: number;
+  department_id?: number;
+  category_ids?: string[];
 }
 
 export interface IUser {

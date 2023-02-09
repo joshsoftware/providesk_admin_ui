@@ -16,3 +16,9 @@ export const getDetailsTicket = (id) => {
     path: `/tickets/${id}`,
   });
 };
+
+export const getAskForUpdate = (id: number, pathTicket: string) => {
+  return get({
+    path: `/tickets/${id}/ask_for_update/?ticket_link=${pathTicket}`,
+  });
+};

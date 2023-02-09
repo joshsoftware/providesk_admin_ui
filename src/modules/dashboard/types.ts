@@ -1,4 +1,4 @@
-import { StringifyOptions } from "querystring";
+import { StringifyOptions } from 'querystring';
 
 export interface IComplaintDetails {
   id: number;
@@ -16,7 +16,10 @@ export interface IComplaintDetails {
   resolver: string;
   requester: string;
   permited_events: string[];
-  reason_for_update:string
+  reason_for_update: string;
+  eta?: string;
+  permited_transitions: string[];
+  requester_email: string;
 }
 
 export interface GetRequestsListResponse {
@@ -30,9 +33,39 @@ export interface IFetchComplaintListRequest {
   title?: string;
   page?: number;
   perPage?: number;
-  type?:string,  
-  category?:string,
-  assig_to_me?:boolean,
-  created_by_me?:boolean,
+  type?: string;
+  category?: string;
+  assig_to_me?: boolean;
+  created_by_me?: boolean;
+}
 
+export interface BulkUpdatePayload {
+  ticket: {
+    ticket_ids: number[];
+    status: string;
+    department_id: string;
+    category_id: string;
+    resolver_id: string;
+  };
+}
+export interface BulkUpload {
+  department_id: string;
+  category_id: string;
+  resolver_id: string;
+  status: string;
+}
+export interface PayloadBulkUpload {
+  ticket: {
+    ticket_ids: number[];
+    status: string;
+    department_id: number | string;
+    category_id: number | string;
+    resolver_id: number | string;
+  };
+}
+
+export interface SelectedTicket {
+  id: number[];
+  status: string;
+  permited_transitions: string[];
 }

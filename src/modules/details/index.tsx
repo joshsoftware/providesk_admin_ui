@@ -1,15 +1,8 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-
-import { useTicketDetails } from './details.hook';
-import Loader from 'modules/Auth/components/Loader';
-import { TimelineComponent } from './components/Timeline';
-import { EditTicketForm } from './components/EditTicketForm';
-
+import { useState, useEffect, lazy, Suspense, useContext } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
+import moment from 'moment';
 import {
   Box,
-  Divider,
-  Grid,
   Typography,
   Modal,
   Chip,
@@ -18,12 +11,23 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  IconButton,
+  Paper,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import { ticketStatusColours } from './constants';
+import { EditRounded, UpdateRounded } from '@mui/icons-material';
 
+import { useAskForUpdate, useTicketDetails } from './details.hook';
+import Loader from 'modules/Auth/components/Loader';
+import { TimelineComponent } from './components/Timeline';
+import { UpdateTicketForm } from './components/EditTicketForm';
+import { ticketStatusColours } from './constants';
 import { ImageS3Tag } from './components/ImageTag';
+import { Button } from 'modules/shared/Button';
+import { STATUS } from 'modules/dashboard/constant';
+
+import { EtaButtonShow } from './utils';
+import { UserContext } from 'App';
+
+const Ticket = lazy(() => import('modules/Ticket'));
 
 function Details() {
   const id: number = parseInt(useParams().id as string);
@@ -34,117 +38,149 @@ function Details() {
   } = useTicketDetails(id);
 
   const [ticket, setTicket] = useState(ticketDetails);
-  const [openEdit, setOpenEdit] = useState(false);
+  const [openProgressTicket, setOpenProgressTicket] = useState(false);
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
+  const { userProfile } = useContext(UserContext);
 
   useEffect(() => {
     setTicket(ticketDetails);
   }, [ticketDetails]);
+  const loc = useLocation();
 
+  const {
+    data: askForUpdateData,
+    isLoading: isLoadingAskForUpdate,
+    refetch: refetchAskForUpdate,
+  } = useAskForUpdate(ticket?.id, window.location.href);
+  const askForUpdate = () => {};
   return (
-    <div>
-      <Grid container>
-        <Loader isLoading={isFetchingTicketDetails} />
-        <Grid item xs={12} md={4} p={5}>
-          <Divider>
-            <Typography variant='h5' component='div'>
-              Ticket Details
-            </Typography>
-          </Divider>
-          <Box>
-            <div>
-              <IconButton
-                aria-label='edit'
-                size='large'
-                onClick={() => setOpenEdit(true)}
+    <Box
+      sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        <Box display={'flex'} gap={3}>
+          <Typography variant='h5' textTransform={'capitalize'}>
+            {ticket?.title}
+          </Typography>
+          <Chip
+            label={STATUS[ticket?.status]}
+            sx={{
+              backgroundColor: ticketStatusColours[ticket?.status],
+              color: STATUS[ticket?.status] === 'Rejected' ? '#FFF' : 'inherit',
+            }}
+          />
+        </Box>
+        <Box sx={{ ml: 'auto' }}>
+          {userProfile?.email === ticket?.requester_email &&
+            ticket.status === 'assigned' && (
+              <Button
+                variant='text'
+                startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
+                sx={{ color: 'grey.900' }}
+                onClick={() => {
+                  setOpenEdit(true);
+                }}
               >
-                <EditIcon fontSize='inherit' />
-              </IconButton>
-            </div>
-            <TableContainer>
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>Title</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.title}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>Description</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.description}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>Department</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.department}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>Category</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.category}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>Ticket Type</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.ticket_type}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>Created by</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.requester}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>Assigned to</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.resolver}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>Status</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      <Chip
-                        label={ticket?.status}
-                        style={{
-                          backgroundColor: ticketStatusColours[ticket?.status],
-                        }}
-                      />
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell sx={{ color: '#63686b' }}>
-                      Previous Comment
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
-                      {ticket?.reason_for_update || '_'}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Image</TableCell>
-                    <TableCell>
-                      <Box
-                        display='flex'
-                        sx={{ width: '300px', overflowX: 'scroll' }}
-                      >
+                Edit Ticket
+              </Button>
+            )}
+          {(userProfile?.email !== ticket?.requester_email ||
+            ticket?.status == 'resolved') && (
+            <Button
+              variant='text'
+              startIcon={<EditRounded sx={{ color: 'primary.main' }} />}
+              sx={{ color: 'grey.900' }}
+              onClick={() => setOpenProgressTicket(true)}
+            >
+              Update Ticket
+            </Button>
+          )}
+        </Box>
+      </Box>
+      <Box display={'flex'} flexDirection={{ sm: 'row', xs: 'column' }} gap={3}>
+        <Loader isLoading={isFetchingTicketDetails} />
+        <Box
+          component={Paper}
+          alignSelf={'flex-start'}
+          flex={1}
+          maxWidth={'50%'}
+        >
+          <TableContainer>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Description</TableCell>
+                  <TableCell>{ticket?.description}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Department</TableCell>
+                  <TableCell>{ticket?.department}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Category</TableCell>
+                  <TableCell>{ticket?.category}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Ticket Type</TableCell>
+                  <TableCell>{ticket?.ticket_type}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Created by</TableCell>
+                  <TableCell>{ticket?.requester}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Assigned to</TableCell>
+                  <TableCell>{ticket?.resolver}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Previous Comment</TableCell>
+                  <TableCell>{ticket?.reason_for_update || '_'}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>ETA</TableCell>
+                  <TableCell>
+                    <Box display={'flex'} alignItems={'center'} gap={2}>
+                      <span>
+                        {ticket?.eta ? moment(ticket?.eta).format('ll') : '_'}
+                      </span>
+                      {EtaButtonShow({
+                        eta: ticket?.eta,
+                        createDate: activities?.[0]?.created_at,
+                      }) &&
+                        userProfile?.email === ticket?.requester_email && (
+                          <Button
+                            variant='text'
+                            startIcon={
+                              <UpdateRounded sx={{ color: 'primary.main' }} />
+                            }
+                            sx={{ color: 'grey.900' }}
+                            onClick={() => refetchAskForUpdate()}
+                            disabled={!ticket?.ask_for_update}
+                          >
+                            Ask to Update
+                          </Button>
+                        )}
+                    </Box>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Image</TableCell>
+                  <TableCell>
+                    {ticket?.asset_url ? (
+                      <Box display={'flex'} flexWrap={'wrap'} gap={2}>
                         {ticket?.asset_url?.map((item) => (
                           <ImageS3Tag path={item} />
                         ))}
                       </Box>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-
+                    ) : null}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
           <Modal
-            open={openEdit}
-            onClose={() => setOpenEdit(false)}
+            open={openProgressTicket}
+            onClose={() => setOpenProgressTicket(false)}
             sx={{ overflow: 'scroll' }}
             style={{
               display: 'flex',
@@ -152,30 +188,28 @@ function Details() {
               alignItems: 'center',
             }}
           >
-            <EditTicketForm
+            <UpdateTicketForm
               ticket={ticketDetails}
               id={id}
-              setOpenEdit={setOpenEdit}
+              setOpenEdit={setOpenProgressTicket}
             />
           </Modal>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          md={8}
-          p={5}
-          style={{ maxHeight: '85vh', overflow: 'auto' }}
-        >
-          <Divider>
-            <Typography variant='h5' component='div'>
-              Ticket History
-            </Typography>
-          </Divider>
-
+          {openEdit && (
+            <Suspense fallback={<Loader isLoading={true} />}>
+              <Ticket
+                open={openEdit}
+                setOpen={setOpenEdit}
+                isEdit={true}
+                data={ticketDetails}
+              />
+            </Suspense>
+          )}
+        </Box>
+        <Box component={Paper} flex={1}>
           <TimelineComponent activities={activities} />
-        </Grid>
-      </Grid>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 

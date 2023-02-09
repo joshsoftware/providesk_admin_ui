@@ -102,9 +102,10 @@ export default function Sidebar() {
             </IconButton>
             <Box display={'flex'} sx={{ cursor: 'pointer' }}>
               <img
-                src='./images/providesk-logo.svg'
+                src='/images/providesk-logo.svg'
                 alt='ProviDesk'
                 height={28}
+                onClick={() => navigate(ROUTE.DASHBOARD)}
               />
             </Box>
           </Box>

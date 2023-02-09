@@ -6,6 +6,7 @@ import API_CONSTANTS from 'hooks/constants';
 import { IProgressTicketParams, IReopenTicketParams } from './type';
 import { ICreateTicketError } from 'modules/Ticket/type';
 import {
+  getAskForUpdate,
   getDetailsTicket,
   putProgressTicket,
   putReopenTicket,
@@ -45,7 +46,7 @@ export const useReopenTicket = () => {
       },
       onError: (err: AxiosError) => {
         let error = err?.response?.data as ICreateTicketError;
-        console.log(err);
+        // console.log(err);
         toast.error(error?.errors || 'Failed to reopen ticket.');
       },
     }
@@ -65,7 +66,27 @@ export const useTicketDetails = (id: number) => {
   );
   return {
     ticket: data?.data?.data?.ticket,
-    activities: data?.data?.data?.activites,
+    activities: data?.data?.data?.activities,
     isLoading,
   };
+};
+
+export const useAskForUpdate = (id: number, pathTicket: string) => {
+  const queryClient = useQueryClient();
+  const { data, isLoading, refetch } = useQuery(
+    [API_CONSTANTS.ASK_FOR_UPDATE, id],
+    () => getAskForUpdate(id, pathTicket),
+    {
+      onSuccess: () => {
+        toast.success('Email sent successfully');
+        queryClient.invalidateQueries([API_CONSTANTS.DETAILS_SPECEFIC, id]);
+      },
+      onError: (e) => {
+        toast.error('unable to send Email');
+        // console.log(e);
+      },
+      enabled: false,
+    }
+  );
+  return { data, isLoading, refetch };
 };

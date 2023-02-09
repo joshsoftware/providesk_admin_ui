@@ -1,4 +1,5 @@
-import { Typography } from "@mui/material";
+import { Typography } from '@mui/material';
+
 export const StyleLabel = ({
   text,
   sx,
@@ -10,16 +11,9 @@ export const StyleLabel = ({
 }) => {
   return (
     <>
-      <Typography
-        sx={{
-          fontSize: "13px",
-          display: "flex",
-          alignItems: "center",
-          ...sx,
-        }}
-      >
+      <Typography sx={{ sx }}>
         {text}
-        {required && "*"}
+        {required && '*'}
       </Typography>
     </>
   );

@@ -15,9 +15,10 @@ import ROUTE from './constants';
 import { Users } from 'modules/Users';
 import { lazy, Suspense } from 'react';
 import Loader from 'modules/Auth/components/Loader';
+import { TicketAsTime } from 'modules/Reports';
+import { AnalyticsReportDashBoard } from 'modules/analyticalDashboard';
 
 const Details = lazy(() => import('modules/details'));
-const Ticket = lazy(() => import('modules/Ticket'));
 
 export const routeConfig = [
   {
@@ -29,6 +30,10 @@ export const routeConfig = [
     element: <AuthContainer />,
   },
   {
+    path: ROUTE.REPORTS,
+    element: withLayout(<TicketAsTime />),
+  },
+  {
     path: ROUTE.UNAUTHORIZED,
     element: withLayout(<UnauthorizedAccess />),
   },
@@ -37,7 +42,12 @@ export const routeConfig = [
     element: (
       <PrivateRoute
         Component={withLayout(<Dashboard />)}
-        AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
+        AllowedRoles={[
+          ROLES.ADMIN,
+          ROLES.DEPARTMENT_HEAD,
+          ROLES.EMPLOYEE,
+          ROLES.RESOLVER,
+        ]}
       />
     ),
   },
@@ -50,7 +60,12 @@ export const routeConfig = [
             <Details />
           </Suspense>
         )}
-        AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
+        AllowedRoles={[
+          ROLES.ADMIN,
+          ROLES.DEPARTMENT_HEAD,
+          ROLES.EMPLOYEE,
+          ROLES.RESOLVER,
+        ]}
       />
     ),
   },
@@ -91,15 +106,11 @@ export const routeConfig = [
     ),
   },
   {
-    path: ROUTE.TICKET,
+    path: ROUTE.ANALYSIS,
     element: (
       <PrivateRoute
-        Component={withLayout(
-          <Suspense fallback={<Loader isLoading={true} />}>
-            <Ticket />
-          </Suspense>
-        )}
-        AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD, ROLES.EMPLOYEE]}
+        Component={withLayout(<AnalyticsReportDashBoard />)}
+        AllowedRoles={[ROLES.ADMIN, ROLES.DEPARTMENT_HEAD]}
       />
     ),
   },

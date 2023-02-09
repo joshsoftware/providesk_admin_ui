@@ -1,21 +1,27 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  lazy,
+  Suspense,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import TablePagination from '@mui/material/TablePagination';
 import {
   Box,
   Card,
   CardContent,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
+  IconButton,
+  Menu,
   Paper,
+  // Radio,
+  // RadioGroup,
 } from '@mui/material';
 
 import { useGetRequestsList } from './dashboard.hooks';
 import Select, { CustomSelect } from 'modules/shared/Select';
 import Search from 'modules/shared/Search';
-import ComplaintCard from 'modules/shared/ComplaintCard';
 import { UserContext } from 'App';
 import { useCategories, useDepartments } from 'modules/Category/category.hook';
 
@@ -24,16 +30,25 @@ import './dashboard.scss';
 // import { useNavigate } from 'react-router-dom';
 import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
-import { AddRounded, RestartAltRounded } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import ROUTE from 'routes/constants';
+import {
+  AddRounded,
+  FilterAltRounded,
+  GridOffTwoTone,
+  GridOnTwoTone,
+  RestartAltRounded,
+} from '@mui/icons-material';
+
 import { ROLES } from 'routes/roleConstants';
 import { useUsers } from 'modules/Ticket/ticket.hook';
+import { CardsView } from './CardsView';
+import { BulkUpdateComponent } from './BulkUpdateComponet';
+import { SelectedTicket } from './types';
+const Ticket = lazy(() => import('modules/Ticket'));
 
 const statusOptions = [
   {
     value: 'reopen',
-    label: 'reopen',
+    label: 'Reopen',
   },
   {
     value: 'assigned',
@@ -55,11 +70,10 @@ const statusOptions = [
     value: 'closed',
     label: 'Closed',
   },
-];
-
-const typeOption = [
-  { value: 'complaint', label: 'Complaint' },
-  { value: 'request', label: 'Request' },
+  {
+    value: 'on_hold',
+    label: 'On Hold',
+  },
 ];
 
 const DEFAULT_FILTERS = {
@@ -75,7 +89,6 @@ const DEFAULT_FILTERS = {
 };
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const { data, isLoading } = useGetRequestsList(filters);
   const { userAuth } = useContext(UserContext);
@@ -120,8 +133,7 @@ const Dashboard = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const { data: categoriesList, isLoading: listFetching } =
-    useCategories(departmentId);
+  const { data: categoriesList } = useCategories(departmentId);
   const categoryOptions = useMemo(() => {
     return (
       categoriesList?.map((cate) => ({
@@ -131,8 +143,7 @@ const Dashboard = () => {
     );
   }, [categoriesList]);
 
-  const { data: departmentsList, isLoading: departmentsFetching } =
-    useDepartments(organizationId);
+  const { data: departmentsList } = useDepartments(organizationId);
 
   const deptOptions = useMemo(() => {
     return (
@@ -156,7 +167,7 @@ const Dashboard = () => {
   const updatedListResolverEmployeeFilter = useMemo(() => {
     if (resolverEmpId)
       return updatedListdataSearchfilter?.filter(
-        (item) => item.resolver_id == resolverEmpId
+        (item) => item.resolver_id + '' === resolverEmpId
       );
     return updatedListdataSearchfilter;
   }, [updatedListdataSearchfilter, resolverEmpId]);
@@ -179,52 +190,90 @@ const Dashboard = () => {
     return [{ label: 'None', value: '' }, ...list];
   }, [usersList]);
 
-  const onClickPlus = () => {
-    navigate(ROUTE.TICKET);
+  const [open, setOpen] = useState(false);
+  const [tableView, setTableView] = useState<boolean>(true);
+  const [selectedTicketForBulkUpdate, setSeletedTicketForBulkUpdate] =
+    useState<SelectedTicket>({ id: [], status: '', permited_transitions: [] });
+
+  const [filterMenu, setFilterMenu] = React.useState(null);
+  const openFilterMenu = Boolean(filterMenu);
+  const handleFilterMenu = (event) => {
+    setFilterMenu(event.currentTarget);
   };
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleCreateTicketDialogOpen = () => {
-    setOpen(true);
-  };
-
-  const handleCreateTicketDialogClose = () => {
-    setOpen(false);
+  const handleCloseFilterMenu = () => {
+    setFilterMenu(null);
   };
 
   return (
     <Box display='flex' flexDirection='column' flex='1' gap={3} p={3}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <Typography variant='h5'>Dashboard</Typography>
-        <Button
-          variant='text'
-          onClick={handleCreateTicketDialogOpen}
-          size='small'
-          startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
-          sx={{ color: 'grey.900', ml: 'auto' }}
-        >
-          Create Ticket
-        </Button>
-        <Dialog
-          open={open}
-          onClose={handleCreateTicketDialogClose}
-          fullWidth
-          maxWidth='xs'
-        >
-          <DialogTitle>Create Ticket</DialogTitle>
-          <DialogContent>Create Ticket Form Here</DialogContent>
-          <DialogActions>
-            <Button
-              size='small'
-              variant='text'
-              onClick={handleCreateTicketDialogClose}
+        <Box display={'flex'}>
+          <Button
+            variant='text'
+            onClick={() => setOpen(true)}
+            size='small'
+            startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
+            sx={{ color: 'grey.900', ml: 'auto' }}
+          >
+            Create Ticket
+          </Button>
+          {tableView === true ? (
+            <IconButton
+              color='primary'
+              aria-label='grid'
+              onClick={() => setTableView(false)}
+              sx={{ ml: 3 }}
             >
-              Cancel
-            </Button>
-            <Button size='small'>Create</Button>
-          </DialogActions>
-        </Dialog>
+              <GridOffTwoTone fontSize='small' />
+            </IconButton>
+          ) : (
+            <IconButton
+              color='primary'
+              aria-label='table'
+              onClick={() => setTableView(true)}
+              sx={{ ml: 3 }}
+            >
+              <GridOnTwoTone fontSize='small' />
+            </IconButton>
+          )}
+          <IconButton
+            color='primary'
+            disabled={selectedTicketForBulkUpdate.status !== '' ? false : true}
+            onClick={handleFilterMenu}
+          >
+            <FilterAltRounded />
+          </IconButton>
+          <Menu
+            id='basic-menu'
+            anchorEl={filterMenu}
+            open={openFilterMenu}
+            onClose={handleCloseFilterMenu}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+            PaperProps={{
+              sx: { width: 240, maxWidth: '100%' },
+            }}
+          >
+            {selectedTicketForBulkUpdate.status !== '' && (
+              <BulkUpdateComponent
+                selectedTicketForBulkUpdate={selectedTicketForBulkUpdate}
+                setSeletedTicketForBulkUpdate={setSeletedTicketForBulkUpdate}
+                setFilterMenu={setFilterMenu}
+              />
+            )}
+          </Menu>
+          <Suspense fallback={<Loader isLoading={true} />}>
+            <Ticket open={open} setOpen={setOpen} isEdit={false} />
+          </Suspense>
+        </Box>
       </Box>
       <Card sx={{ display: 'flex', flex: 1 }}>
         <CardContent
@@ -295,7 +344,7 @@ const Dashboard = () => {
                       />
                     )}
                     <Select
-                      label={'Resolver Employee'}
+                      label={'Resolver'}
                       options={userResolverList}
                       value={resolverEmpId + ''}
                       onChange={(e) => {
@@ -380,14 +429,12 @@ const Dashboard = () => {
                   No Data
                 </Typography>
               ) : (
-                <Box
-                  sx={{ display: 'grid', gap: '1rem' }}
-                  className='complaint-card-grid'
-                >
-                  {updatedDataFinalList?.map((complaint) => (
-                    <ComplaintCard details={complaint} />
-                  ))}
-                </Box>
+                <CardsView
+                  data={updatedDataFinalList}
+                  tableview={tableView}
+                  setSeletedTicketForBulkUpdate={setSeletedTicketForBulkUpdate}
+                  selectedTicketForBulkUpdate={selectedTicketForBulkUpdate}
+                />
               )}
               <TablePagination
                 component='div'

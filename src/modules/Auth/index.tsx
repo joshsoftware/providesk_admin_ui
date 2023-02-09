@@ -13,7 +13,7 @@ import { LOCAL_STORAGE_KEYS } from 'shared/appConstants';
 import { UserContext } from 'App';
 import { ROLES } from 'routes/roleConstants';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Card, CardContent, Typography } from '@mui/material';
 import './auth.scss';
 
 const AuthContainer = () => {
@@ -64,60 +64,81 @@ const AuthContainer = () => {
 
   const Heading = () => {
     return (
-      <Typography
-        variant='h2'
-        sx={{ textAlign: 'center' }}
-        className='auth-heading'
-      >
-        Welcome to Providesk!
-      </Typography>
+      <Box display={'grid'} gap={1} textAlign={'center'}>
+        <Typography m={0} fontSize={20}>
+          Welcome to
+        </Typography>
+        <img src='/images/providesk-logo.svg' alt='ProviDesk' height={28} />
+      </Box>
     );
   };
 
   return (
     <>
       <Loader isLoading={isLogging} top='0' />
-      <Box sx={{ display: 'grid', flex: '1' }} className='scroll-auto'>
-        <Box
+      <Box
+        bgcolor={'#DEEBF1'}
+        display={'flex'}
+        flexDirection={'column'}
+        flex={1}
+        justifyContent={'center'}
+        alignItems={'center'}
+        p={3}
+        className='scroll-auto'
+      >
+        <Card
           sx={{
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flex: '1',
+            m: '0 auto',
+            borderRadius: 3,
           }}
-          className='auth-wrapper'
         >
-          <Box
+          <CardContent
             sx={{
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: '2rem',
+              flex: '1',
+              gap: 3,
+              '@media (max-width: 575.98px)': {
+                flexDirection: 'column',
+              },
             }}
-            className='img-box'
           >
-            <Heading />
-            <img src='./images/auth.svg' alt='Login' className='img-auth' />
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1.5rem',
-            }}
-            className='auth-box'
-          >
-            <Heading />
-            <GoogleLogin
-              onSuccess={onGoogleLoginSuccess}
-              onError={onGoogleLoginFailure}
-              theme='filled_blue'
-            />
-          </Box>
-        </Box>
+            <Box
+              display={'flex'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              bgcolor={'#b1c6d7'}
+              height={'100%'}
+              p={3}
+              borderRadius={2}
+              overflow={'hidden'}
+            >
+              <img src='./images/auth.svg' alt='Login' className='img-auth' />
+            </Box>
+            <Box
+              display={'flex'}
+              flexDirection={'column'}
+              alignItems={'center'}
+              justifyContent={'center'}
+              gap={4}
+              p={3}
+              sx={{
+                '@media (max-width: 575.98px)': {
+                  p: 0,
+                  gap: 3,
+                },
+              }}
+            >
+              <Heading />
+              <GoogleLogin
+                onSuccess={onGoogleLoginSuccess}
+                onError={onGoogleLoginFailure}
+                theme='filled_blue'
+              />
+            </Box>
+          </CardContent>
+        </Card>
       </Box>
     </>
   );

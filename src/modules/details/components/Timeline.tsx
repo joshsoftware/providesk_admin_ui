@@ -8,77 +8,95 @@ import {
   TimelineOppositeContent,
 } from '@mui/lab';
 import { Box, Chip, Paper, Typography } from '@mui/material';
-import { DateFormate, getLastDaysFrom } from 'apis/utils/date.utils';
+
+import { getLastDaysFrom } from 'apis/utils/date.utils';
+import { STATUS } from 'modules/dashboard/constant';
 import { ticketStatusColours } from '../constants';
 import { ITicketActivity } from '../type';
 import { ImageS3Tag } from './ImageTag';
 
 export const TimelineComponent = ({ activities }: any) => {
   return (
-    <>
-      <Timeline>
-        {activities?.map((item, index) => {
-          return (
-            <Box key={item.created_at}>
-              <TimelineItem>
-                <TimelineOppositeContent>
-                  <TimelineLeft date={item.created_at} index={index} />{' '}
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                  <TimelineDot />
-                  <TimelineConnector></TimelineConnector>
-                </TimelineSeparator>
-                <TimelineContent>
-                  <TimeLineDescription activity={item} />
-                </TimelineContent>
-              </TimelineItem>
-            </Box>
-          );
-        })}
-      </Timeline>
-    </>
+    <Timeline
+      nonce={undefined}
+      onResize={undefined}
+      onResizeCapture={undefined}
+    >
+      {activities?.map((item, index) => {
+        return (
+          <TimelineItem key={item.created_at}>
+            <TimelineOppositeContent sx={{ flex: '0 1 25%' }}>
+              <TimelineLeft date={item.created_at} index={index} />
+            </TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineDot
+                sx={{
+                  backgroundColor:
+                    ticketStatusColours[item?.current_ticket_status],
+                }}
+              />
+              <TimelineConnector></TimelineConnector>
+            </TimelineSeparator>
+            <TimelineContent>
+              <TimeLineDescription activity={item} />
+            </TimelineContent>
+          </TimelineItem>
+        );
+      })}
+    </Timeline>
   );
 };
 
 const TimelineLeft = ({ date, index }: { date: string; index: number }) => {
-  return (
-    <div
-      style={{
-        margin: '0.3rem 0',
-        minWidth: '11.5vw',
-        maxWidth: '100%',
-        textAlign: 'right',
-        fontWeight: 490,
-      }}
-    >
-      {getLastDaysFrom(date)}
-    </div>
-  );
+  return <Typography variant='body2'>{getLastDaysFrom(date)}</Typography>;
 };
 
 const TimeLineDescription = ({ activity }: { activity: ITicketActivity }) => {
   return (
-    <Paper elevation={8} style={{ width: '40vw', maxWidth: '100%' }}>
-      <div style={{ padding: '0.5rem 0', margin: '0.5rem' }}>
+    <Box
+      component={Paper}
+      elevation={0}
+      variant='outlined'
+      display={'grid'}
+      gap={1}
+      px={3}
+      py={2}
+    >
+      <Typography variant='body1'>{activity?.get_description}</Typography>
+      {activity.reason_for_update && (
+        <Box>
+          <Typography
+            component='span'
+            variant='body2'
+            fontWeight={'fontWeightBold'}
+          >
+            Comment:{' '}
+          </Typography>
+          <Typography component='span' variant='body2'>
+            {activity?.reason_for_update}
+          </Typography>
+        </Box>
+      )}
+      <Box>
         <Chip
-          label={activity?.current_ticket_status}
-          style={{
+          label={STATUS[activity?.current_ticket_status]}
+          sx={{
             backgroundColor:
               ticketStatusColours[activity?.current_ticket_status],
+            color:
+              STATUS[activity?.current_ticket_status] === 'Rejected'
+                ? '#FFF'
+                : 'inherit',
           }}
-          sx={{ m: 2 }}
         />
-        <span>{activity?.get_description}</span>
-        {activity.reason_for_update && (
-          <p>
-            <strong>Comment:</strong>
-            <span> {activity?.reason_for_update}</span>
-          </p>
-        )}
-        {activity?.asset_url?.map((item) => (
-          <ImageS3Tag path={item as string} />
-        ))}
-      </div>
-    </Paper>
+      </Box>
+      {activity?.asset_url?.length > 0 ? (
+        <Box display={'flex'} flexWrap={'wrap'} gap={2} pt={2}>
+          {activity?.asset_url?.map((item) => (
+            <ImageS3Tag path={item as string} />
+          ))}
+        </Box>
+      ) : null}
+    </Box>
   );
 };

@@ -1,8 +1,8 @@
 import { useCallback, useState, useMemo, useContext } from 'react';
 
-import { useDepartments } from 'modules/Category/category.hook';
+import { useCategories, useDepartments } from 'modules/Category/category.hook';
 import Loader from 'modules/Auth/components/Loader';
-import Select from 'modules/shared/Select';
+import Select, { MultiSelect } from 'modules/shared/Select';
 import { Button } from 'modules/shared/Button';
 import { useEditUser } from '../users.hook';
 import { getAllowedRoles } from '../users.helpers';
@@ -20,6 +20,7 @@ import {
   Select as SelectMUI,
   Typography,
 } from '@mui/material';
+import { toast } from 'react-toastify';
 
 const EditUser = ({ user, organizationId, setOpenEdit }) => {
   const { userAuth } = useContext(UserContext);
@@ -27,20 +28,51 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
   const { data: departmentsList, isLoading: isFetchingDepartments } =
     useDepartments(organizationId);
   const [departmentId, setDepartmentId] = useState<number | ''>(
-    user?.department_id || ''
+    user?.department_id
   );
+  const [errorDepartment, setErrorDepartment] = useState<boolean>(false);
+  const { data: categoriesList, isLoading: listFetching } =
+    useCategories(departmentId);
+  const categoryOptions = useMemo(() => {
+    return (
+      categoriesList?.map((cate) => ({
+        label: cate.name,
+        value: cate.id,
+      })) || []
+    );
+  }, [categoriesList]);
   const [role, setRole] = useState<string>(user?.role);
+  const [categoryListSelected, setCategoryList] = useState<string[]>(
+    user?.category_id || []
+  );
   const allowedRoles = getAllowedRoles(userAuth?.role);
   const { mutate: updateUser, isLoading: isUpdatingUser } = useEditUser();
 
-  const handleRoleChange = useCallback((e) => setRole(e.target.value), []);
+  const handleRoleChange = useCallback((e) => {
+    setRole(e.target.value);
+    setDepartmentId('');
+  }, []);
   const handleUpdateUser = useCallback(() => {
+    if (role === 'resolver' || role === 'department_head') {
+      if (departmentId === '') {
+        setErrorDepartment(true);
+        return;
+      }
+    }
     const payload: IEditUserPayload = {
       role,
-      department_id: departmentId as number,
+      department_id:
+        role == 'employee' || role == 'admin'
+          ? undefined
+          : (departmentId as number),
+      category_ids:
+        role == 'employee' || role == 'admin'
+          ? undefined
+          : categoryListSelected,
     };
+
     updateUser({ id: user?.id, payload, setOpenEdit });
-  }, [role, departmentId]);
+  }, [role, departmentId, categoryListSelected]);
 
   const deptOptions = useMemo(() => {
     if (userAuth?.role === ROLES.DEPARTMENT_HEAD)
@@ -93,14 +125,34 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
             ))}
           </SelectMUI>
         </FormControl>
-        <Select
-          name='department'
-          required={true}
-          label={'Department'}
-          value={departmentId}
-          options={deptOptions}
-          onChange={(e) => setDepartmentId(parseInt(e.target.value))}
-        />
+        {(role.toLowerCase() === 'resolver' ||
+          role.toLowerCase() === 'department_head') && (
+          <>
+            <Select
+              name='department'
+              required={true}
+              label={'Department'}
+              value={departmentId}
+              options={deptOptions}
+              error={errorDepartment && 'required Field'}
+              onChange={(e) => {
+                setDepartmentId(parseInt(e.target.value));
+                setCategoryList([]);
+                setErrorDepartment(false);
+              }}
+            />
+
+            <MultiSelect
+              options={categoryOptions}
+              value={categoryListSelected}
+              name={'category'}
+              label={'Category'}
+              onChange={(li) => {
+                setCategoryList(li);
+              }}
+            />
+          </>
+        )}
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2, p: 2 }}>
         <Button variant='text' onClick={() => setOpenEdit(false)}>

@@ -3,6 +3,8 @@ export interface IreateCategoryPayload {
     name: string;
     priority: number;
     department_id: number;
+    sla_unit: string;
+    sla_unit_type: string;
   };
 }
 
