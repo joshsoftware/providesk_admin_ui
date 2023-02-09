@@ -53,7 +53,6 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
     setDepartmentId('');
   }, []);
   const handleUpdateUser = useCallback(() => {
-    console.log(role);
     if (role === 'resolver' || role === 'department_head') {
       if (departmentId === '') {
         setErrorDepartment(true);
@@ -138,6 +137,7 @@ const EditUser = ({ user, organizationId, setOpenEdit }) => {
               error={errorDepartment && 'required Field'}
               onChange={(e) => {
                 setDepartmentId(parseInt(e.target.value));
+                setCategoryList([]);
                 setErrorDepartment(false);
               }}
             />

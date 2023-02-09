@@ -136,8 +136,7 @@ const data = [
     on_hold: 145,
   },
 ];
-
-export const BarChartComp = ({ datat }) => {
+const BarChartComp = ({ datat }) => {
   let dataForGraph = useMemo(() => dataToBarChart(datat), [datat]);
   return (
     <ResponsiveContainer width='100%' height='100%'>
@@ -203,3 +202,5 @@ export const BarChartComp = ({ datat }) => {
     </ResponsiveContainer>
   );
 };
+
+export default React.memo(BarChartComp);

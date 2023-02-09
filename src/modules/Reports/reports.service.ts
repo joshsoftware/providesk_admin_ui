@@ -3,7 +3,6 @@ import { resolve } from 'path';
 import { OverdueReponce } from './types';
 
 export const getOverdueTicket: () => Promise<OverdueReponce> = () => {
-  // return mockAPICall<OverdueReponce>(data);
   return get({ path: '/tickets/timeline' });
 };
 

@@ -25,6 +25,37 @@ export const BulkUpdateComponent = ({
     resolver_id: '',
     status: '',
   });
+
+  const { userAuth } = useContext(UserContext);
+  const [organizationId, setOrganizationId] = useState<number>(
+    userAuth?.organizations?.[0]?.id
+  );
+
+  const SuccessCallbackFunction = useCallback(() => {
+    setpayloadload({
+      department_id: '',
+      category_id: '',
+      resolver_id: '',
+      status: '',
+    });
+    setSeletedTicketForBulkUpdate({
+      id: [],
+      status: '',
+      permited_transitions: [],
+    });
+    setFilterMenu(null);
+  }, [setFilterMenu, setSeletedTicketForBulkUpdate, setpayloadload]);
+  const { isLoading, mutate } = usePostBulkUpdate(SuccessCallbackFunction);
+  const { data: categoriesList, isLoading: listFetching } = useCategories(
+    payload?.department_id
+  );
+  const { data: departmentsList, isLoading: departmentsFetching } =
+    useDepartments(organizationId);
+
+  const { data: usersList, isLoading: isFetchingUsers } = useUsers(
+    payload?.department_id
+  );
+
   const statusOptions = useMemo(
     () =>
       selectedTicketForBulkUpdate.permited_transitions?.map((item) => ({
@@ -33,19 +64,7 @@ export const BulkUpdateComponent = ({
       })),
     [selectedTicketForBulkUpdate]
   );
-  const handleChange = useCallback(
-    (
-      name: 'department_id' | 'category_id' | 'resolver_id' | 'status',
-      value: string
-    ) => {
-      setpayloadload((p: BulkUpload) => ({ ...p, [name]: value }));
-    },
-    [setpayloadload]
-  );
-  const { userAuth } = useContext(UserContext);
-  const { data: categoriesList, isLoading: listFetching } = useCategories(
-    payload?.department_id
-  );
+
   const categoryOptions = useMemo(() => {
     return (
       categoriesList?.map((cate) => ({
@@ -55,12 +74,6 @@ export const BulkUpdateComponent = ({
     );
   }, [categoriesList]);
 
-  const [organizationId, setOrganizationId] = useState<number>(
-    userAuth?.organizations?.[0]?.id
-  );
-  const { data: departmentsList, isLoading: departmentsFetching } =
-    useDepartments(organizationId);
-
   const deptOptions = useMemo(() => {
     return (
       departmentsList?.map((dept) => ({
@@ -69,9 +82,7 @@ export const BulkUpdateComponent = ({
       })) || []
     );
   }, [departmentsList]);
-  const { data: usersList, isLoading: isFetchingUsers } = useUsers(
-    payload?.department_id
-  );
+
   const userResolverList = useMemo(() => {
     const list =
       usersList?.map((emp) => {
@@ -82,10 +93,15 @@ export const BulkUpdateComponent = ({
       }) || [];
     return [{ label: 'None', value: '' }, ...list];
   }, [usersList]);
-  const { isLoading, mutate } = usePostBulkUpdate(
-    setpayloadload,
-    setSeletedTicketForBulkUpdate,
-    setFilterMenu
+
+  const handleChange = useCallback(
+    (
+      name: 'department_id' | 'category_id' | 'resolver_id' | 'status',
+      value: string
+    ) => {
+      setpayloadload((p: BulkUpload) => ({ ...p, [name]: value }));
+    },
+    [setpayloadload]
   );
 
   const updateAllStatus = useCallback(() => {
@@ -98,7 +114,6 @@ export const BulkUpdateComponent = ({
         status: payload.status,
       },
     };
-
     mutate(payLoad);
   }, [mutate, selectedTicketForBulkUpdate, payload]);
 

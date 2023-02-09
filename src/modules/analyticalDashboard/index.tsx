@@ -1,9 +1,9 @@
 import { Card, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAnalyticalReports } from './analyticalDashBoard.hook';
-import { BarChartComp } from './barchart';
+import BarChartComp from './barchart';
 import { DepartmentChart } from './departmentChart';
-import { Piechart } from './pieChart';
+import Piechart from './pieChart';
 import { AnalyticalReportType } from './type';
 
 export const AnalyticsReportDashBoard = () => {

@@ -1,4 +1,4 @@
-import { useMemo, useState, useContext, useCallback } from 'react';
+import React, { useMemo, useState, useContext, useCallback } from 'react';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import {
@@ -49,10 +49,10 @@ function Ticket({
     resolver_id: data?.resolver_id,
     asset_url: data?.asset_url,
   };
-  const [organizationId, setOrganizationId] = useState<number | ''>(
+  const [organizationId, setOrganizationId] = useState<number | string>(
     userAuth?.organizations?.[0]?.id || ''
   );
-  const [departmentId, setDepartmentId] = useState<number | string | ''>(
+  const [departmentId, setDepartmentId] = useState<number | string>(
     data?.department_id || 1
   );
 
@@ -190,7 +190,7 @@ function Ticket({
         })
         .catch((e) => {
           setIsLoading(false);
-          // console.log(e, 'error');
+
           toast.error('unable to upload image');
         });
     },
@@ -366,4 +366,4 @@ function Ticket({
     </Dialog>
   );
 }
-export default Ticket;
+export default React.memo(Ticket);

@@ -78,7 +78,7 @@ export const Ticket = ({
           {days > 0 && (
             <>
               <HourglassBottomRoundedIcon fontSize='small' color='error' />
-              <Typography>late by {days}</Typography>
+              <Typography>late by {days} days</Typography>
             </>
           )}
           {days == 0 && (

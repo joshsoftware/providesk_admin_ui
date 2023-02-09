@@ -1,10 +1,10 @@
 import { Box } from '@mui/system';
 import { ticketStatusColours } from 'modules/details/constants';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 import { dataToPieChartConversion } from './util';
 
-export const Piechart = ({ data }) => {
+const Piechart = ({ data }) => {
   const piedata: { name: string; value: number }[] =
     dataToPieChartConversion(data);
 
@@ -23,7 +23,7 @@ export const Piechart = ({ data }) => {
         <Pie
           data={piedata}
           activeIndex={activeIndex}
-          activeShape={renderActiveShape}
+          activeShape={RenderActiveShape}
           cx={150}
           cy={150}
           innerRadius={60}
@@ -67,7 +67,7 @@ const Label = ({ props, data }) => {
   );
 };
 
-const renderActiveShape = (props) => {
+const RenderActiveShape = (props) => {
   const RADIAN = Math.PI / 180;
   const {
     cx,
@@ -130,3 +130,5 @@ const renderActiveShape = (props) => {
     </g>
   );
 };
+
+export default React.memo(Piechart);

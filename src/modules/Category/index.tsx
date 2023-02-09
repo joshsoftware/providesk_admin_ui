@@ -4,7 +4,7 @@ import {
   categoryValidationRegex,
   prioritiesList,
   slaDurationTypeOptions,
-} from './constanst';
+} from './constant';
 import { useCreateCategory, useDepartments } from './category.hook';
 import CategoryList from './components/CategoryList';
 import { Button } from 'modules/shared/Button';
