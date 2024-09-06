@@ -18,4 +18,5 @@ export default defineConfig({
     "stylesheets": path.resolve(__dirname, "./src/stylesheets"),
   },
 },
+base: '/providesk'
 })

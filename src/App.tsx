@@ -27,7 +27,7 @@ export const UserContext = createContext<IUserContextType>({
   setUserAuth: (value) => {},
 });
 
-const router = createBrowserRouter(routeConfig);
+const router = createBrowserRouter(routeConfig, { basename: '/providesk'});
 
 function App() {
   const [userAuth, setUserAuth] = useState<any>(
