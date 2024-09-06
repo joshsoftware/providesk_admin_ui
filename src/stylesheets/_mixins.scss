@@ -1,0 +1,28 @@
+// Custom Scrollbar
+@mixin scrollbars() {
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba($color: #000, $alpha: 0.25);
+    border-radius: 0.25rem;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  // For Internet Explorer
+  & {
+    scrollbar-face-color: rgba($color: #000, $alpha: 0.25);
+    scrollbar-track-color: transparent;
+  }
+}
