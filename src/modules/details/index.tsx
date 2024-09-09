@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useTicketDetails } from './details.hook';
@@ -19,14 +19,18 @@ import {
   TableRow,
   TableCell,
   IconButton,
+
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { ticketStatusColours } from './constants';
 
+
 import { ImageS3Tag } from './components/ImageTag';
+import { UserContext } from 'App';
 
 function Details() {
   const id: number = parseInt(useParams().id as string);
+  const { userAuth } = useContext(UserContext);
   const {
     ticket: ticketDetails,
     activities,
@@ -57,7 +61,10 @@ function Details() {
                 size='large'
                 onClick={() => setOpenEdit(true)}
               >
-                <EditIcon fontSize='inherit' />
+                {(userAuth.role !== 'employee' || ticket?.status === 'resolved') && <EditIcon fontSize='inherit' />}
+                
+
+
               </IconButton>
             </div>
             <TableContainer>
