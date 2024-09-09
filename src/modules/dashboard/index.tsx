@@ -222,7 +222,10 @@ const Dashboard = () => {
             >
               Cancel
             </Button>
-            <Button size='small'>Create</Button>
+            <Button size='small'
+            onClick={()=>{navigate("/ticket")}}>
+              Create
+            </Button>
           </DialogActions>
         </Dialog>
       </Box>
