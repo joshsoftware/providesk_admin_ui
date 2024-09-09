@@ -3,6 +3,7 @@ import {
   ButtonProps,
   CircularProgress,
 } from '@mui/material';
+import { ElementType } from 'react';
 
 export const Button = ({
   isLoading,
@@ -27,5 +28,5 @@ export const Button = ({
 
 interface CustomButtonProps extends ButtonProps {
   isLoading?: boolean;
-  component?: string;
+  component?: ElementType;
 }
