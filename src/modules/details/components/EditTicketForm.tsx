@@ -30,6 +30,7 @@ import { StyleLabel } from 'modules/shared/StyleLabel';
 import { UploadBucket } from 'modules/shared/UploadBucket';
 import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
 import { toast } from 'react-toastify';
+import { ROLES } from 'routes/roleConstants';
 
 export const EditTicketForm = ({
   ticket,
@@ -229,6 +230,7 @@ export const EditTicketForm = ({
             onChange={handleChange}
             error={touched.status && Boolean(errors.status)}
           >
+          {userAuth.role !== ROLES.EMPLOYEE && (
             <MenuItem
               key={ticket?.status}
               value={ticket?.status || ''}
@@ -237,6 +239,7 @@ export const EditTicketForm = ({
             >
               <span>{ticket?.status}</span>
             </MenuItem>
+          )}
             {ticket?.permited_transitions?.map((item) => (
               <MenuItem
                 key={item}
@@ -258,6 +261,8 @@ export const EditTicketForm = ({
               flexDirection: 'column',
             }}
           >
+        {userAuth.role !== ROLES.EMPLOYEE && (
+          <>
             <FormControl sx={{ m: 2, minWidth: 240 }}>
               <Select
                 name='department_id'
@@ -298,6 +303,8 @@ export const EditTicketForm = ({
                 error={(touched.resolver_id && errors.resolver_id) || ''}
               />
             </FormControl>
+          </>
+    )}
 
             <Box>
               <StyleLabel
@@ -341,7 +348,7 @@ export const EditTicketForm = ({
 
         {values.status === 'reopen' && (
           <Box>
-            <FormControl variant='standard' sx={{ m: 2, minWidth: 240 }}>
+            {/* <FormControl variant='standard' sx={{ m: 2, minWidth: 240 }}>
               <InputLabel id='feedback-select-label'>
                 Are you satisfied with the work done?
               </InputLabel>
@@ -355,7 +362,7 @@ export const EditTicketForm = ({
                 <MenuItem value={'false'}>No</MenuItem>
                 <MenuItem value={'true'}>Yes</MenuItem>
               </SelectMUI>
-            </FormControl>
+            </FormControl> */}
 
             <InputLabel
               id='rating'
