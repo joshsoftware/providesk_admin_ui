@@ -27,6 +27,7 @@ import { ticketStatusColours } from './constants';
 
 import { ImageS3Tag } from './components/ImageTag';
 import { UserContext } from 'App';
+import { ROLES } from 'routes/roleConstants';
 
 function Details() {
   const id: number = parseInt(useParams().id as string);
@@ -61,7 +62,7 @@ function Details() {
                 size='large'
                 onClick={() => setOpenEdit(true)}
               >
-                {(userAuth.role !== 'employee' || ticket?.status === 'resolved') && <EditIcon fontSize='inherit' />}
+                {(userAuth.role !== ROLES.EMPLOYEE || ticket?.status === 'resolved') && <EditIcon fontSize='inherit' />}
                 
 
 

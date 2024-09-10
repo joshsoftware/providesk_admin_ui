@@ -30,6 +30,7 @@ import { StyleLabel } from 'modules/shared/StyleLabel';
 import { UploadBucket } from 'modules/shared/UploadBucket';
 import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
 import { toast } from 'react-toastify';
+import { ROLES } from 'routes/roleConstants';
 
 export const EditTicketForm = ({
   ticket,
@@ -229,7 +230,7 @@ export const EditTicketForm = ({
             onChange={handleChange}
             error={touched.status && Boolean(errors.status)}
           >
-          {userAuth.role !== 'employee' && (
+          {userAuth.role !== ROLES.EMPLOYEE && (
             <MenuItem
               key={ticket?.status}
               value={ticket?.status || ''}
@@ -260,7 +261,7 @@ export const EditTicketForm = ({
               flexDirection: 'column',
             }}
           >
-        {userAuth.role !== 'employee' && (
+        {userAuth.role !== ROLES.EMPLOYEE && (
           <>
             <FormControl sx={{ m: 2, minWidth: 240 }}>
               <Select
