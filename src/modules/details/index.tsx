@@ -56,18 +56,18 @@ function Details() {
             </Typography>
           </Divider>
           <Box>
-            <div>
-              <IconButton
-                aria-label='edit'
-                size='large'
-                onClick={() => setOpenEdit(true)}
-              >
-                {(userAuth.role !== ROLES.EMPLOYEE || ticket?.status === 'resolved') && <EditIcon fontSize='inherit' />}
-                
-
-
-              </IconButton>
-            </div>
+            {
+              (userAuth.role !== ROLES.EMPLOYEE || ticket?.status === 'resolved') &&
+              <div>
+                <IconButton
+                  aria-label='edit'
+                  size='large'
+                  onClick={() => setOpenEdit(true)}
+                >
+                  <EditIcon fontSize='inherit' />
+                </IconButton>
+              </div>
+            }
             <TableContainer>
               <Table>
                 <TableBody>
