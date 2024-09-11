@@ -1,5 +1,5 @@
-import { Button } from './Button';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
+// import { Button } from './Button';
+// import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { Box } from '@mui/system';
 import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -37,7 +37,7 @@ export const UploadBucket = ({
           }
         }}
       />
-      <label htmlFor='id'>
+      {/* <label htmlFor='id'>
         <Button
           variant='contained'
           component='span'
@@ -46,7 +46,7 @@ export const UploadBucket = ({
         >
           Upload
         </Button>
-      </label>
+      </label> */}
       {file?.map((item, index) => (
         <Box
           sx={{
