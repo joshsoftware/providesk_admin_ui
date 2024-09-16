@@ -19,7 +19,7 @@ export const s3GetSignedUrlForPath = (path) => {
   });
 
   const data = {
-    Key: path,
+    Key: "providesk-stage/"+path,
     Expires: 21600,
   };
 
@@ -55,7 +55,7 @@ export const uploadFile = (
     let fileName: string = file[i].name;
     let fileExtension: string = fileName.substring(fileName.lastIndexOf('.'));
     name[i] = uuidv4() + date + fileExtension;
-    pro.push(s3Upload(file[i], name[i]));
+    pro.push(s3Upload(file[i], "providesk-stage/"+name[i]));
   }
   return { pro, name };
 };
