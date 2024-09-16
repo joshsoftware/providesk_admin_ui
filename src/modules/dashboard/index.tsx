@@ -183,6 +183,10 @@ const Dashboard = () => {
     navigate(ROUTE.TICKET);
   };
 
+  const onClickCreate =() => {
+    navigate("/ticket")
+  }
+
   const [open, setOpen] = React.useState(false);
 
   const handleCreateTicketDialogOpen = () => {
@@ -222,7 +226,11 @@ const Dashboard = () => {
             >
               Cancel
             </Button>
-            <Button size='small'>Create</Button>
+            <Button size='small'
+            onClick={onClickCreate}
+            >
+              Create
+            </Button>
           </DialogActions>
         </Dialog>
       </Box>

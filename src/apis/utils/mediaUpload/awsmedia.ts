@@ -19,7 +19,7 @@ export const s3GetSignedUrlForPath = (path) => {
   });
 
   const data = {
-    Key: path,
+    Key: process.env.REACT_APP_S3_BUCKET_FOLDER+path,
     Expires: 21600,
   };
 
@@ -55,7 +55,7 @@ export const uploadFile = (
     let fileName: string = file[i].name;
     let fileExtension: string = fileName.substring(fileName.lastIndexOf('.'));
     name[i] = uuidv4() + date + fileExtension;
-    pro.push(s3Upload(file[i], name[i]));
+    pro.push(s3Upload(file[i], process.env.REACT_APP_S3_BUCKET_FOLDER+name[i]));
   }
   return { pro, name };
 };
