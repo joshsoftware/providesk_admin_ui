@@ -31,7 +31,8 @@ export const s3Upload= async (file: File, presignedUrl: string) => {
   try {
     await axios.put(presignedUrl, file, {
       headers: {
-        'Content-Type': file.type
+        'Content-Type': file.type,
+        'Content-Length': file.size
       },
     });
   } catch (error) {
@@ -41,25 +42,33 @@ export const s3Upload= async (file: File, presignedUrl: string) => {
 }
 
 export const uploadFile = async (
-  file: File[],
+  files: File[],
   setIsLoading: (a: boolean) => void
 ) => {
   setIsLoading(true);
   const date = moment().format('DD-MM-YYYY');
-  let fileNames: string[] = [];
+  const fileNames: string[] = [];
 
-  for (let i = 0; i < file.length; i++) {
-    const fileName: string = file[i].name;
+  const uploadPromises = files.map(async (file) => {
+    const fileName: string = file.name;
     const fileExtension: string = fileName.substring(fileName.lastIndexOf('.'));
     const uniqueFileName: string = uuidv4() + date + fileExtension;  
     try {
       const presignedUrl = await s3GetSignedUrlForPath(uniqueFileName);
-      await s3Upload(file[i], presignedUrl);
-      fileNames.push(uniqueFileName);
+      await s3Upload(file, presignedUrl);
+      fileNames.push(uniqueFileName); 
     } catch (error) {
       console.error(`Error uploading file ${fileName}: `, error);
     }
+  });
+
+  try {
+    await Promise.all(uploadPromises); 
+  } catch (error) {
+    console.error("file uploads failed:", error);
+  } finally {
+    setIsLoading(false); 
   }
-  setIsLoading(false);
-  return fileNames;
+
+  return fileNames; 
 };
