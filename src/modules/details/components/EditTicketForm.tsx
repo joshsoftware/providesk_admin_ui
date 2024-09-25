@@ -167,20 +167,20 @@ export const EditTicketForm = ({
   } = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      let { pro, name } = uploadFile(file, setIsLoading);
-      Promise.all(pro)
-        .then((e) => {
-          setIsLoading(false);
-          if (values.status === 'reopen')
-            handleReopenTicket({ ...values, asset_url: name });
-          else handleUpdateTicket({ ...values, asset_url: name });
-        })
-        .catch((e) => {
-          toast.error('failed to upload image');
-          setIsLoading(false);
-          console.log(e, 'error');
-        });
+    onSubmit: async (values) => {
+      try {
+        const fileNames = await uploadFile(file, setIsLoading);
+        setIsLoading(false); 
+        if (values.status === 'reopen') {
+          handleReopenTicket({ ...values, asset_url: fileNames });
+        } else {
+          handleUpdateTicket({ ...values, asset_url: fileNames });
+        }
+      } catch (error) {
+        toast.error('Failed to upload image');
+        setIsLoading(false);
+        console.log(error, 'error');
+      }
     },
   });
 
