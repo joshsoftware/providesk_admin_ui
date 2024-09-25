@@ -1,17 +1,12 @@
-import { post } from 'apis/apiHelper';
+import { get, post } from 'apis/apiHelper';
 import AWS from 'aws-sdk';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import axios from 'axios';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 
-AWS.config.update({
-  region: process.env.REACT_APP_AWS_REGION,
-  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY,
-  secretAccessKey: process.env.REACT_APP_AWS_SECRECT_KEY,
-});
 
-export const s3GetSignedUrlForPath = async (fileName) => {
+export const s3PostPresignedUrl = async (fileName) => {
   try {
     const payload = {
       path: '/tickets/create_presigned_url', 
@@ -21,6 +16,22 @@ export const s3GetSignedUrlForPath = async (fileName) => {
     };
     const response = await post(payload);
     return response.data.url;
+  } catch (error) {
+    console.error('Error getting presigned URL: ', error);
+    throw error;
+  }
+};
+
+export const s3GetPresignedUrl = async (objectKey) => {
+  try {
+    const payload = {
+      path: '/ticket/presigned_url_for_get',
+      queryParams: {
+        object_key: objectKey,
+      },
+    };
+    const response = await get(payload);
+    return response.data.url; 
   } catch (error) {
     console.error('Error getting presigned URL: ', error);
     throw error;
@@ -45,7 +56,8 @@ export const uploadFile = async (
   files: File[],
   setIsLoading: (a: boolean) => void
 ) => {
-  setIsLoading(true);
+  let pro: Promise<PromiseResult<AWS.S3.PutObjectOutput, AWS.AWSError>>[] = [];
+  let name: string[] = [];
   const date = moment().format('DD-MM-YYYY');
   const fileNames: string[] = [];
 
@@ -54,7 +66,7 @@ export const uploadFile = async (
     const fileExtension: string = fileName.substring(fileName.lastIndexOf('.'));
     const uniqueFileName: string = uuidv4() + date + fileExtension;  
     try {
-      const presignedUrl = await s3GetSignedUrlForPath(uniqueFileName);
+      const presignedUrl = await s3PostPresignedUrl(uniqueFileName);
       await s3Upload(file, presignedUrl);
       fileNames.push(uniqueFileName); 
     } catch (error) {
