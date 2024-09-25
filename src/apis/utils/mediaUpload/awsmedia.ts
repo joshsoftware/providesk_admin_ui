@@ -1,85 +1,61 @@
-import { get, post } from 'apis/apiHelper';
 import AWS from 'aws-sdk';
 import { PromiseResult } from 'aws-sdk/lib/request';
-import axios from 'axios';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 
+AWS.config.update({
+  region: process.env.REACT_APP_AWS_REGION,
+  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY,
+  secretAccessKey: process.env.REACT_APP_AWS_SECRECT_KEY,
+});
 
-export const s3PostPresignedUrl = async (fileName) => {
-  try {
-    const payload = {
-      path: '/tickets/create_presigned_url', 
-      requestParams: {
-        object_key: fileName,
-      },
-    };
-    const response = await post(payload);
-    return response.data.url;
-  } catch (error) {
-    console.error('Error getting presigned URL: ', error);
-    throw error;
-  }
+export const s3GetSignedUrlForPath = (path) => {
+  const s3Bucket = new AWS.S3({
+    region: process.env.REACT_APP_AWS_REGION,
+    params: {
+      Bucket: process.env.REACT_APP_S3_BUCKET_NAME,
+      region: process.env.REACT_APP_AWS_REGION,
+    },
+  });
+
+  const data = {
+    Key: process.env.REACT_APP_S3_BUCKET_FOLDER+path,
+    Expires: 21600,
+  };
+
+  return s3Bucket.getSignedUrlPromise('getObject', data);
 };
 
-export const s3GetPresignedUrl = async (objectKey) => {
-  try {
-    const payload = {
-      path: '/ticket/presigned_url_for_get',
-      queryParams: {
-        object_key: objectKey,
-      },
-    };
-    const response = await get(payload);
-    return response.data.url; 
-  } catch (error) {
-    console.error('Error getting presigned URL: ', error);
-    throw error;
-  }
+export const s3Upload = async (base64Obj, path) => {
+  const s3Bucket = new AWS.S3({
+    params: {
+      Bucket: process.env.REACT_APP_S3_BUCKET_NAME,
+      region: process.env.REACT_APP_AWS_REGION,
+    },
+  });
+
+  const data: AWS.S3.PutObjectRequest = {
+    Key: path,
+    Body: base64Obj,
+    Bucket: process.env.REACT_APP_S3_BUCKET_NAME as string,
+    ContentType: base64Obj.type,
+  };
+  return s3Bucket.putObject(data).promise();
 };
 
-export const s3Upload= async (file: File, presignedUrl: string) => {
-  try {
-    await axios.put(presignedUrl, file, {
-      headers: {
-        'Content-Type': file.type,
-        'Content-Length': file.size
-      },
-    });
-  } catch (error) {
-    console.error("Error uploading file to S3: ", error);
-    throw error;
-  }
-}
-
-export const uploadFile = async (
-  files: File[],
+export const uploadFile = (
+  file: File[],
   setIsLoading: (a: boolean) => void
 ) => {
   let pro: Promise<PromiseResult<AWS.S3.PutObjectOutput, AWS.AWSError>>[] = [];
   let name: string[] = [];
   const date = moment().format('DD-MM-YYYY');
-  const fileNames: string[] = [];
-
-  const uploadPromises = files.map(async (file) => {
-    const fileName: string = file.name;
-    const fileExtension: string = fileName.substring(fileName.lastIndexOf('.'));
-    const uniqueFileName: string = uuidv4() + date + fileExtension;  
-    try {
-      const presignedUrl = await s3PostPresignedUrl(uniqueFileName);
-      await s3Upload(file, presignedUrl);
-      fileNames.push(uniqueFileName); 
-    } catch (error) {
-      console.error(`Error uploading file ${fileName}: `, error);
-    }
-  });
-
-  try {
-    await Promise.all(uploadPromises); 
-  } catch (error) {
-    console.error("file uploads failed:", error);
-  } finally {
-    setIsLoading(false); 
+  setIsLoading(true);
+  for (let i = 0; i < file.length; i++) {
+    let fileName: string = file[i].name;
+    let fileExtension: string = fileName.substring(fileName.lastIndexOf('.'));
+    name[i] = uuidv4() + date + fileExtension;
+    pro.push(s3Upload(file[i], process.env.REACT_APP_S3_BUCKET_FOLDER+name[i]));
   }
   return { pro, name };
 };
