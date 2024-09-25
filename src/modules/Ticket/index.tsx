@@ -126,16 +126,17 @@ function Ticket() {
       asset_url: [],
     },
     validationSchema: ValidationSchema,
-    onSubmit: async (values) => {
-      try {
-        const fileNames = await uploadFile(file, setIsLoading);       
-        setIsLoading(false);
-        createTicket({ ...values, asset_url: fileNames });
-      } catch (error) {
-        setIsLoading(false);
-        toast.error('Unable to upload image');
-        console.error(error);
-      }
+    onSubmit: (values) => {
+      let { pro, name } = uploadFile(file, setIsLoading);
+      Promise.all(pro)
+        .then((e) => {
+          setIsLoading(false);
+          createTicket({ ...values, asset_url: name });
+        })
+        .catch((e) => {
+          setIsLoading(false);
+          toast.error('unable to upload image');
+        });
     },
   });
 
