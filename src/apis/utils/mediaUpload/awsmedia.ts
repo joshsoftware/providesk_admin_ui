@@ -12,6 +12,7 @@ export const s3PostPresignedUrl = async (fileName) => {
       path: '/tickets/create_presigned_url', 
       requestParams: {
         object_key: fileName,
+        method: 'put',
       },
     };
     const response = await post(payload);
@@ -25,9 +26,10 @@ export const s3PostPresignedUrl = async (fileName) => {
 export const s3GetPresignedUrl = async (objectKey) => {
   try {
     const payload = {
-      path: '/ticket/presigned_url_for_get',
+      path: '/tickets/create_presigned_url',
       queryParams: {
         object_key: objectKey,
+        method: 'get',
       },
     };
     const response = await get(payload);
