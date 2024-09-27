@@ -56,7 +56,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
       value: requester,
     },
     {
-      label: 'Raised On',
+      label: 'Raised Time',
       value: DateFormate(created_at),
     },
     {
@@ -68,7 +68,7 @@ const ComplaintCard: React.FC<Props> = (props) => {
       value: reason_for_update || '_',
     },
     {
-      label: 'Last Updated On',
+      label: 'Last Updated Time',
       value: DateFormate(updated_at) || '_',
     },
   ];
