@@ -1,4 +1,4 @@
-import { get, post } from 'apis/apiHelper';
+import {post } from 'apis/apiHelper';
 import AWS from 'aws-sdk';
 import { PromiseResult } from 'aws-sdk/lib/request';
 import axios from 'axios';
@@ -10,7 +10,7 @@ export const s3PostPresignedUrl = async (fileName) => {
   try {
     const payload = {
       path: '/tickets/create_presigned_url', 
-      requestParams: {
+      queryParams: {
         object_key: fileName,
         method: 'put',
       },
@@ -32,7 +32,7 @@ export const s3GetPresignedUrl = async (objectKey) => {
         method: 'get',
       },
     };
-    const response = await get(payload);
+    const response = await post(payload);
     return response.data.url; 
   } catch (error) {
     console.error('Error getting presigned URL: ', error);
