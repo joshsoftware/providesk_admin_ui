@@ -3,6 +3,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { Box } from '@mui/system';
 import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useState } from 'react';
 
 export const UploadBucket = ({
   isLoading,
@@ -21,19 +22,32 @@ export const UploadBucket = ({
   removeFile: (a: number) => void;
   error?: string;
 }) => {
-  const onChangeFile = (e) => {
-    handleChange(e);
-  };
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const onChangeFile = (files: FileList) => {
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+    const selectedFiles = Array.from(files);
+
+    const invalidFile = selectedFiles.find(file => !allowedTypes.includes(file.type));
+    
+    if (invalidFile) {
+      setErrorMessage(`Invalid file type: ${invalidFile.name}`);
+    } else {
+      setErrorMessage(null);
+      handleChange(selectedFiles);
+    }
+  };
   return (
     <Box>
       <input
         style={{ display: 'none' }}
         type='file'
-        id={'id'}
+        accept='image/*'
+        id={'id'} 
         onChange={(e) => {
-          if (e.target.files?.length! > 0) {
-            onChangeFile(e.target.files);
+          const files = e.target.files; 
+          if (files && files.length > 0) { 
+            onChangeFile(files); 
           }
         }}
       />
@@ -47,6 +61,11 @@ export const UploadBucket = ({
           Upload
         </Button>
       </label>
+      {errorMessage && ( 
+        <Typography color="error" sx={{ mt: 1 }}>
+          {errorMessage}
+        </Typography>
+      )}
       {file?.map((item, index) => (
         <Box
           sx={{
