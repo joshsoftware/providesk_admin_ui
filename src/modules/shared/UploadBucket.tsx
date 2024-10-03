@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
-import { ALLOWEDTYPES } from './constants';
+import { ALLOWED_TYPES } from './constants';
 
 export const UploadBucket = ({
   isLoading,
@@ -28,7 +28,7 @@ export const UploadBucket = ({
   const onChangeFile = (files: FileList) => {
     const selectedFiles = Array.from(files);
 
-    const invalidFile = selectedFiles.find(file => !ALLOWEDTYPES.includes(file.type));
+    const invalidFile = selectedFiles.find(file => !ALLOWED_TYPES.includes(file.type));
     
     if (invalidFile) {
       setErrorMessage(`Invalid file type: ${invalidFile.name}`);
@@ -42,7 +42,7 @@ export const UploadBucket = ({
       <input
         style={{ display: 'none' }}
         type='file'
-        accept={ALLOWEDTYPES.join(',')} 
+        accept={ALLOWED_TYPES.join(',')} 
         id={'id'} 
         onChange={(e) => {
           const files = e.target.files; 

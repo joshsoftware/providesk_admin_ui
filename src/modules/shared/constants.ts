@@ -1,1 +1,1 @@
-export const ALLOWEDTYPES = ['image/png', 'image/jpeg', 'image/jpg'];
+export const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
