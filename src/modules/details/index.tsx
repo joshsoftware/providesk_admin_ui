@@ -25,7 +25,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ticketStatusColours } from './constants';
 
 
-import { ImageS3Tag } from './components/ImageTag';
+import { MediaS3Tag } from './components/ImageTag';
 import { UserContext } from 'App';
 import { ROLES } from 'routes/roleConstants';
 
@@ -133,14 +133,14 @@ function Details() {
                     </TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Image</TableCell>
+                    <TableCell>Attachment</TableCell>
                     <TableCell>
                       <Box
                         display='flex'
-                        sx={{ width: '300px', overflowX: 'scroll' }}
+                        sx={{ width: '300px' }}
                       >
                         {ticket?.asset_url?.map((item) => (
-                          <ImageS3Tag path={item} />
+                          <MediaS3Tag path={item} />
                         ))}
                       </Box>
                     </TableCell>
