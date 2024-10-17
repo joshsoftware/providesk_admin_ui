@@ -5,6 +5,7 @@ import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import { ALLOWED_TYPES, MAX_FILE_SIZE } from './constants';
+import '../dashboard/dashboard.scss';
 
 export const UploadBucket = ({
   isLoading,
@@ -47,7 +48,7 @@ export const UploadBucket = ({
   };
 
   return (
-    <Box>
+    <Box className="container">
       <input
         style={{ display: 'none' }}
         type='file'
@@ -66,7 +67,6 @@ export const UploadBucket = ({
           component='span'
           isLoading={isLoading}
           startIcon={<FileUploadIcon />}
-          sx={{ marginTop: 4 }} 
         >
           Upload
         </Button>
