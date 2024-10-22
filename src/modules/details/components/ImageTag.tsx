@@ -1,27 +1,67 @@
 import { CircularProgress } from '@mui/material';
-import { isLabelWithInternallyDisabledControl } from '@testing-library/user-event/dist/utils';
-import { s3GetPresignedUrl} from 'apis/utils/mediaUpload/awsmedia';
-import Loader from 'modules/Auth/components/Loader';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { s3GetPresignedUrl } from 'apis/utils/mediaUpload/awsmedia';
+import { MediaS3Tagparams } from '../type';
+import MediaButton from './MediaButton';
 
-export const ImageS3Tag = ({ path }) => {
-  const [srcImg, setSrcImg] = useState<string | undefined>();
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
+export const MediaS3Tag = ({ path }: MediaS3Tagparams) => {
+  const [srcFile, setSrcFile] = useState<string | undefined>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+ 
   useEffect(() => {
-    setIsLoading(true);
-    s3GetPresignedUrl(path)
-      .then((img) => {
+    const fetchPresignedUrl = async () => {
+      setIsLoading(true);
+      try {
+        const assetUrl = await s3GetPresignedUrl(path);
+        setSrcFile(assetUrl);
+      } catch (e) {
+        console.log('Unable to fetch:', e);
+      } finally {
         setIsLoading(false);
-        setSrcImg(img);
-      })
-      .catch((e) => {
-        console.log('unable to fetch', e);
-        setIsLoading(false);
-      });
-  }, []);
-  return isLoading ? (
-    <CircularProgress />
-  ) : (
-    <img src={srcImg} alt='Image' width={'200px'} height={'200px'}></img>
+      }
+    };
+
+    fetchPresignedUrl();
+  }, [path]);
+
+  const handleDownload = async () => {
+    if (srcFile) {
+      try {
+        const response = await axios.get(srcFile, { responseType: 'blob' });
+        const blob = new Blob([response.data]);
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = path.split('/').pop() || 'download';
+        link.click();
+        window.URL.revokeObjectURL(downloadUrl);
+      } catch (error) {
+        console.error('Download failed:', error);
+      }
+    }
+  };
+
+  const handleView = () => {
+    if (srcFile) {
+      window.open(srcFile, '_blank');
+    }
+  };
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  return (
+    <div>
+      {srcFile ? (
+        <div>
+          <MediaButton handleFunction={handleView} children='View' />
+          <MediaButton handleFunction={handleDownload} children='Download' />
+        </div>
+      ) : (
+        <p>Unable to load file</p>
+      )}
+    </div>
   );
 };
