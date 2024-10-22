@@ -38,7 +38,7 @@ export const UploadBucket = ({
     const oversizedFile = selectedFiles.find((file) => file.size > MAX_FILE_SIZE);
 
     if (oversizedFile) {
-      setErrorMessage(`File size exceeds limit: ${oversizedFile.name}`);
+      setErrorMessage(`File exceeds size limit: ${oversizedFile.name}`);
       return;
     }
 

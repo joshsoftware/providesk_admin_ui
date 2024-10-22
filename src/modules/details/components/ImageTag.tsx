@@ -1,88 +1,67 @@
 import { CircularProgress } from '@mui/material';
-import { isLabelWithInternallyDisabledControl } from '@testing-library/user-event/dist/utils';
-import { s3GetPresignedUrl} from 'apis/utils/mediaUpload/awsmedia';
-import Loader from 'modules/Auth/components/Loader';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { s3GetPresignedUrl } from 'apis/utils/mediaUpload/awsmedia';
+import { MediaS3Tagparams } from '../type';
+import MediaButton from './MediaButton';
 
-export const MediaS3Tag = ({ path }: { path: string }) => {
+export const MediaS3Tag = ({ path }: MediaS3Tagparams) => {
   const [srcFile, setSrcFile] = useState<string | undefined>();
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
-  const [fileType, setFileType] = useState<string | undefined>();
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+ 
   useEffect(() => {
-    setIsLoading(true);
-    s3GetPresignedUrl(path)
-      .then((assetUrl) => {
-        setIsLoading(false);
+    const fetchPresignedUrl = async () => {
+      setIsLoading(true);
+      try {
+        const assetUrl = await s3GetPresignedUrl(path);
         setSrcFile(assetUrl);
-        const baseUrl = assetUrl.split('?')[0]; 
-        const extension = baseUrl.split('.').pop()?.toLowerCase(); 
-
-        if (extension === 'pdf') {
-          setFileType('pdf');
-        } else if (['jpg', 'jpeg', 'png', 'gif'].includes(extension || '')) {
-          setFileType('image');
-        } else if (['xls', 'xlsx'].includes(extension)) {
-          setFileType('excel'); 
-        } else if (['mp4', 'webm', 'ogg'].includes(extension)) {
-          setFileType('video'); 
-        } else {
-          setFileType('unsupported'); 
-        }
-      })
-      .catch((e) => {
-        console.log('unable to fetch', e);
+      } catch (e) {
+        console.log('Unable to fetch:', e);
+      } finally {
         setIsLoading(false);
-      });
+      }
+    };
+
+    fetchPresignedUrl();
   }, [path]);
+
+  const handleDownload = async () => {
+    if (srcFile) {
+      try {
+        const response = await axios.get(srcFile, { responseType: 'blob' });
+        const blob = new Blob([response.data]);
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = path.split('/').pop() || 'download';
+        link.click();
+        window.URL.revokeObjectURL(downloadUrl);
+      } catch (error) {
+        console.error('Download failed:', error);
+      }
+    }
+  };
+
+  const handleView = () => {
+    if (srcFile) {
+      window.open(srcFile, '_blank');
+    }
+  };
 
   if (isLoading) {
     return <CircularProgress />;
   }
 
-  if (fileType === 'pdf') {
-    return (
-      <img 
-        src="/images/pdf.png" 
-        alt="PDF Thumbnail" 
-        width="50px" 
-        height="50px" 
-        onClick={() => window.open(srcFile, '_blank')} 
-        style={{ cursor: 'pointer' }} 
-      />
-    );
-  } else if (fileType === 'image') {
-    return (
-      <img 
-        src={srcFile} 
-        alt="File" 
-        width="200px" 
-        height="200px" 
-      />
-    );
-  } else if (fileType === 'excel') {
-    return (
-      <img 
-        src="/images/sheets.png" 
-        alt="Excel Thumbnail" 
-        width="50px" 
-        height="50px" 
-        onClick={() => window.open(srcFile, '_blank')} 
-        style={{ cursor: 'pointer' }} 
-      />
-    );
-  } else if (fileType === 'video') {
-    const videoType = srcFile?.split('.').pop()?.toLowerCase() === 'mp4' ? 'video/mp4' : 'video/webm'; 
-    return (
-      <video
-        width="400" 
-        controls 
-        style={{ cursor: 'pointer' }}>
-        <source src={srcFile} type={videoType} />
-        Your browser does not support the video tag.
-      </video>
-    );
-  } else {
-    return <p>Unsupported file type</p>;
-  }
+  return (
+    <div>
+      {srcFile ? (
+        <div>
+          <MediaButton handleFunction={handleView} children='View' />
+          <MediaButton handleFunction={handleDownload} children='Download' />
+        </div>
+      ) : (
+        <p>Unable to load file</p>
+      )}
+    </div>
+  );
 };
