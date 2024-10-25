@@ -1,29 +1,16 @@
-import { CircularProgress } from '@mui/material';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useQuery } from 'react-query';
+import { CircularProgress } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DownloadIcon from '@mui/icons-material/Download';
 import { s3GetPresignedUrl } from 'apis/utils/mediaUpload/awsmedia';
-import { MediaS3Tagparams } from '../type';
 import MediaButton from './MediaButton';
+import { MediaS3Tagparams } from '../type';
 
 export const MediaS3Tag = ({ path }: MediaS3Tagparams) => {
-  const [srcFile, setSrcFile] = useState<string | undefined>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
- 
-  useEffect(() => {
-    const fetchPresignedUrl = async () => {
-      setIsLoading(true);
-      try {
-        const assetUrl = await s3GetPresignedUrl(path);
-        setSrcFile(assetUrl);
-      } catch (e) {
-        console.log('Unable to fetch:', e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPresignedUrl();
-  }, [path]);
+  const { data: srcFile, isLoading, error } = useQuery(['presignedUrl', path], () => s3GetPresignedUrl(path), { 
+    enabled: !!path,
+  });
 
   const handleDownload = async () => {
     if (srcFile) {
@@ -56,8 +43,8 @@ export const MediaS3Tag = ({ path }: MediaS3Tagparams) => {
     <div>
       {srcFile ? (
         <div>
-          <MediaButton handleFunction={handleView} children='View' />
-          <MediaButton handleFunction={handleDownload} children='Download' />
+          <MediaButton handleFunction={handleView} children='View' icon={<VisibilityIcon />} />
+          <MediaButton handleFunction={handleDownload} children='Download' icon={<DownloadIcon />} />
         </div>
       ) : (
         <p>Unable to load file</p>
