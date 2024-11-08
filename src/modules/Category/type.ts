@@ -1,8 +1,10 @@
-export interface IreateCategoryPayload {
+export interface ICreateCategoryPayload {
   category: {
     name: string;
     priority: number;
     department_id: number;
+    sla_unit: number; 
+    sla_duration_type: string; 
   };
 }
 
