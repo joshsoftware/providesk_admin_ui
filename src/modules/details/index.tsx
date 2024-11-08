@@ -79,7 +79,7 @@ function Details() {
                   </TableRow>
                   <TableRow>
                     <TableCell sx={{ color: '#63686b' }}>Description</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>
+                    <TableCell sx={{ fontWeight: 'bold', whiteSpace: 'pre-line'}}>
                       {ticket?.description}
                     </TableCell>
                   </TableRow>
