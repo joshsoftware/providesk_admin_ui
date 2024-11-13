@@ -35,7 +35,7 @@ export const Category = () => {
     userAuth?.organizations?.[0]?.department_id || 1
   );
   const [priority, setPriority] = useState<number>(0);
-  const [slaUnit, setSlaUnit] = useState<number | ''>('');
+  const [slaUnit, setSlaUnit] = useState<number>(NaN);
   const [slaDurationType, setSlaDurationType] = useState<string>('days');
   const [error, setError] = useState<string>('');
 
@@ -71,9 +71,25 @@ export const Category = () => {
     setOpen(true);
   };
 
+  const resetForm = () => {
+    setPriority(0);
+    setDepartmentId(0);
+    setCategory('');
+    setSlaUnit(NaN);
+    setSlaDurationType('days');
+  };
+  
   const handleCreateCategoryDialogClose = () => {
     setOpen(false);
+    resetForm();
   };
+
+  const isButtonDisabled =+
+  category.length < 2 ||
+  departmentId === 0 ||
+  Number.isNaN(slaUnit) ||
+  slaUnit === 0 ||
+  isCreatingCategory;
 
   return (
     <Box
@@ -223,16 +239,10 @@ export const Category = () => {
             <Button
               onClick={() => {
                 createCategory();
-                setPriority(0);
-                setDepartmentId(0);
-                setCategory('');
-                setSlaUnit('');
-                setSlaDurationType('days');
+                resetForm();
               }}
               isLoading={isCreatingCategory}
-              disabled={
-                category.length < 2 || departmentId === 0 || slaUnit === '' || isCreatingCategory
-              }
+              disabled={isButtonDisabled}             
             >
               Create
             </Button>
