@@ -93,3 +93,7 @@ export interface IProgressTicketParams {
   id: number;
   setOpenEdit: (value: React.SetStateAction<boolean>) => void;
 }
+
+export interface MediaS3Tagparams {
+  path: string;
+}
