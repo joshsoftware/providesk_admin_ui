@@ -8,3 +8,5 @@ export const prioritiesList: PriorityType[] = [
 ];
 
 export const categoryValidationRegex = /^[-()., A-Za-z0-9\n]*$/i;
+
+export const slaDurationTypes: string[] = ['Days', 'Hours'];
