@@ -14,8 +14,7 @@ import { useCreateTicket, useUsers } from './ticket.hook';
 import {
   Box,
   FormControl,
-  InputLabel,
-  MenuItem,
+  
   Paper,
   Select as SelectMUI,
   TextField,
@@ -26,9 +25,12 @@ import { uploadFile } from 'apis/utils/mediaUpload/awsmedia';
 
 import Loader from 'modules/Auth/components/Loader';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import ROUTE from 'routes/constants';
 
 function Ticket() {
   const { userAuth } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const [organizationId, setOrganizationId] = useState<number | ''>(
     userAuth?.organizations?.[0]?.id || ''
@@ -126,9 +128,10 @@ function Ticket() {
       asset_url: [],
     },
     validationSchema: ValidationSchema,
+    validateOnMount: true,
     onSubmit: async (values) => {
       try {
-        const fileNames = await uploadFile(file, setIsLoading);       
+        const fileNames = await uploadFile(file, setIsLoading);
         setIsLoading(false);
         createTicket({ ...values, asset_url: fileNames });
       } catch (error) {
@@ -138,7 +141,11 @@ function Ticket() {
       }
     },
   });
-  
+
+  const onClickCancel = () => {
+    navigate(ROUTE.DASHBOARD);
+  };
+
   return (
     <Box
       sx={{ display: 'flex', flexDirection: 'column', flex: '1', p: '1.5rem' }}
@@ -275,7 +282,14 @@ function Ticket() {
             removeFile={removeFile}
           />
           <Box sx={{ display: 'flex', justifyContent: 'end', pt: 3 }}>
-            <Button isLoading={creatingTicket} type='submit'>
+            <Button variant='text' onClick={onClickCancel}>
+              Cancel
+            </Button>
+            <Button
+              isLoading={creatingTicket}
+              type='submit'
+              disabled={!(formik.isValid && formik.dirty)}
+            >
               Create
             </Button>
           </Box>

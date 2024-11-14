@@ -1,10 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useTicketDetails } from './details.hook';
 import Loader from 'modules/Auth/components/Loader';
 import { TimelineComponent } from './components/Timeline';
 import { EditTicketForm } from './components/EditTicketForm';
+import BackButtonIcon from '@mui/icons-material/KeyboardBackspaceSharp';
+import ROUTE from 'routes/constants';
 
 import {
   Box,
@@ -19,11 +21,9 @@ import {
   TableRow,
   TableCell,
   IconButton,
-
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { ticketStatusColours } from './constants';
-
 
 import { ImageS3Tag } from './components/ImageTag';
 import { UserContext } from 'App';
@@ -38,6 +38,7 @@ function Details() {
     isLoading: isFetchingTicketDetails,
   } = useTicketDetails(id);
 
+  const navigate = useNavigate();
   const [ticket, setTicket] = useState(ticketDetails);
   const [openEdit, setOpenEdit] = useState(false);
 
@@ -45,11 +46,19 @@ function Details() {
     setTicket(ticketDetails);
   }, [ticketDetails]);
 
+  const handleBackClick = () => {
+    navigate(ROUTE.HOME);
+  };
+
   return (
     <div>
       <Grid container>
         <Loader isLoading={isFetchingTicketDetails} />
         <Grid item xs={12} md={4} p={5}>
+          <BackButtonIcon
+            onClick={handleBackClick}
+            style={{ color: 'grey', cursor: 'pointer', marginRight: '8px' }}
+          />
           <Divider>
             <Typography variant='h5' component='div'>
               Ticket Details
