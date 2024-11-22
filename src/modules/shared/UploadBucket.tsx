@@ -29,7 +29,7 @@ export const UploadBucket = ({
     const selectedFiles = Array.from(files);
 
     const invalidFile = selectedFiles.find(file => !ALLOWED_TYPES.includes(file.type));
-    
+
     if (invalidFile) {
       setErrorMessage(`Invalid file type: ${invalidFile.name}`);
       return;
@@ -42,8 +42,8 @@ export const UploadBucket = ({
       return;
     }
 
-    setErrorMessage(null); 
-    handleChange(selectedFiles); 
+    setErrorMessage(null);
+    handleChange(selectedFiles);
   };
 
   return (
@@ -51,32 +51,40 @@ export const UploadBucket = ({
       <input
         style={{ display: 'none' }}
         type='file'
-        accept={ALLOWED_TYPES.join(',')} 
-        id={'id'} 
+        accept={ALLOWED_TYPES.join(',')}
+        id={'id'}
         onChange={(e) => {
-          const files = e.target.files; 
-          if (files && files.length > 0) { 
-            onChangeFile(files); 
+          const files = e.target.files;
+          if (files && files.length > 0) {
+            onChangeFile(files);
+            e.target.value = '';
           }
         }}
       />
-      <label htmlFor='id'>
-        <Button
-          variant='contained'
-          component='span'
-          isLoading={isLoading}
-          startIcon={<FileUploadIcon />}
-        >
-          Upload
-        </Button>
-      </label>
-      {errorMessage && ( 
-        <Typography color="error" sx={{ mt: 1 }}>
+      <Box className="upload-button"
+      >
+        <label htmlFor='id'>
+          <Button
+            variant='contained'
+            component='span'
+            isLoading={isLoading}
+            startIcon={<FileUploadIcon />}
+          >
+            Upload
+          </Button>
+        </label>
+        <Typography variant='caption' color='textSecondary' sx={{ mt: 0.5 }}>
+          Maximum upload file size: 50MB
+        </Typography>
+      </Box>
+      {errorMessage && (
+        <Typography color='error' sx={{ mt: 1 }}>
           {errorMessage}
         </Typography>
       )}
       {file?.map((item, index) => (
         <Box
+          key={index}
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
