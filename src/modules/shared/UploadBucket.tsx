@@ -58,26 +58,35 @@ export const UploadBucket = ({
           const files = e.target.files; 
           if (files && files.length > 0) { 
             onChangeFile(files); 
+            e.target.value = '';
           }
         }}
       />
-      <label htmlFor='id'>
-        <Button
-          variant='contained'
-          component='span'
-          isLoading={isLoading}
-          startIcon={<FileUploadIcon />}
-        >
-          Upload
-        </Button>
-      </label>
-      {errorMessage && ( 
-        <Typography color="error" sx={{ mt: 1 }}>
+      
+      <Box className="upload-button"
+      >
+        <label htmlFor='id'>
+          <Button
+            variant='contained'
+            component='span'
+            isLoading={isLoading}
+            startIcon={<FileUploadIcon />}
+          >
+            Upload
+          </Button>
+        </label>
+        <Typography variant='caption' color='textSecondary' sx={{ mt: 0.5 }}>
+          Maximum upload file size: 50MB
+        </Typography>
+      </Box>
+      {errorMessage && (
+        <Typography color='error' sx={{ mt: 1 }}>
           {errorMessage}
         </Typography>
       )}
       {file?.map((item, index) => (
         <Box
+          key={index}
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
