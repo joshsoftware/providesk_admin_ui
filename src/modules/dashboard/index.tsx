@@ -44,10 +44,6 @@ const statusOptions = [
     label: 'In Progress',
   },
   {
-    value: 'resolved',
-    label: 'Resolved',
-  },
-  {
     value: 'for_approval',
     label: 'For Approval',
   },

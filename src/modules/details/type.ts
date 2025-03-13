@@ -69,7 +69,6 @@ export type ticketStatusType =
   | 'for_approval'
   | 'assigned'
   | 'inprogress'
-  | 'resolved'
   | 'closed'
   | 'rejected'
   | 'reopen';
@@ -78,7 +77,6 @@ export type permittedEventsType =
   | 'assigned'
   | 'approve'
   | 'reject'
-  | 'resolve'
   | 'close'
   | 'reopen';
 
