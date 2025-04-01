@@ -57,7 +57,7 @@ function Details() {
           </Divider>
           <Box>
             {
-              (userAuth.role !== ROLES.EMPLOYEE || ticket?.status === 'resolved') &&
+              (userAuth.role !== ROLES.EMPLOYEE || ticket?.status === 'closed') &&
               <div>
                 <IconButton
                   aria-label='edit'
