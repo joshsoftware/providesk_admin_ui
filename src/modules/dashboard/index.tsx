@@ -29,6 +29,7 @@ import { useNavigate } from 'react-router-dom';
 import ROUTE from 'routes/constants';
 import { ROLES } from 'routes/roleConstants';
 import { useUsers } from 'modules/Ticket/ticket.hook';
+import { PaginationContext } from 'App';
 
 const statusOptions = [
   {
@@ -77,7 +78,7 @@ const Dashboard = () => {
   const { userAuth } = useContext(UserContext);
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(8);
+  const {rowsPerPage, setRowsPerPage} = useContext(PaginationContext);
   const [departmentId, setDepartmentId] = useState<number>(1);
   const [organizationId, setOrganizationId] = useState<number>(
     userAuth?.organizations?.[0]?.id
@@ -116,6 +117,8 @@ const Dashboard = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+
   const { data: categoriesList, isLoading: listFetching } =
     useCategories(departmentId);
   const categoryOptions = useMemo(() => {
