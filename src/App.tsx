@@ -3,12 +3,10 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-
 import { IUserContextType } from 'modules/Auth/auth.types';
 import { routeConfig } from 'routes/routeConfig';
 import { GOOGLE_CLIENT_ID, LOCAL_STORAGE_KEYS } from 'shared/appConstants';
 import { loadLocalStorage } from 'shared/localStorageHelpers';
-
 import { ReactQueryDevtools } from 'react-query/devtools';
 
 // Create a client
@@ -38,9 +36,7 @@ function App() {
   const [userAuth, setUserAuth] = useState<any>(
     loadLocalStorage(LOCAL_STORAGE_KEYS.USER_AUTH)
   );
-
   const [rowsPerPage , setRowsPerPage] = useState<any>(8)
-
   const userProfile = loadLocalStorage(LOCAL_STORAGE_KEYS.USER_PROFILE);
 
   return (

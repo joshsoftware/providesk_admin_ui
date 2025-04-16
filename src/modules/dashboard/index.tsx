@@ -76,7 +76,6 @@ const Dashboard = () => {
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const { data, isLoading } = useGetRequestsList(filters);
   const { userAuth } = useContext(UserContext);
-
   const [page, setPage] = React.useState(0);
   const {rowsPerPage, setRowsPerPage} = useContext(PaginationContext);
   const [departmentId, setDepartmentId] = useState<number>(1);
@@ -117,8 +116,7 @@ const Dashboard = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-
+  
   const { data: categoriesList, isLoading: listFetching } =
     useCategories(departmentId);
   const categoryOptions = useMemo(() => {
