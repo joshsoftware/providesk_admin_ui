@@ -36,9 +36,7 @@ function App() {
   const [userAuth, setUserAuth] = useState<any>(
     loadLocalStorage(LOCAL_STORAGE_KEYS.USER_AUTH)
   );
-
   const [rowsPerPage , setRowsPerPage] = useState<any>(8)
-
   const userProfile = loadLocalStorage(LOCAL_STORAGE_KEYS.USER_PROFILE);
 
   return (
