@@ -8,6 +8,7 @@ import { routeConfig } from 'routes/routeConfig';
 import { GOOGLE_CLIENT_ID, LOCAL_STORAGE_KEYS } from 'shared/appConstants';
 import { loadLocalStorage } from 'shared/localStorageHelpers';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { PaginationContextType } from 'shared/paginationContextType';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -25,7 +26,7 @@ export const UserContext = createContext<IUserContextType>({
   setUserAuth: (value) => {},
 });
 
-export const PaginationContext = createContext<any>({
+export const PaginationContext = createContext<PaginationContextType>({
   rowsPerPage: 8,
   setRowsPerPage: (value) =>{}
 })
