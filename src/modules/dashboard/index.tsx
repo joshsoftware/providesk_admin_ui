@@ -116,7 +116,7 @@ const Dashboard = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  
   const { data: categoriesList, isLoading: listFetching } =
     useCategories(departmentId);
   const categoryOptions = useMemo(() => {
