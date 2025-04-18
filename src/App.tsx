@@ -25,28 +25,21 @@ export const UserContext = createContext<IUserContextType>({
   setUserAuth: (value) => {},
 });
 
-export const PaginationContext = createContext<any>({
-  rowsPerPage: 8,
-  setRowsPerPage: (value) =>{}
-})
-
 const router = createBrowserRouter(routeConfig);
 
 function App() {
   const [userAuth, setUserAuth] = useState<any>(
     loadLocalStorage(LOCAL_STORAGE_KEYS.USER_AUTH)
   );
-  const [rowsPerPage , setRowsPerPage] = useState<any>(8)
+
   const userProfile = loadLocalStorage(LOCAL_STORAGE_KEYS.USER_PROFILE);
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <QueryClientProvider client={queryClient}>
         <UserContext.Provider value={{ userAuth, userProfile, setUserAuth }}>
-          <PaginationContext.Provider value={{rowsPerPage, setRowsPerPage}}>
-            <ToastContainer position='top-right' autoClose={5000} />
-            <RouterProvider router={router} />
-          </PaginationContext.Provider>
+          <ToastContainer position='top-right' autoClose={5000} />
+          <RouterProvider router={router} />
         </UserContext.Provider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
