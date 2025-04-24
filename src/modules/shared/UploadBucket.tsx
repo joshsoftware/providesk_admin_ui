@@ -15,6 +15,8 @@ export const UploadBucket = ({
   value,
   name,
   error,
+  accept // <-- Add this line
+
 }: {
   isLoading: boolean;
   file: File[];
@@ -23,6 +25,7 @@ export const UploadBucket = ({
   handleChange: (a: File[]) => void;
   removeFile: (a: number) => void;
   error?: string;
+  accept?: string; // <-- Add this line
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
