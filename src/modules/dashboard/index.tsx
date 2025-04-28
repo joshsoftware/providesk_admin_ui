@@ -34,7 +34,7 @@ import { PaginationContext } from 'App';
 const statusOptions = [
   {
     value: 'reopen',
-    label: 'reopen',
+    label: 'Reopen',
   },
   {
     value: 'assigned',
