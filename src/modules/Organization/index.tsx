@@ -222,7 +222,7 @@ export const Organization = () => {
           </Table>
           {organizationList?.length === 0 && (
             <Typography variant='h6' sx={{ textAlign: 'center' }}>
-              No Data
+              No Ticket
             </Typography>
           )}
         </CardContent>
