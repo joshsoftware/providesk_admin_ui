@@ -5,10 +5,6 @@ import {
   Box,
   Card,
   CardContent,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Paper,
 } from '@mui/material';
 
@@ -21,7 +17,6 @@ import { useCategories, useDepartments } from 'modules/Category/category.hook';
 
 import { Checkbox, Typography } from '@mui/material';
 import './dashboard.scss';
-// import { useNavigate } from 'react-router-dom';
 import Loader from 'modules/Auth/components/Loader';
 import { Button } from 'modules/shared/Button';
 import { AddRounded, RestartAltRounded } from '@mui/icons-material';
@@ -184,52 +179,19 @@ const Dashboard = () => {
     navigate("/ticket")
   }
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleCreateTicketDialogOpen = () => {
-    setOpen(true);
-  };
-
-  const handleCreateTicketDialogClose = () => {
-    setOpen(false);
-  };
-
   return (
     <Box display='flex' flexDirection='column' flex='1' gap={3} p={3}>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography variant='h5'>Dashboard</Typography>
         <Button
           variant='text'
-          onClick={handleCreateTicketDialogOpen}
+          onClick={onClickCreate}
           size='small'
           startIcon={<AddRounded sx={{ color: 'primary.main' }} />}
           sx={{ color: 'grey.900', ml: 'auto' }}
         >
           Create Ticket
         </Button>
-        <Dialog
-          open={open}
-          onClose={handleCreateTicketDialogClose}
-          fullWidth
-          maxWidth='xs'
-        >
-          <DialogTitle>Create Ticket</DialogTitle>
-          <DialogContent>Create Ticket Form Here</DialogContent>
-          <DialogActions>
-            <Button
-              size='small'
-              variant='text'
-              onClick={handleCreateTicketDialogClose}
-            >
-              Cancel
-            </Button>
-            <Button size='small'
-            onClick={onClickCreate}
-            >
-              Create
-            </Button>
-          </DialogActions>
-        </Dialog>
       </Box>
       <Card sx={{ display: 'flex', flex: 1 }}>
         <CardContent
@@ -344,7 +306,7 @@ const Dashboard = () => {
                     }
                     sx={{ p: 2, '& .MuiSvgIcon-root': { fontSize: 20 } }}
                   />
-                  <Typography>Assign to me</Typography>
+                  <Typography>Assigned to me</Typography>
                 </Box>
                 <Box
                   sx={{
@@ -382,7 +344,7 @@ const Dashboard = () => {
                 <Loader isLoading={isLoading} />
               ) : updatedDataFinalList?.length === 0 ? (
                 <Typography variant='h6' sx={{ p: 3, textAlign: 'center' }}>
-                  No Data
+                  No Ticket
                 </Typography>
               ) : (
                 <Box
