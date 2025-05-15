@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback, useContext, useState } from 'react';
-import { categoryValidationRegex, prioritiesList } from './constanst';
+import { categoryValidationRegex, prioritiesList, slaDurationTypes } from './constanst';
 import { useCreateCategory, useDepartments } from './category.hook';
 import CategoryList from './components/CategoryList';
 import { Button } from 'modules/shared/Button';
@@ -30,17 +30,17 @@ export const Category = () => {
   const [organizationId, setOrganizationId] = useState<number | ''>(
     userAuth?.organizations?.[0]?.id || ''
   );
-
   const [category, setCategory] = useState<string>('');
   const [departmentId, setDepartmentId] = useState<number>(
     userAuth?.organizations?.[0]?.department_id || 1
   );
   const [priority, setPriority] = useState<number>(0);
+  const [slaUnit, setSlaUnit] = useState<number>(NaN);
+  const [slaDurationType, setSlaDurationType] = useState<string>('days');
   const [error, setError] = useState<string>('');
 
   const { mutate, isLoading: isCreatingCategory } = useCreateCategory();
-  const { data: departmentsList, isLoading: isFetchingDepartment } =
-    useDepartments(organizationId);
+  const { data: departmentsList, isLoading: isFetchingDepartment } = useDepartments(organizationId);
 
   const handleOrganizationChange = useCallback(
     (e) => setOrganizationId(e.target.value),
@@ -57,11 +57,13 @@ export const Category = () => {
         name: category.trim(),
         priority: priority,
         department_id: departmentId,
+        sla_unit: slaUnit,
+        sla_duration_type: slaDurationType,
       },
     };
     mutate(payload);
     setOpen(false);
-  }, [category, priority, departmentId]);
+  }, [category, priority, departmentId, slaUnit, slaDurationType]);
 
   const [open, setOpen] = React.useState(false);
 
@@ -69,9 +71,25 @@ export const Category = () => {
     setOpen(true);
   };
 
+  const resetForm = () => {
+    setPriority(0);
+    setDepartmentId(0);
+    setCategory('');
+    setSlaUnit(NaN);
+    setSlaDurationType('days');
+  };
+  
   const handleCreateCategoryDialogClose = () => {
     setOpen(false);
+    resetForm();
   };
+
+  const isButtonDisabled =+
+  category.length < 2 ||
+  departmentId === 0 ||
+  Number.isNaN(slaUnit) ||
+  slaUnit === 0 ||
+  isCreatingCategory;
 
   return (
     <Box
@@ -94,7 +112,7 @@ export const Category = () => {
           fullWidth
           maxWidth='xs'
         >
-          <DialogTitle>Create Department</DialogTitle>
+          <DialogTitle>Create Category</DialogTitle>
           <DialogContent>
             <Box sx={{ display: 'grid', gap: 3, pt: 3 }}>
               {userAuth.role === ROLES.SUPER_ADMIN && (
@@ -168,6 +186,30 @@ export const Category = () => {
                   </Typography>
                 )}
               </Box>
+              <TextField
+                label='SLA Unit'
+                value={slaUnit}
+                type='number'
+                required
+                onChange={(e) => setSlaUnit(Number(e.target.value))}
+                size='small'
+              />
+              <FormControl size='small'>
+                <InputLabel id='sla-duration-type'>SLA Duration Type</InputLabel>
+                <SelectMUI
+                  labelId='sla-duration-type'
+                  id='sla-duration-type'
+                  value={slaDurationType}
+                  label='SLA Duration Type'
+                  onChange={(e: SelectChangeEvent) => setSlaDurationType(e.target.value)}
+                >
+                  {slaDurationTypes.map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </SelectMUI>
+              </FormControl>
               <FormControl size='small'>
                 <InputLabel id='priority-selector-id'>Priority</InputLabel>
                 <SelectMUI
@@ -197,14 +239,10 @@ export const Category = () => {
             <Button
               onClick={() => {
                 createCategory();
-                setPriority(0);
-                setDepartmentId(0);
-                setCategory('');
+                resetForm();
               }}
               isLoading={isCreatingCategory}
-              disabled={
-                category.length < 2 || departmentId === 0 || isCreatingCategory
-              }
+              disabled={isButtonDisabled}             
             >
               Create
             </Button>

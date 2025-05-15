@@ -102,12 +102,12 @@ function Ticket() {
   const ValidationSchema = yup.object({
     title: yup
       .string()
-      .matches(/^[-()., A-Za-z0-9\n]*$/i, 'Special characters are not allowed.')
+      .matches(/^[-()., A-Za-z0-9\n/{}[\]]*$/i, 'Special characters are not allowed.')
       .required('Complaint/Request title is required'),
     description: yup
       .string()
       .matches(
-        /^[-().,_ A-Za-z0-9@': \n]*$/i,
+        /^[-().,_ A-Za-z0-9@': \n/{}[\]]*$/i,
         'Special characters are not allowed.'
       )
       .required('Complaint/Request description is required'),

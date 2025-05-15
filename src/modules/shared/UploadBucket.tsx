@@ -4,7 +4,8 @@ import { Box } from '@mui/system';
 import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
-import { ALLOWED_TYPES } from './constants';
+import { ALLOWED_TYPES, MAX_FILE_SIZE } from './constants';
+import '../dashboard/dashboard.scss';
 
 export const UploadBucket = ({
   isLoading,
@@ -32,13 +33,22 @@ export const UploadBucket = ({
     
     if (invalidFile) {
       setErrorMessage(`Invalid file type: ${invalidFile.name}`);
-    } else {
-      setErrorMessage(null);
-      handleChange(selectedFiles);
+      return;
     }
+
+    const oversizedFile = selectedFiles.find((file) => file.size > MAX_FILE_SIZE);
+
+    if (oversizedFile) {
+      setErrorMessage(`File exceeds size limit: ${oversizedFile.name}`);
+      return;
+    }
+
+    setErrorMessage(null); 
+    handleChange(selectedFiles); 
   };
+
   return (
-    <Box>
+    <Box className="container">
       <input
         style={{ display: 'none' }}
         type='file'
@@ -48,26 +58,35 @@ export const UploadBucket = ({
           const files = e.target.files; 
           if (files && files.length > 0) { 
             onChangeFile(files); 
+            e.target.value = '';
           }
         }}
       />
-      <label htmlFor='id'>
-        <Button
-          variant='contained'
-          component='span'
-          isLoading={isLoading}
-          startIcon={<FileUploadIcon />}
-        >
-          Upload
-        </Button>
-      </label>
-      {errorMessage && ( 
-        <Typography color="error" sx={{ mt: 1 }}>
+      
+      <Box className="upload-button"
+      >
+        <label htmlFor='id'>
+          <Button
+            variant='contained'
+            component='span'
+            isLoading={isLoading}
+            startIcon={<FileUploadIcon />}
+          >
+            Upload
+          </Button>
+        </label>
+        <Typography variant='caption' color='textSecondary' sx={{ mt: 0.5 }}>
+          Maximum upload file size: 50MB
+        </Typography>
+      </Box>
+      {errorMessage && (
+        <Typography color='error' sx={{ mt: 1 }}>
           {errorMessage}
         </Typography>
       )}
       {file?.map((item, index) => (
         <Box
+          key={index}
           sx={{
             display: 'flex',
             justifyContent: 'space-between',

@@ -69,7 +69,6 @@ export type ticketStatusType =
   | 'for_approval'
   | 'assigned'
   | 'inprogress'
-  | 'resolved'
   | 'closed'
   | 'rejected'
   | 'reopen';
@@ -78,7 +77,6 @@ export type permittedEventsType =
   | 'assigned'
   | 'approve'
   | 'reject'
-  | 'resolve'
   | 'close'
   | 'reopen';
 
@@ -92,4 +90,8 @@ export interface IProgressTicketParams {
   ticket_details: { ticket: IEditTicketPayload };
   id: number;
   setOpenEdit: (value: React.SetStateAction<boolean>) => void;
+}
+
+export interface MediaS3Tagparams {
+  path: string;
 }
