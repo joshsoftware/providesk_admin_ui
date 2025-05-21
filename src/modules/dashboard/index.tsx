@@ -231,7 +231,7 @@ const Dashboard = () => {
           </DialogActions>
         </Dialog>
       </Box>
-      <Card sx={{ display: 'flex', flex: 1 }}>
+        <Card sx={{ display: 'flex', flex: 1 }}>
         <CardContent
           sx={{ display: 'flex', flexDirection: 'column', flex: '1' }}
         >
@@ -239,12 +239,12 @@ const Dashboard = () => {
             sx={{ display: 'flex', flex: '1', gap: 3 }}
             className='complaint-grid-wrapper'
           >
-            <Paper
+          {userAuth.role !== 'employee' && ( <Paper
               elevation={0}
               sx={{ display: 'grid', alignSelf: 'flex-start' }}
               className='complaint-filters'
             >
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                 <Typography variant='h6' sx={{ m: 0 }}>
                   Filter By
                 </Typography>
@@ -270,34 +270,33 @@ const Dashboard = () => {
                 sx={{ display: 'grid', gap: '1rem' }}
                 className='filter-input-group flex-1'
               >
-                {userAuth.role !== 'employee' && (
-                  <>
-                    <CustomSelect
-                      label={'Status'}
-                      options={statusOptions}
-                      value={filters.status}
-                      onChange={handleChange}
-                      name='status'
-                    />
-                    {(userAuth.role === 'admin' ||
-                      userAuth.role === 'super_admin') && (
-                      <CustomSelect
-                        label={'Departments'}
-                        options={deptOptions}
-                        value={filters.department}
-                        onChange={(e) => {
-                          setDepartmentId(
-                            departmentsList.filter(
-                              (item) => item.id === e.target.value
-                            )[0].id
-                          );
+               
+               <CustomSelect
+                  label={'Status'}
+                  options={statusOptions}
+                  value={filters.status}
+                  onChange={handleChange}
+                  name='status'
+                />
+                {(userAuth.role === 'admin' ||
+                  userAuth.role === 'super_admin') && (
+                  <CustomSelect
+                    label={'Departments'}
+                    options={deptOptions}
+                    value={filters.department}
+                    onChange={(e) => {
+                      setDepartmentId(
+                        departmentsList.filter(
+                          (item) => item.id === e.target.value
+                        )[0].id
+                      );
 
-                          setFilters((p) => ({ ...p, category: '' }));
-                          setResolverEmpId('');
-                          handleChange(e);
-                        }}
-                        name='department'
-                      />
+                      setFilters((p) => ({ ...p, category: '' }));
+                      setResolverEmpId('');
+                      handleChange(e);
+                    }}
+                    name='department'
+                    />
                     )}
                     <Select
                       label={'Resolver Employee'}
@@ -316,8 +315,6 @@ const Dashboard = () => {
                       onChange={handleChange}
                       name='category'
                     />
-                  </>
-                )}
                 <Search
                   label={'Search'}
                   value={filters.title}
@@ -325,7 +322,7 @@ const Dashboard = () => {
                   name='title'
                   placeholder='Enter Title'
                 />
-                <Box
+                  <Box
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -368,7 +365,7 @@ const Dashboard = () => {
                   <Typography>Created by me</Typography>
                 </Box>
               </Box>
-            </Paper>
+            </Paper>)}
             <Box
               sx={{
                 borderWidth: 0,
